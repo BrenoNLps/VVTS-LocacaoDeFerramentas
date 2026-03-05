@@ -37,9 +37,6 @@ O sistema aplica preços progressivos: quanto maior o período de locação, men
 - `PrecosProgressivos` — encapsula os valores de diária, semanal e mensal
 - `Garantia` — encapsula o valor e as regras da garantia cobrada na locação
 
-**Enum**
-- `StatusDaFerramenta`: `DISPONIVEL`, `ALUGADO`, `EM_MANUTENCAO`
-
 **Repositório (Repository)**
 - `LocacaoRepository`
 
@@ -50,6 +47,9 @@ O sistema aplica preços progressivos: quanto maior o período de locação, men
 - `ConsultarValorAluguelService`
 - `EnviarParaManutencaoService`
 - `RetornarDaManutencaoService`
+
+**Enum**
+- `StatusDaFerramenta`: `DISPONIVEL`, `ALUGADO`, `EM_MANUTENCAO`
 
 ## Equipe
 
