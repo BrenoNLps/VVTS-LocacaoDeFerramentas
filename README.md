@@ -66,7 +66,7 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 
 **Enum**
 - `StatusDaFerramenta`: `DISPONIVEL`, `ALUGADO`, `EM_MANUTENCAO`
-- `StatusDaLocacao`: `DISPONIVEL`, `CANCELADA`, `FINALIZADA`
+- `StatusDaLocacao`: `ATIVA`, `CANCELADA`, `FINALIZADA`
 
 ## Equipe
 
