@@ -65,7 +65,7 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 - `RetornarDaManutencaoService`
 
 **Enum**
-- `StatusDaFerramenta`: `DISPONIVEL`, `ALUGADO`, `EM_MANUTENCAO`
+- `StatusDaFerramenta`: `DISPONIVEL`, `ALUGADA`, `MANUTENCAO`
 - `StatusDaLocacao`: `ATIVA`, `CANCELADA`, `FINALIZADA`
 
 ## Equipe
