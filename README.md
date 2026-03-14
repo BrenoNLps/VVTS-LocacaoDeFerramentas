@@ -66,11 +66,12 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 
 **Enum**
 - `StatusDaFerramenta`: `DISPONIVEL`, `ALUGADO`, `EM_MANUTENCAO`
+- `StatusDaLocacao`: `DISPONIVEL`, `CANCELADA`, `FINALIZADA`
 
 ## Equipe
 
 | Membro | GitHub |
 |--------|--------|
 | Breno Nascimento Lopes | [@brenonlps](https://github.com/brenonlps) |
-| Lucas Jundi Hikazudani | [@usuario](https://github.com/usuario) |
-| Maria Clara Passareli Alves | [@usuario](https://github.com/usuario) |
+| Lucas Jundi Hikazudani | [@hikazudani](https://github.com/hikazudani) |
+| Maria Clara Passareli Alves | [@passareliscoding](https://github.com/passareliscoding) |
