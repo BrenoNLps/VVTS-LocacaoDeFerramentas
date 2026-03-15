@@ -28,7 +28,7 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 |------------|-----------|
 | Java | Linguagem principal do projeto |
 | Spring Boot | API REST Back-end |
-| ****** | Front-end |
+| A definir | Front-end |
 
 ## Práticas
 
@@ -45,9 +45,10 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 
 **Agregado (Aggregate Root)**
 - `Locacao`
+- `Equipamento`
 
 **Entidade (Entity)**
-- `Equipamento`
+- `Manutenção (Equipamento)`
 
 **Objetos de Valor (Value Objects)**
 - `PrecosProgressivos` — encapsula os valores de diária, semanal e mensal
@@ -55,6 +56,7 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 
 **Repositório (Repository)**
 - `LocacaoRepository`
+- `EquipamentoRepository`
 
 **Serviços de Aplicação (Application Services)**
 - `AlugarService`
@@ -64,7 +66,7 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 - `EnviarParaManutencaoService`
 - `RetornarDaManutencaoService`
 
-**Enum**
+**Enumerações de domminio**
 - `StatusDaFerramenta`: `DISPONIVEL`, `ALUGADA`, `MANUTENCAO`
 - `StatusDaLocacao`: `ATIVA`, `CANCELADA`, `FINALIZADA`
 
