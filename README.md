@@ -76,3 +76,6 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 | Breno Nascimento Lopes | [@brenonlps](https://github.com/brenonlps) |
 | Lucas Jundi Hikazudani | [@hikazudani](https://github.com/hikazudani) |
 | Maria Clara Passareli Alves | [@passareliscoding](https://github.com/passareliscoding) |
+
+# demo-auth-app
+Pre-configured secure Spring Boot application template using JWT.
