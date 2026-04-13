@@ -27,8 +27,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@UnitTest
-@TDD
+
 @ExtendWith(MockitoExtension.class)
 class SendToMaintenanceTest {
     @Mock private ToolRepository toolRepository;
@@ -40,21 +39,27 @@ class SendToMaintenanceTest {
         return new Tool(UUID.randomUUID().toString(), "Hammer", status, prices);
     }
 
-    @Test
+    @UnitTest
+    @TDD
+    @Test //51
     @DisplayName("Should throw NullPointerException when tool id is null")
     void shouldThrowNullPointerExceptionWhenToolIdIsNull() {
         assertThatThrownBy(() -> sendToMaintenance.execute(null))
                 .isInstanceOf(NullPointerException.class);
     }
 
-    @Test
+    @UnitTest
+    @TDD
+    @Test //52
     @DisplayName("Should throw IllegalArgumentException when tool id is blank")
     void shouldThrowIllegalArgumentExceptionWhenToolIdIsBlank() {
         assertThatThrownBy(() -> sendToMaintenance.execute(""))
                 .isInstanceOf(InvalidArgumentException.class);
     }
 
-    @Test
+    @UnitTest
+    @TDD
+    @Test //50
     @DisplayName("Should throw EntityNotFoundException when tool is not found")
     void shouldThrowEntityNotFoundExceptionWhenToolIsNotFound() {
         String toolId = UUID.randomUUID().toString();
@@ -62,7 +67,9 @@ class SendToMaintenanceTest {
         assertThatThrownBy(() -> sendToMaintenance.execute(toolId)).isInstanceOf(EntityNotFoundException.class);
     }
 
-    @Test
+    @UnitTest
+    @TDD
+    @Test  //47
     @DisplayName("Should generate maintenance record and change tool status to maintenance when tool is available")
     void shouldGenerateMaintenanceRecordAndChangeToolStatusWhenToolIsAvailable() {
         Tool tool = buildTool(ToolStatus.AVAILABLE);
@@ -73,7 +80,9 @@ class SendToMaintenanceTest {
         verify(toolRepository).save(tool);
     }
 
-    @Test
+    @UnitTest
+    @TDD
+    @Test  //48
     @DisplayName("Should throw ToolInUseException when tool status is rented")
     void shouldThrowToolInUseExceptionWhenToolStatusIsRented() {
         Tool tool = buildTool(ToolStatus.RENTED);
@@ -81,7 +90,9 @@ class SendToMaintenanceTest {
         assertThatThrownBy(() -> sendToMaintenance.execute(tool.getId())).isInstanceOf(ToolInUseException.class);
     }
 
-    @Test
+    @UnitTest
+    @TDD
+    @Test  //49
     @DisplayName("Should throw ToolAlreadyInMaintenanceException when tool status is maintenance")
     void shouldThrowToolAlreadyInMaintenanceExceptionWhenToolStatusIsMaintenance() {
         Tool tool = buildTool(ToolStatus.MAINTENANCE);
