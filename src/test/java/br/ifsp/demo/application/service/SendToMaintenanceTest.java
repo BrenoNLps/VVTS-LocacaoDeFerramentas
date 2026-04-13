@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @UnitTest
@@ -70,6 +71,7 @@ class SendToMaintenanceTest {
         MaintenanceRecord result= sendToMaintenance.execute(tool.getId());
         assertThat(result).isNotNull();
         assertThat(tool.getStatus()).isEqualTo(ToolStatus.MAINTENANCE);
+        verify(toolRepository).save(tool);
     }
 
     @Test
