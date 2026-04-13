@@ -1,4 +1,4 @@
-package br.ifsp.demo.application;
+package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.domain.MaintenanceRecord;
 import br.ifsp.demo.domain.Tool;
@@ -6,10 +6,10 @@ import br.ifsp.demo.domain.repository.ToolRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Objects;
 
-public class SendToMaintenanceService {
+public class SendToMaintenance {
     private final ToolRepository toolRepository;
 
-    public SendToMaintenanceService(ToolRepository toolRepository) {
+    public SendToMaintenance(ToolRepository toolRepository) {
         this.toolRepository = toolRepository;
     }
 

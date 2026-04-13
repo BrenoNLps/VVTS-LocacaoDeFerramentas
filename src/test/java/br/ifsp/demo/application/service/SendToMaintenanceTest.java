@@ -1,4 +1,4 @@
-package br.ifsp.demo.application;
+package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
@@ -18,21 +18,22 @@ import static org.mockito.Mockito.when;
 @UnitTest
 @TDD
 @ExtendWith(MockitoExtension.class)
-class SendToMaintenanceServiceTest {
+class SendToMaintenanceTest {
     @Mock private ToolRepository toolRepository;
-    @InjectMocks SendToMaintenanceService sendToMaintenanceService;
+    @InjectMocks
+    SendToMaintenance sendToMaintenance;
 
     @Test
     @DisplayName("Should throw NullPointerException when tool id is null")
     void shouldThrowNullPointerExceptionWhenToolIdIsNull() {
-        assertThatThrownBy(() -> sendToMaintenanceService.execute(null))
+        assertThatThrownBy(() -> sendToMaintenance.execute(null))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
     @DisplayName("Should throw IllegalArgumentException when tool id is empty")
     void shouldThrowIllegalArgumentExceptionWhenToolIdIsEmpty() {
-        assertThatThrownBy(() -> sendToMaintenanceService.execute(""))
+        assertThatThrownBy(() -> sendToMaintenance.execute(""))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -41,6 +42,6 @@ class SendToMaintenanceServiceTest {
     void shouldThrowEntityNotFoundExceptionWhenToolIsNotFound() {
         String toolId = UUID.randomUUID().toString();
         when(toolRepository.findById(toolId)).thenReturn(null);
-        assertThatThrownBy(() -> sendToMaintenanceService.execute(toolId)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> sendToMaintenance.execute(toolId)).isInstanceOf(EntityNotFoundException.class);
     }
 }
