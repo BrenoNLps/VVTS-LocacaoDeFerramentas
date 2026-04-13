@@ -3,6 +3,7 @@ package br.ifsp.demo.application.service;
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.MaintenanceRecord;
+import br.ifsp.demo.domain.ProgressivePrices;
 import br.ifsp.demo.domain.Tool;
 import br.ifsp.demo.domain.ToolStatus;
 
@@ -19,6 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
@@ -28,16 +31,13 @@ import static org.mockito.Mockito.when;
 @TDD
 @ExtendWith(MockitoExtension.class)
 class SendToMaintenanceTest {
-    private Tool tool;
-    private String toolId;
     @Mock private ToolRepository toolRepository;
     @InjectMocks
     SendToMaintenance sendToMaintenance;
 
-    @BeforeEach
-    void setUp() {
-        toolId= UUID.randomUUID().toString();
-        tool = new Tool();
+    private Tool buildTool(ToolStatus status) {
+        ProgressivePrices prices = new ProgressivePrices(BigDecimal.TEN, BigDecimal.valueOf(8), BigDecimal.valueOf(6));
+        return new Tool(UUID.randomUUID().toString(), "Hammer", status, prices);
     }
 
     @Test
@@ -65,8 +65,9 @@ class SendToMaintenanceTest {
     @Test
     @DisplayName("Should generate maintenance record and change tool status to maintenance when tool is available")
     void shouldGenerateMaintenanceRecordAndChangeToolStatusWhenToolIsAvailable() {
-        when(toolRepository.findById(toolId)).thenReturn(tool);
-        MaintenanceRecord result= sendToMaintenance.execute(toolId);
+        Tool tool = buildTool(ToolStatus.AVAILABLE);
+        when(toolRepository.findById(tool.getId())).thenReturn(tool);
+        MaintenanceRecord result= sendToMaintenance.execute(tool.getId());
         assertThat(result).isNotNull();
         assertThat(tool.getStatus()).isEqualTo(ToolStatus.MAINTENANCE);
     }
@@ -74,17 +75,17 @@ class SendToMaintenanceTest {
     @Test
     @DisplayName("Should throw ToolInUseException when tool status is rented")
     void shouldThrowToolInUseExceptionWhenToolStatusIsRented() {
-        tool.setStatus(ToolStatus.RENTED);
-        when(toolRepository.findById(toolId)).thenReturn(tool);
-        assertThatThrownBy(() -> sendToMaintenance.execute(toolId)).isInstanceOf(ToolInUseException.class);
+        Tool tool = buildTool(ToolStatus.RENTED);
+        when(toolRepository.findById(tool.getId())).thenReturn(tool);
+        assertThatThrownBy(() -> sendToMaintenance.execute(tool.getId())).isInstanceOf(ToolInUseException.class);
     }
 
     @Test
     @DisplayName("Should throw ToolAlreadyInMaintenanceException when tool status is maintenance")
     void shouldThrowToolAlreadyInMaintenanceExceptionWhenToolStatusIsMaintenance() {
-        tool.setStatus(ToolStatus.MAINTENANCE);
-        when(toolRepository.findById(toolId)).thenReturn(tool);
-        assertThatThrownBy(() -> sendToMaintenance.execute(toolId)).isInstanceOf(ToolAlreadyInMaintenanceException.class);
+        Tool tool = buildTool(ToolStatus.MAINTENANCE);
+        when(toolRepository.findById(tool.getId())).thenReturn(tool);
+        assertThatThrownBy(() -> sendToMaintenance.execute(tool.getId())).isInstanceOf(ToolAlreadyInMaintenanceException.class);
     }
 
 }
