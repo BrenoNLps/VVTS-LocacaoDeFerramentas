@@ -19,7 +19,7 @@ public class SendToMaintenance {
         Objects.requireNonNull(toolId);
         if(toolId.isBlank()) throw new IllegalArgumentException();
         Tool tool = toolRepository.findById(toolId);
-        if(tool == null) throw new EntityNotFoundException("Tool" + toolId);
+        if(tool == null) throw new EntityNotFoundException(toolId);
         return tool.sendToMaintenance(LocalDate.now());
     }
 }
