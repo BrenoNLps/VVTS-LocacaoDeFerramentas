@@ -6,6 +6,7 @@ import br.ifsp.demo.domain.MaintenanceRecord;
 import br.ifsp.demo.domain.Tool;
 import br.ifsp.demo.domain.ToolStatus;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
+import br.ifsp.demo.domain.exception.ToolAlreadyInMaintenanceException;
 import br.ifsp.demo.domain.exception.ToolInUseException;
 import br.ifsp.demo.domain.repository.ToolRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,6 +73,14 @@ class SendToMaintenanceTest {
         tool.setStatus(ToolStatus.RENTED);
         when(toolRepository.findById(toolId)).thenReturn(tool);
         assertThatThrownBy(() -> sendToMaintenance.execute(toolId)).isInstanceOf(ToolInUseException.class);
+    }
+
+    @Test
+    @DisplayName("Should throw ToolAlreadyInMaintenanceException when tool status is maintenance")
+    void shouldThrowToolAlreadyInMaintenanceExceptionWhenToolStatusIsMaintenance() {
+        tool.setStatus(ToolStatus.MAINTENANCE);
+        when(toolRepository.findById(toolId)).thenReturn(tool);
+        assertThatThrownBy(() -> sendToMaintenance.execute(toolId)).isInstanceOf(ToolAlreadyInMaintenanceException.class);
     }
 
 }
