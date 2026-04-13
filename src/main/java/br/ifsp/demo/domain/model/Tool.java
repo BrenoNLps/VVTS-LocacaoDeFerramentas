@@ -1,4 +1,4 @@
-package br.ifsp.demo.domain;
+package br.ifsp.demo.domain.model;
 
 import br.ifsp.demo.domain.exception.ToolAlreadyInMaintenanceException;
 import br.ifsp.demo.domain.exception.ToolInUseException;

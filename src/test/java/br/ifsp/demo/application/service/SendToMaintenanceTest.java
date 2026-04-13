@@ -2,10 +2,10 @@ package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
-import br.ifsp.demo.domain.MaintenanceRecord;
-import br.ifsp.demo.domain.ProgressivePrices;
-import br.ifsp.demo.domain.Tool;
-import br.ifsp.demo.domain.ToolStatus;
+import br.ifsp.demo.domain.model.MaintenanceRecord;
+import br.ifsp.demo.domain.model.ProgressivePrices;
+import br.ifsp.demo.domain.model.Tool;
+import br.ifsp.demo.domain.model.ToolStatus;
 
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
@@ -13,7 +13,6 @@ import br.ifsp.demo.domain.exception.ToolAlreadyInMaintenanceException;
 import br.ifsp.demo.domain.exception.ToolInUseException;
 import br.ifsp.demo.domain.repository.ToolRepository;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

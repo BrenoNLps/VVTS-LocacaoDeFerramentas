@@ -1,7 +1,7 @@
 package br.ifsp.demo.application.service;
 
-import br.ifsp.demo.domain.MaintenanceRecord;
-import br.ifsp.demo.domain.Tool;
+import br.ifsp.demo.domain.model.MaintenanceRecord;
+import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.repository.ToolRepository;
