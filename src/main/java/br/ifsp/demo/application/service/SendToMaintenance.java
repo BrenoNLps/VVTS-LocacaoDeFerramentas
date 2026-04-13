@@ -2,8 +2,9 @@ package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.domain.MaintenanceRecord;
 import br.ifsp.demo.domain.Tool;
+import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.repository.ToolRepository;
-import jakarta.persistence.EntityNotFoundException;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -18,7 +19,7 @@ public class SendToMaintenance {
         Objects.requireNonNull(toolId);
         if(toolId.isBlank()) throw new IllegalArgumentException();
         Tool tool = toolRepository.findById(toolId);
-        if(tool == null) throw new EntityNotFoundException();
+        if(tool == null) throw new EntityNotFoundException("Tool" + toolId);
         return tool.sendToMaintenance(LocalDate.now());
     }
 }
