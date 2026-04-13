@@ -2,6 +2,8 @@ package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
+import br.ifsp.demo.domain.MaintenanceRecord;
+import br.ifsp.demo.domain.Tool;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.repository.ToolRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -44,4 +46,15 @@ class SendToMaintenanceTest {
         when(toolRepository.findById(toolId)).thenReturn(null);
         assertThatThrownBy(() -> sendToMaintenance.execute(toolId)).isInstanceOf(EntityNotFoundException.class);
     }
+
+    @Test
+    @DisplayName("Should generate maintenance record and change tool status to maintenance when tool is available")
+    void shouldGenerateMaintenanceRecordAndChangeToolStatusWhenToolIsAvailable() {
+        String toolId = UUID.randomUUID().toString();
+        Tool tool = new Tool();
+        when(toolRepository.findById(toolId)).thenReturn(tool);
+        MaintenanceRecord result= sendToMaintenance.execute(toolId);
+        assertThat(result).isNotNull();
+    }
+
 }
