@@ -65,6 +65,7 @@ class SendToMaintenanceTest {
         when(toolRepository.findById(toolId)).thenReturn(tool);
         MaintenanceRecord result= sendToMaintenance.execute(toolId);
         assertThat(result).isNotNull();
+        assertThat(tool.getStatus()).isEqualTo(ToolStatus.MAINTENANCE);
     }
 
     @Test

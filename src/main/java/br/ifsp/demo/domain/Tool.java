@@ -2,6 +2,7 @@ package br.ifsp.demo.domain;
 
 import br.ifsp.demo.domain.exception.ToolAlreadyInMaintenanceException;
 import br.ifsp.demo.domain.exception.ToolInUseException;
+import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 public class Tool {
     private String id;
     private String name;
-    @Setter private ToolStatus status;
+    @Getter @Setter private ToolStatus status;
     private ProgressivePrices prices;
     private final List<MaintenanceRecord> maintenanceHistory;
 
@@ -26,4 +27,5 @@ public class Tool {
         this.maintenanceHistory.add(record);
         return record;
     }
+
 }
