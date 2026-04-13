@@ -24,4 +24,10 @@ class SendToMaintenanceServiceTest {
                 .isInstanceOf(NullPointerException.class);
     }
 
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when tool id is empty")
+    void shouldThrowIllegalArgumentExceptionWhenToolIdIsEmpty() {
+        assertThatThrownBy(() -> sendToMaintenanceService.execute(""))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }
