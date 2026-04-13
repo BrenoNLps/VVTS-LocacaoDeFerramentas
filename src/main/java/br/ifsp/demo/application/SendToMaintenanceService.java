@@ -8,6 +8,7 @@ import java.util.UUID;
 public class SendToMaintenanceService {
     public MaintenanceRecord execute(String toolId) {
         Objects.requireNonNull(toolId);
+        if(toolId.isBlank()) throw new IllegalArgumentException();
         return null;
     }
 }
