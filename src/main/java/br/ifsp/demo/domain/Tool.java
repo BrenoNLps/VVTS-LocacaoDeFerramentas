@@ -1,5 +1,6 @@
 package br.ifsp.demo.domain;
 
+import br.ifsp.demo.domain.exception.ToolInUseException;
 import lombok.Setter;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class Tool {
     }
 
     public MaintenanceRecord sendToMaintenance(LocalDate date) {
+        if(status == ToolStatus.RENTED) throw new ToolInUseException(this.id);
         status= ToolStatus.MAINTENANCE;
         MaintenanceRecord record = new MaintenanceRecord();
         this.maintenanceHistory.add(record);
