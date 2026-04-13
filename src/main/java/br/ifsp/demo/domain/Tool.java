@@ -8,9 +8,9 @@ public class Tool {
     private String name;
     private ToolStatus status;
     private ProgressivePrices prices;
-    private final List<MaintenanceRecord> maintenanceRecords;
+    private final List<MaintenanceRecord> maintenanceHistory;
 
     public Tool() {
-        this.maintenanceRecords = new ArrayList<>();
+        this.maintenanceHistory = new ArrayList<>();
     }
 }
