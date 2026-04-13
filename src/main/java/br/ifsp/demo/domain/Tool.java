@@ -1,5 +1,6 @@
 package br.ifsp.demo.domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,5 +13,12 @@ public class Tool {
 
     public Tool() {
         this.maintenanceHistory = new ArrayList<>();
+    }
+
+    public MaintenanceRecord sendToMaintenance(LocalDate date) {
+        status= ToolStatus.MAINTENANCE;
+        MaintenanceRecord record = new MaintenanceRecord();
+        this.maintenanceHistory.add(record);
+        return record;
     }
 }
