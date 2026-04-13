@@ -5,10 +5,13 @@ import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.MaintenanceRecord;
 import br.ifsp.demo.domain.Tool;
 import br.ifsp.demo.domain.ToolStatus;
+
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
+import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.exception.ToolAlreadyInMaintenanceException;
 import br.ifsp.demo.domain.exception.ToolInUseException;
 import br.ifsp.demo.domain.repository.ToolRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,10 +48,10 @@ class SendToMaintenanceTest {
     }
 
     @Test
-    @DisplayName("Should throw IllegalArgumentException when tool id is empty")
-    void shouldThrowIllegalArgumentExceptionWhenToolIdIsEmpty() {
+    @DisplayName("Should throw IllegalArgumentException when tool id is blank")
+    void shouldThrowIllegalArgumentExceptionWhenToolIdIsBlank() {
         assertThatThrownBy(() -> sendToMaintenance.execute(""))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(InvalidArgumentException.class);
     }
 
     @Test
