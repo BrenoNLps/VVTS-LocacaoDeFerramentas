@@ -1,5 +1,6 @@
 package br.ifsp.demo.domain;
 
+import lombok.Setter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public class Tool {
     private String id;
     private String name;
-    private ToolStatus status;
+    @Setter private ToolStatus status;
     private ProgressivePrices prices;
     private final List<MaintenanceRecord> maintenanceHistory;
 
