@@ -4,6 +4,7 @@ import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
+import br.ifsp.demo.domain.exception.InvalidToolStateException;
 import br.ifsp.demo.domain.model.MaintenanceRecord;
 import br.ifsp.demo.domain.model.ProgressivePrices;
 import br.ifsp.demo.domain.model.Tool;
@@ -66,4 +67,12 @@ class ReturnFromMaintenanceTest {
         verify(toolRepository).save(tool);
     }
 
+
+    @Test @UnitTest @TDD //55
+    @DisplayName("Should throw InvalidToolStateException when tool status is available")
+    void shouldThrowInvalidToolStateExceptionWhenToolIsAvailable() {
+        Tool tool = buildTool(ToolStatus.AVAILABLE);
+        when(toolRepository.findById(tool.getId())).thenReturn(tool);
+        assertThatThrownBy(() -> returnFromMaintenance.execute(tool.getId())).isInstanceOf(InvalidToolStateException.class);
+    }
 }
