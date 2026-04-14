@@ -41,6 +41,13 @@ public class RegisterRental {
     ){
         Objects.requireNonNull(customerId, "customerId");
         if (customerId.isBlank()) throw new InvalidArgumentException("customerId");
+        Objects.requireNonNull(toolsIds, "toolIds");
+        if (toolsIds.isEmpty()) throw new InvalidArgumentException("toolIds");
+        for (String toolId : toolsIds) {
+            Objects.requireNonNull(toolId, "toolId");
+            if (toolId.isBlank()) throw new InvalidArgumentException("toolId");
+        }
+        Objects.requireNonNull(startDate, "startDate");
         if (guaranteeType == null) throw new MissingGuaranteeException();
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
