@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class RegisterRental {
@@ -37,7 +38,7 @@ public class RegisterRental {
             BigDecimal depositValue,
             String documentNumber
     ){
-        if (customerId == null) throw new NullPointerException("customerId");
+        Objects.requireNonNull(customerId, "customerId");
         if (guaranteeType == null) throw new MissingGuaranteeException();
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
