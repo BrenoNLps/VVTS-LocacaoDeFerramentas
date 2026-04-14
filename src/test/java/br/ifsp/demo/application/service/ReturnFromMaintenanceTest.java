@@ -4,6 +4,10 @@ import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
+import br.ifsp.demo.domain.model.MaintenanceRecord;
+import br.ifsp.demo.domain.model.ProgressivePrices;
+import br.ifsp.demo.domain.model.Tool;
+import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.ToolRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,9 +16,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,6 +28,11 @@ class ReturnFromMaintenanceTest {
     @Mock
     ToolRepository toolRepository;
     @InjectMocks ReturnFromMaintenance returnFromMaintenance;
+
+    private Tool buildTool(ToolStatus status) {
+        ProgressivePrices prices = new ProgressivePrices(BigDecimal.TEN, BigDecimal.valueOf(8), BigDecimal.valueOf(6));
+        return new Tool(UUID.randomUUID().toString(), "Hammer", status, prices);
+    }
 
     @TDD @UnitTest @Test //58
     @DisplayName("Should throw NullPointerException when tool id is null")
@@ -41,6 +52,18 @@ class ReturnFromMaintenanceTest {
         String toolId = UUID.randomUUID().toString();
         when(toolRepository.findById(toolId)).thenReturn(null);
         assertThatThrownBy(() -> returnFromMaintenance.execute(toolId)).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test @UnitTest @TDD //54
+    @DisplayName("Should close maintenance record and change status to available when tool is in maintenance")
+    void shouldCloseMaintenanceRecordAndChangeStatusToAvailableWhenToolIsInMaintenance() {
+        Tool tool = buildTool(ToolStatus.MAINTENANCE);
+        when(toolRepository.findById(tool.getId())).thenReturn(tool);
+        MaintenanceRecord record = returnFromMaintenance.execute(tool.getId());
+
+        assertThat(tool.getStatus()).isEqualTo(ToolStatus.AVAILABLE);
+        assertThat(record).isNotNull();
+        verify(toolRepository).save(tool);
     }
 
 }
