@@ -15,6 +15,7 @@ public class QueryRentalValue {
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
         if (endDate.isBefore(startDate)) throw new InvalidPeriodException();
+        if (startDate.isEqual(endDate)) throw new InvalidPeriodException();
         for (String toolId : toolIds) {
             Objects.requireNonNull(toolId, "toolId");
             if(toolId.isBlank()) throw new InvalidArgumentException("toolId");
