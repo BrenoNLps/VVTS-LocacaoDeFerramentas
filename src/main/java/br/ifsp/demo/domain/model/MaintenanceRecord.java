@@ -18,10 +18,10 @@ public class MaintenanceRecord {
     }
 
     public void close(LocalDate returnDate) {
-
+        this.returnDate = returnDate;
+        this.closed = true;
     }
 
-    public boolean isOpen() {
-        return false;
-    }
+    public boolean isOpen() { return !closed; }
+    public boolean isClosed() { return closed; }
 }
