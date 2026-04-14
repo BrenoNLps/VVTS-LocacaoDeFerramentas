@@ -25,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -118,7 +119,13 @@ class RegisterRentalTest {
 
         static Stream<Arguments> nullInputsProvider(){
             return Stream.of(
-                    Arguments.of(null, List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null)
+                    Arguments.of(null, List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), //#42 null customerid
+                    Arguments.of("customer-1", Arrays.asList((String) null), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), //#44 null toolId
+                    Arguments.of("customer-1", Arrays.asList(("tool-1"), null), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), // #64 null toolId in multi-tool
+                    Arguments.of("customer-1", List.of("tool-1"), null, "CASH_DEPOSIT", BigDecimal.TEN, null) //#67 null start date
+
+
+
             );
         }
 
@@ -138,9 +145,13 @@ class RegisterRentalTest {
 
         static Stream<Arguments> blankInputsProvider(){
             return Stream.of(
-                    Arguments.of("", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null),
-                    Arguments.of("    ", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null)
-            );
+                    Arguments.of("", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), //#43 blank customer id
+                    Arguments.of("    ", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), // #43 whitespace customerid
+                    Arguments.of("customer-1", Arrays.asList(""), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), // #45 blank toolId
+                    Arguments.of("customer-1", Arrays.asList("  "), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), //# 63 white space tool id
+                    Arguments.of("customer-1", List.of(), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null),
+                    Arguments.of("customer-1", Arrays.asList("tool-1", ""), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null) //#65 blank  toolId in multi-tool
+                    );
         }
 
         @ParameterizedTest
