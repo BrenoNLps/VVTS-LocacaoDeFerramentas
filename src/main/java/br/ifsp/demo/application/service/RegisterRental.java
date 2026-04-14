@@ -1,6 +1,7 @@
 package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
+import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.Customer;
 import br.ifsp.demo.domain.model.Rental;
 import br.ifsp.demo.domain.model.Tool;
@@ -39,6 +40,7 @@ public class RegisterRental {
             String documentNumber
     ){
         Objects.requireNonNull(customerId, "customerId");
+        if (customerId.isBlank()) throw new InvalidArgumentException("customerId");
         if (guaranteeType == null) throw new MissingGuaranteeException();
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
