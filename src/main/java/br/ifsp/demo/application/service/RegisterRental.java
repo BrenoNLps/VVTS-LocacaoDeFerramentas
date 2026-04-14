@@ -8,6 +8,7 @@ import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.CustomerRepository;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.domain.repository.ToolRepository;
+import br.ifsp.demo.exception.MissingGuaranteeException;
 import br.ifsp.demo.exception.ToolUnavailableException;
 
 import java.math.BigDecimal;
@@ -36,6 +37,7 @@ public class RegisterRental {
             BigDecimal depositValue,
             String documentNumber
     ){
+        if (guaranteeType == null) throw new MissingGuaranteeException();
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
         List<Tool> tools = new ArrayList<>();

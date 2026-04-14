@@ -176,9 +176,6 @@ class RegisterRentalTest {
         @Test
         @DisplayName("Should Throw missing GuaranteeException when guarantee is not provided")
         void shouldThrowMissingGuaranteeExceptionWhenGuaranteeIsNotProvided() {
-            Tool tool = buildTool("tool-1", ToolStatus.AVAILABLE);
-            when(customerRepository.findById("customer-1")).thenReturn(customer);
-            when(toolRepository.findById("tool-1")).thenReturn(tool);
 
             assertThatThrownBy(() -> registerRental.execute(
                     "customer-1", List.of("tool-1"), TODAY, null, null, null
