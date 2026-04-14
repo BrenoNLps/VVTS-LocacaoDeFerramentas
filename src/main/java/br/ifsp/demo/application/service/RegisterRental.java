@@ -42,7 +42,7 @@ public class RegisterRental {
         for (String toolId : toolsIds) {
             var tool = toolRepository.findById(toolId);
             if (tool == null) throw new EntityNotFoundException("Tool", toolId);
-            if (tool.getStatus() != ToolStatus.AVAILABLE) throw new ToolUnavailableException(toolId);
+            if (!tool.isAvailable()) throw new ToolUnavailableException(toolId);
             tool.markAsRented();
         }
 

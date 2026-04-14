@@ -42,6 +42,10 @@ public class Tool {
         return record;
     }
 
+    public boolean isAvailable(){
+        return status == ToolStatus.AVAILABLE;
+    }
+
     public void markAsRented(){
         this.status = ToolStatus.RENTED;
     }
