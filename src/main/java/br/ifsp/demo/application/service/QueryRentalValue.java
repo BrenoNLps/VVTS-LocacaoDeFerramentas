@@ -1,5 +1,7 @@
 package br.ifsp.demo.application.service;
 
+import br.ifsp.demo.domain.exception.InvalidArgumentException;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -13,6 +15,7 @@ public class QueryRentalValue {
         Objects.requireNonNull(endDate);
         for (String toolId : toolIds) {
             Objects.requireNonNull(toolId, "toolId");
+            if(toolId.isBlank()) throw new InvalidArgumentException("toolId");
         }
         return null;
     }
