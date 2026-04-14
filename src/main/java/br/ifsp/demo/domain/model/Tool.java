@@ -1,5 +1,6 @@
 package br.ifsp.demo.domain.model;
 
+import br.ifsp.demo.domain.exception.InvalidToolStateException;
 import br.ifsp.demo.domain.exception.ToolAlreadyInMaintenanceException;
 import br.ifsp.demo.domain.exception.ToolInUseException;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class Tool {
     }
 
     public MaintenanceRecord returnFromMaintenance(LocalDate date) {
+        if (status == ToolStatus.AVAILABLE) {throw new InvalidToolStateException(id, status.name());}
         status= ToolStatus.AVAILABLE;
         MaintenanceRecord record = new MaintenanceRecord();
         this.maintenanceHistory.add(record);
