@@ -5,6 +5,7 @@ import br.ifsp.demo.domain.exception.InvalidPeriodException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,8 +15,8 @@ public class QueryRentalValue {
         Objects.requireNonNull(toolIds);
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
-        if (endDate.isBefore(startDate)) throw new InvalidPeriodException();
-        if (startDate.isEqual(endDate)) throw new InvalidPeriodException();
+        long days = ChronoUnit.DAYS.between(startDate, endDate);
+        if (days <= 0) throw new InvalidPeriodException();
         for (String toolId : toolIds) {
             Objects.requireNonNull(toolId, "toolId");
             if(toolId.isBlank()) throw new InvalidArgumentException("toolId");
