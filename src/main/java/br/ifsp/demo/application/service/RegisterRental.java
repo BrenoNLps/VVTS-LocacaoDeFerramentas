@@ -37,6 +37,7 @@ public class RegisterRental {
             BigDecimal depositValue,
             String documentNumber
     ){
+        if (customerId == null) throw new NullPointerException("customerId");
         if (guaranteeType == null) throw new MissingGuaranteeException();
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
