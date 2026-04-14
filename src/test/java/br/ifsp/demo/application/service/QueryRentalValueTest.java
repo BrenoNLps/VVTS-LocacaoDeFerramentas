@@ -35,6 +35,7 @@ class QueryRentalValueTest {
         ProgressivePrices prices = new ProgressivePrices(BigDecimal.TEN, BigDecimal.valueOf(8), BigDecimal.valueOf(6));
         return new Tool(UUID.randomUUID().toString(), "Hammer", status, prices);
     }
+    private static final ProgressivePrices PRICES = new ProgressivePrices(BigDecimal.TEN, BigDecimal.valueOf(8), BigDecimal.valueOf(6));
 
     @Test @UnitTest @TDD //75
     @DisplayName("Should throw NullPointerException when tool id is null")
@@ -93,5 +94,14 @@ class QueryRentalValueTest {
         when(toolRepository.findById("tool-1")).thenReturn(null);
         assertThatThrownBy(() -> queryRentalValue.execute(toolIds, LocalDate.now(), LocalDate.now().plusDays(5)))
                 .isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test @UnitTest @TDD //71
+    @DisplayName("Should calculate rental value with daily rate when period is less than 7 days")
+    void shouldCalculateRentalValueWithDailyRateWhenPeriodIsLessThan7Days() {
+        Tool tool = new Tool("tool-1", "Hammer", ToolStatus.AVAILABLE, PRICES);
+        when(toolRepository.findById("tool-1")).thenReturn(tool);
+        BigDecimal result = queryRentalValue.execute(List.of("tool-1"), LocalDate.now(), LocalDate.now().plusDays(3));
+        assertThat(result).isEqualByComparingTo(new BigDecimal("30"));
     }
 }
