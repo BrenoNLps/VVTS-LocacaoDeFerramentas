@@ -115,13 +115,26 @@ class QueryRentalValueTest {
         assertThat(result).isEqualByComparingTo(expected);
     }
 
-    @Test @UnitTest @TDD
+    @Test @UnitTest @TDD //32
     @DisplayName("Should calculate rental value with monthly rate when period is 30 days or more")
     void shouldCalculateRentalValueWithMonthlyRateWhenPeriodIs30DaysOrMore() {
         Tool tool = new Tool("tool-1", "Hammer", ToolStatus.AVAILABLE, PRICES);
         when(toolRepository.findById("tool-1")).thenReturn(tool);
         BigDecimal result = queryRentalValue.execute(List.of("tool-1"), LocalDate.now(), LocalDate.now().plusDays(30));
         BigDecimal expected = BigDecimal.valueOf(30).multiply(BigDecimal.valueOf(6));
+        assertThat(result).isEqualByComparingTo(expected);
+    }
+
+    @Test @UnitTest @TDD //34
+    @DisplayName("Should return consolidated total value for multiple tools")
+    void shouldReturnConsolidatedTotalValueForMultipleTools() {
+        ProgressivePrices prices2 = new ProgressivePrices(BigDecimal.valueOf(20), BigDecimal.valueOf(16), BigDecimal.valueOf(12));
+        Tool tool1 = new Tool("tool-1", "Hammer", ToolStatus.AVAILABLE, PRICES);
+        Tool tool2 = new Tool("tool-2", "Drill", ToolStatus.AVAILABLE, prices2);
+        when(toolRepository.findById("tool-1")).thenReturn(tool1);
+        when(toolRepository.findById("tool-2")).thenReturn(tool2);
+        BigDecimal result = queryRentalValue.execute(List.of("tool-1", "tool-2"), LocalDate.now(), LocalDate.now().plusDays(3));
+        BigDecimal expected = BigDecimal.valueOf(3).multiply(BigDecimal.valueOf(10)).add(BigDecimal.valueOf(3).multiply(BigDecimal.valueOf(20)));
         assertThat(result).isEqualByComparingTo(expected);
     }
 }
