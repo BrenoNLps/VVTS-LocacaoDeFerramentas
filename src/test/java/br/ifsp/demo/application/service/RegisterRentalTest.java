@@ -118,5 +118,16 @@ class RegisterRentalTest {
                     "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
                     .isInstanceOf(EntityNotFoundException.class);
         }
+
+        @Test
+        @DisplayName("should throw EntityNotFoundException when tool does not exist")
+        void shouldThrowEntityNotFoundExceptionWhenToolDoesNotExist() {
+            when(customerRepository.findById("customer-1")).thenReturn(customer);
+            when(toolRepository.findById("tool-1")).thenReturn(null);
+
+            assertThatThrownBy(() -> registerRental.execute(
+                    "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
+                    .isInstanceOf(EntityNotFoundException.class);
+        }
     }
 }
