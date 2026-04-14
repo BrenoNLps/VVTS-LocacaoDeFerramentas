@@ -102,7 +102,8 @@ class QueryRentalValueTest {
         Tool tool = new Tool("tool-1", "Hammer", ToolStatus.AVAILABLE, PRICES);
         when(toolRepository.findById("tool-1")).thenReturn(tool);
         BigDecimal result = queryRentalValue.execute(List.of("tool-1"), LocalDate.now(), LocalDate.now().plusDays(3));
-        assertThat(result).isEqualByComparingTo(new BigDecimal("30"));
+        BigDecimal expected = BigDecimal.valueOf(3).multiply(BigDecimal.valueOf(10));
+        assertThat(result).isEqualByComparingTo(expected);
     }
 
     @Test @UnitTest @TDD //31
