@@ -9,10 +9,7 @@ import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.CustomerRepository;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.domain.repository.ToolRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -57,6 +54,9 @@ class RegisterRentalTest {
         customer = new Customer("customer-1", "Thom Yorke");
     }
 
+    @Nested
+    @DisplayName("Happy path")
+    class HappyPath{
 
     @Test
     @UnitTest
@@ -100,5 +100,6 @@ class RegisterRentalTest {
         assertThat(tool1.getStatus()).isEqualTo(ToolStatus.RENTED);
         assertThat(tool2.getStatus()).isEqualTo(ToolStatus.RENTED);
         verify(rentalRepository).save(any());
+    }
     }
 }
