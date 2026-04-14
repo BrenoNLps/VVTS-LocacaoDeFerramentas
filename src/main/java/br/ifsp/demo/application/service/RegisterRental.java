@@ -1,5 +1,7 @@
 package br.ifsp.demo.application.service;
 
+import br.ifsp.demo.domain.exception.EntityNotFoundException;
+import br.ifsp.demo.domain.model.Customer;
 import br.ifsp.demo.domain.model.Rental;
 import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.model.ToolStatus;
@@ -32,7 +34,8 @@ public class RegisterRental {
             BigDecimal depositValue,
             String documentNumber
     ){
-        customerRepository.findById(customerId);
+        Customer customer = customerRepository.findById(customerId);
+        if (customer == null) throw new EntityNotFoundException("Customer", customerId);
         Tool tool0 = toolRepository.findById(toolsIds.get(0));
 
         for (String toolId : toolsIds) {
