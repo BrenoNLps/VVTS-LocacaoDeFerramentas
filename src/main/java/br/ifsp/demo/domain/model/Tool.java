@@ -35,6 +35,7 @@ public class Tool {
 
     public MaintenanceRecord returnFromMaintenance(LocalDate date) {
         if (status == ToolStatus.AVAILABLE) {throw new InvalidToolStateException(id, status.name());}
+        if (status == ToolStatus.RENTED) {throw new InvalidToolStateException(id, status.name());}
         status= ToolStatus.AVAILABLE;
         MaintenanceRecord record = new MaintenanceRecord();
         this.maintenanceHistory.add(record);
