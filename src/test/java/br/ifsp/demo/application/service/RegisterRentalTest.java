@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class RegisterRentalTest {
 
-    private static final LocalDate TODAY = LocalDate.of(2026, 04, 14);
+    private static final LocalDate TODAY = LocalDate.now();
 
     @Mock
     private RentalRepository rentalRepository;
