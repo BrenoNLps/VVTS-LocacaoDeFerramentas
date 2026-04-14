@@ -149,5 +149,27 @@ class RegisterRentalTest {
                     "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
                     .isInstanceOf(ToolUnavailableException.class);
         }
+
+        @ParameterizedTest
+        @EnumSource(value = ToolStatus.class, names = {"RENTED", "MAINTENANCE"})
+        @UnitTest
+        @TDD
+        @DisplayName("Should Throw ToolUnavailableException and leave all tools unchanged when one tool is unavailable in a multi-tool request")
+        void shouldThrowToolUnavailableExceptionAndLeaveAllToolsUnchangedWhenOneToolIsUnavailableInAMultiToolRequest(
+                ToolStatus unavailableStatus
+        ) {
+            Tool tool1 = buildTool("tool-1", ToolStatus.AVAILABLE);
+            Tool tool2 = buildTool("tool-2", unavailableStatus);
+            when(customerRepository.findById("customer-1")).thenReturn(customer);
+            when(toolRepository.findById("tool-1")).thenReturn(tool1);
+            when(toolRepository.findById("tool-2")).thenReturn(tool2);
+
+            assertThatThrownBy(() -> registerRental.execute(
+                    "customer-1", List.of("tool-1", "tool-2"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null
+            ))
+                    .isInstanceOf(ToolUnavailableException.class);
+
+            assertThat(tool1.getStatus()).isEqualTo(ToolStatus.AVAILABLE);
+        }
     }
 }
