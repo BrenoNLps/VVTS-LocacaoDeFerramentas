@@ -12,6 +12,7 @@ import br.ifsp.demo.exception.ToolUnavailableException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,12 +38,16 @@ public class RegisterRental {
     ){
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
+        List<Tool> tools = new ArrayList<>();
         Tool tool0 = toolRepository.findById(toolsIds.get(0));
 
         for (String toolId : toolsIds) {
             var tool = toolRepository.findById(toolId);
             if (tool == null) throw new EntityNotFoundException("Tool", toolId);
             if (!tool.isAvailable()) throw new ToolUnavailableException(toolId);
+            tools.add(tool);
+        }
+        for(Tool tool: tools){
             tool.markAsRented();
         }
 
