@@ -15,6 +15,7 @@ public class ProgressivePrices {
 
     public BigDecimal rateFor(long days) {
         if (days < 7)  return dailyRate;
+        if (days < 30)  return weeklyDailyRate;
         return null;
     }
 }
