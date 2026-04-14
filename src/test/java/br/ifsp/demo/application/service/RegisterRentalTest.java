@@ -3,6 +3,7 @@ package br.ifsp.demo.application.service;
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
+import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.Customer;
 import br.ifsp.demo.domain.model.ProgressivePrices;
 import br.ifsp.demo.domain.model.Tool;
@@ -15,7 +16,9 @@ import br.ifsp.demo.exception.ToolUnavailableException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -111,13 +115,47 @@ class RegisterRentalTest {
     @Nested
     @DisplayName("Input validation errors")
     class InputValidationErrors{
-        @Test
-        @DisplayName("Should throw NullPointerException when customerId is null")
-        void shouldThrowNullPointerExceptionWhenCustomerIdIsNull() {
+
+        static Stream<Arguments> nullInputsProvider(){
+            return Stream.of(
+                    Arguments.of(null, List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null)
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("nullInputsProvider")
+        @UnitTest
+        @TDD
+        @DisplayName("Should throw NullPointerException when required field is null")
+        void shouldThrowNullPointerExceptionWhenRequiredFieldIsNull(
+                String customerId, List<String> toolIds, LocalDate startDate,
+                String guaranteeType, BigDecimal depositValue, String documentNumber
+        ) {
             assertThatThrownBy(() -> registerRental.execute(
-                    null, List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null
-            ))
+                    customerId, toolIds, startDate, guaranteeType, depositValue, documentNumber))
                     .isInstanceOf(NullPointerException.class);
+        }
+
+        static Stream<Arguments> blankInputsProvider(){
+            return Stream.of(
+                    Arguments.of("", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null),
+                    Arguments.of("    ", List.of("tool-1", TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("blankInputsProvider")
+        @UnitTest
+        @TDD
+        @DisplayName("Should throw InvalidArgumentException when required field is blank")
+        void shouldThrowInvalidArgumentExceptionWhenRequiredFieldIsBlank(
+                String customerId, List<String> toolIds, LocalDate startDate,
+                String guaranteeType, BigDecimal depositValue, String documentNumber
+        ){
+            assertThatThrownBy(() -> registerRental.execute(
+                    customerId, toolIds, startDate, guaranteeType, depositValue, documentNumber))
+                    .isInstanceOf(InvalidArgumentException.class);
+
         }
     }
 
