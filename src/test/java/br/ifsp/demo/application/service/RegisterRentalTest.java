@@ -10,8 +10,11 @@ import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.CustomerRepository;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.domain.repository.ToolRepository;
+import br.ifsp.demo.exception.ToolUnavailableException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -120,6 +123,8 @@ class RegisterRentalTest {
         }
 
         @Test
+        @UnitTest
+        @TDD
         @DisplayName("should throw EntityNotFoundException when tool does not exist")
         void shouldThrowEntityNotFoundExceptionWhenToolDoesNotExist() {
             when(customerRepository.findById("customer-1")).thenReturn(customer);
@@ -128,6 +133,21 @@ class RegisterRentalTest {
             assertThatThrownBy(() -> registerRental.execute(
                     "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
                     .isInstanceOf(EntityNotFoundException.class);
+        }
+
+        @ParameterizedTest
+        @EnumSource(value = ToolStatus.class, names = {"RENTED", "MAINTENANCE"})
+        @UnitTest
+        @TDD
+        @DisplayName("Should throw ToolUnavailableException when tool is not available")
+        void shouldThrowToolUnavailableExceptionWhenToolIsNotAvailable(ToolStatus unavailableStatus) {
+            Tool tool = buildTool("tool-1", unavailableStatus);
+            when(customerRepository.findById("customer-1")).thenReturn(customer);
+            when(toolRepository.findById("tool-1")).thenReturn(tool);
+
+            assertThatThrownBy(() -> registerRental.execute(
+                    "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
+                    .isInstanceOf(ToolUnavailableException.class);
         }
     }
 }
