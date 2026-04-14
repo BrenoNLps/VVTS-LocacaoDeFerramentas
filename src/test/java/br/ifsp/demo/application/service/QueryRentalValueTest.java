@@ -3,6 +3,7 @@ package br.ifsp.demo.application.service;
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
+import br.ifsp.demo.domain.exception.InvalidPeriodException;
 import br.ifsp.demo.domain.model.ProgressivePrices;
 import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.model.ToolStatus;
@@ -65,5 +66,13 @@ class QueryRentalValueTest {
         toolIds.add("");
         assertThatThrownBy(() -> queryRentalValue.execute(toolIds, LocalDate.now(), LocalDate.now().plusDays(5)))
                 .isInstanceOf(InvalidArgumentException.class);
+    }
+
+    @Test @UnitTest @TDD //73
+    @DisplayName("Should throw InvalidPeriodException when end date is before start date")
+    void shouldThrowInvalidPeriodExceptionWhenEndDateIsBeforeStartDate() {
+        List<String> toolIds = List.of("tool-1");
+        assertThatThrownBy(() -> queryRentalValue.execute(toolIds, LocalDate.now().plusDays(5), LocalDate.now()))
+                .isInstanceOf(InvalidPeriodException.class);
     }
 }
