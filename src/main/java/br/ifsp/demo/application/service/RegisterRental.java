@@ -9,6 +9,7 @@ import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.CustomerRepository;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.domain.repository.ToolRepository;
+import br.ifsp.demo.exception.InvalidDateException;
 import br.ifsp.demo.exception.MissingGuaranteeException;
 import br.ifsp.demo.exception.ToolUnavailableException;
 
@@ -48,6 +49,7 @@ public class RegisterRental {
             if (toolId.isBlank()) throw new InvalidArgumentException("toolId");
         }
         Objects.requireNonNull(startDate, "startDate");
+        if (!startDate.equals(LocalDate.now())) throw new InvalidDateException("startDate");
         if (guaranteeType == null) throw new MissingGuaranteeException();
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
