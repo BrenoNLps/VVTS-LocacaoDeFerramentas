@@ -2,6 +2,7 @@ package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
+import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.exception.InvalidPeriodException;
 import br.ifsp.demo.domain.model.ProgressivePrices;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class QueryRentalValueTest {
@@ -82,5 +84,14 @@ class QueryRentalValueTest {
         List<String> toolIds = List.of("tool-1");
         assertThatThrownBy(() -> queryRentalValue.execute(toolIds, LocalDate.now(), LocalDate.now()))
                 .isInstanceOf(InvalidPeriodException.class);
+    }
+
+    @Test @UnitTest @TDD //74
+    @DisplayName("Should throw EntityNotFoundException when tool is not found")
+    void shouldThrowEntityNotFoundExceptionWhenToolIsNotFound() {
+        List<String> toolIds = List.of("tool-1");
+        when(toolRepository.findById("tool-1")).thenReturn(null);
+        assertThatThrownBy(() -> queryRentalValue.execute(toolIds, LocalDate.now(), LocalDate.now().plusDays(5)))
+                .isInstanceOf(EntityNotFoundException.class);
     }
 }
