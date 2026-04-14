@@ -75,4 +75,12 @@ class ReturnFromMaintenanceTest {
         when(toolRepository.findById(tool.getId())).thenReturn(tool);
         assertThatThrownBy(() -> returnFromMaintenance.execute(tool.getId())).isInstanceOf(InvalidToolStateException.class);
     }
+
+    @Test @UnitTest @TDD //56
+    @DisplayName("Should throw InvalidToolStateException when tool status is rented")
+    void shouldThrowInvalidToolStateExceptionWhenToolIsRented() {
+        Tool tool = buildTool(ToolStatus.RENTED);
+        when(toolRepository.findById(tool.getId())).thenReturn(tool);
+        assertThatThrownBy(() -> returnFromMaintenance.execute(tool.getId())).isInstanceOf(InvalidToolStateException.class);
+    }
 }
