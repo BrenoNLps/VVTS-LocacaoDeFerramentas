@@ -1,6 +1,7 @@
 package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
+import br.ifsp.demo.domain.exception.InvalidPeriodException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ public class QueryRentalValue {
         Objects.requireNonNull(toolIds);
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
+        if (endDate.isBefore(startDate)) throw new InvalidPeriodException();
         for (String toolId : toolIds) {
             Objects.requireNonNull(toolId, "toolId");
             if(toolId.isBlank()) throw new InvalidArgumentException("toolId");
