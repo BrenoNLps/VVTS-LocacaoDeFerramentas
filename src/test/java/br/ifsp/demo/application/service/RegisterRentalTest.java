@@ -10,6 +10,7 @@ import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.CustomerRepository;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.domain.repository.ToolRepository;
+import br.ifsp.demo.exception.MissingGuaranteeException;
 import br.ifsp.demo.exception.ToolUnavailableException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -170,6 +171,19 @@ class RegisterRentalTest {
                     .isInstanceOf(ToolUnavailableException.class);
 
             assertThat(tool1.getStatus()).isEqualTo(ToolStatus.AVAILABLE);
+        }
+
+        @Test
+        @DisplayName("Should Throw missing GuaranteeException when guarantee is not provided")
+        void shouldThrowMissingGuaranteeExceptionWhenGuaranteeIsNotProvided() {
+            Tool tool = buildTool("tool-1", ToolStatus.AVAILABLE);
+            when(customerRepository.findById("customer-1")).thenReturn(customer);
+            when(toolRepository.findById("tool-1")).thenReturn(tool);
+
+            assertThatThrownBy(() -> registerRental.execute(
+                    "customer-1", List.of("tool-1"), TODAY, null, null, null
+            ))
+                    .isInstanceOf(MissingGuaranteeException.class);
         }
     }
 }
