@@ -11,8 +11,10 @@ import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.CustomerRepository;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.domain.repository.ToolRepository;
+import br.ifsp.demo.exception.InvalidDateException;
 import br.ifsp.demo.exception.MissingGuaranteeException;
 import br.ifsp.demo.exception.ToolUnavailableException;
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -117,15 +119,30 @@ class RegisterRentalTest {
     @DisplayName("Input validation errors")
     class InputValidationErrors{
 
+        static Stream<Arguments> invalidDateProvider(){
+            return Stream.of(
+                    Arguments.of(LocalDate.now().minusDays(1)), //past date
+                            Arguments.of(LocalDate.now().plusDays(1)) //future date
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("invalidDateProvider")
+        @UnitTest
+        @TDD
+        @DisplayName("Should throw invalid date Exception  when start date is not today")
+        void shouldThrowInvalidDateExceptionWhenStartDateIsNotToday(LocalDate invalidDate) {
+            assertThatThrownBy(() -> registerRental.execute(
+                    "customer-1", List.of("tool-1"), invalidDate, "CASH_DEPOSIT", BigDecimal.TEN, null))
+                    .isInstanceOf(InvalidDateException.class);
+        }
+
         static Stream<Arguments> nullInputsProvider(){
             return Stream.of(
                     Arguments.of(null, List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), //#42 null customerid
                     Arguments.of("customer-1", Arrays.asList((String) null), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), //#44 null toolId
                     Arguments.of("customer-1", Arrays.asList(("tool-1"), null), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), // #64 null toolId in multi-tool
                     Arguments.of("customer-1", List.of("tool-1"), null, "CASH_DEPOSIT", BigDecimal.TEN, null) //#67 null start date
-
-
-
             );
         }
 
