@@ -48,4 +48,12 @@ class QueryRentalValueTest {
         assertThatThrownBy(() -> queryRentalValue.execute(toolIds, null, LocalDate.now().plusDays(5)))
                 .isInstanceOf(NullPointerException.class);
     }
+
+    @Test @UnitTest @TDD
+    @DisplayName("Should throw NullPointerException when end date is null")
+    void shouldThrowNullPointerExceptionWhenEndDateIsNull() {
+        List<String> toolIds = new ArrayList<>();
+        assertThatThrownBy(() -> queryRentalValue.execute(toolIds, LocalDate.now(), null))
+                .isInstanceOf(NullPointerException.class);
+    }
 }
