@@ -75,4 +75,12 @@ class QueryRentalValueTest {
         assertThatThrownBy(() -> queryRentalValue.execute(toolIds, LocalDate.now().plusDays(5), LocalDate.now()))
                 .isInstanceOf(InvalidPeriodException.class);
     }
+
+    @Test @UnitTest @TDD //72
+    @DisplayName("Should throw InvalidPeriodException when rental period is zero days")
+    void shouldThrowInvalidPeriodExceptionWhenRentalPeriodIsZeroDays() {
+        List<String> toolIds = List.of("tool-1");
+        assertThatThrownBy(() -> queryRentalValue.execute(toolIds, LocalDate.now(), LocalDate.now()))
+                .isInstanceOf(InvalidPeriodException.class);
+    }
 }
