@@ -6,6 +6,8 @@ import br.ifsp.demo.domain.model.MaintenanceRecord;
 import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.repository.ToolRepository;
 
+import java.util.Objects;
+
 public class ReturnFromMaintenance {
     private final ToolRepository toolRepository;
 
@@ -14,7 +16,7 @@ public class ReturnFromMaintenance {
     }
 
     public MaintenanceRecord execute(String toolId) {
-        if(toolId==null) throw new NullPointerException();
+        Objects.requireNonNull(toolId);
         if(toolId.isBlank()) throw new InvalidArgumentException("ToolId");
         Tool tool = toolRepository.findById(toolId);
         if(tool==null) throw new EntityNotFoundException(toolId);
