@@ -39,7 +39,9 @@ public class RegisterRental {
         Tool tool0 = toolRepository.findById(toolsIds.get(0));
 
         for (String toolId : toolsIds) {
-            toolRepository.findById(toolId).markAsRented();
+            var tool = toolRepository.findById(toolId);
+            if (tool == null) throw new EntityNotFoundException("Tool", toolId);
+            tool.markAsRented();
         }
 
         Rental rental = new Rental(UUID.randomUUID().toString());
