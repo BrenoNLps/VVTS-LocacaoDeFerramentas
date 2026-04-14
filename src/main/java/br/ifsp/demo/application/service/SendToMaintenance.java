@@ -20,7 +20,7 @@ public class SendToMaintenance {
         Objects.requireNonNull(toolId);
         if(toolId.isBlank()) throw new InvalidArgumentException("ToolId");
         Tool tool = toolRepository.findById(toolId);
-        if(tool == null) throw new EntityNotFoundException(toolId);
+        if(tool == null) throw new EntityNotFoundException("Tool",toolId);
         toolRepository.save(tool);
         return tool.sendToMaintenance(LocalDate.now());
     }

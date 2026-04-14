@@ -19,7 +19,7 @@ public class ReturnFromMaintenance {
         Objects.requireNonNull(toolId);
         if(toolId.isBlank()) throw new InvalidArgumentException("ToolId");
         Tool tool = toolRepository.findById(toolId);
-        if(tool==null) throw new EntityNotFoundException(toolId);
+        if(tool==null) throw new EntityNotFoundException("Tool",toolId);
         return null;
     }
 
