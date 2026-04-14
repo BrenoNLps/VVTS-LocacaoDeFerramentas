@@ -1,6 +1,7 @@
 package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.domain.model.Rental;
+import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.CustomerRepository;
 import br.ifsp.demo.domain.repository.RentalRepository;
@@ -32,8 +33,10 @@ public class RegisterRental {
             String documentNumber
     ){
         customerRepository.findById(customerId);
-        var tool = toolRepository.findById(toolsIds.get(0));
-        tool.markAsRented();
+        Tool tool0 = toolRepository.findById(toolsIds.get(0));
+        tool0.markAsRented();
+        Tool tool1 = toolsIds.size() > 1 ? toolRepository.findById(toolsIds.get(1)) : null;
+        if (tool1 != null) tool1.markAsRented();
         Rental rental = new Rental(UUID.randomUUID().toString());
         rentalRepository.save(rental);
         return rental.getId();
