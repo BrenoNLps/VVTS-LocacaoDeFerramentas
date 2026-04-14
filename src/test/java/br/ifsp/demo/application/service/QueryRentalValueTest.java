@@ -115,4 +115,14 @@ class QueryRentalValueTest {
         BigDecimal expected = BigDecimal.valueOf(7).multiply(BigDecimal.valueOf(8));
         assertThat(result).isEqualByComparingTo(expected);
     }
+
+    @Test @UnitTest @TDD
+    @DisplayName("Should calculate rental value with monthly rate when period is 30 days or more")
+    void shouldCalculateRentalValueWithMonthlyRateWhenPeriodIs30DaysOrMore() {
+        Tool tool = new Tool("tool-1", "Hammer", ToolStatus.AVAILABLE, PRICES);
+        when(toolRepository.findById("tool-1")).thenReturn(tool);
+        BigDecimal result = queryRentalValue.execute(List.of("tool-1"), LocalDate.now(), LocalDate.now().plusDays(30));
+        BigDecimal expected = BigDecimal.valueOf(30).multiply(BigDecimal.valueOf(6));
+        assertThat(result).isEqualByComparingTo(expected);
+    }
 }
