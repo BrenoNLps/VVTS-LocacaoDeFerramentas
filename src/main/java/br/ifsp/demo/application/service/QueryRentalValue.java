@@ -25,12 +25,15 @@ public class QueryRentalValue {
         Objects.requireNonNull(endDate);
         long days = ChronoUnit.DAYS.between(startDate, endDate);
         if (days <= 0) throw new InvalidPeriodException();
+        BigDecimal total = BigDecimal.ZERO;
         for (String toolId : toolIds) {
             Objects.requireNonNull(toolId, "toolId");
             if(toolId.isBlank()) throw new InvalidArgumentException("toolId");
             Tool tool = toolRepository.findById(toolId);
             if (tool == null) throw new EntityNotFoundException("Tool", toolId);
+            BigDecimal rate = tool.getPrices().rateFor(days);
+            total = total.add(BigDecimal.valueOf(days).multiply(rate));
         }
-        return null;
+        return total;
     }
 }

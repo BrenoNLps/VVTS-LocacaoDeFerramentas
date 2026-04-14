@@ -4,17 +4,16 @@ import br.ifsp.demo.domain.exception.InvalidToolStateException;
 import br.ifsp.demo.domain.exception.ToolAlreadyInMaintenanceException;
 import br.ifsp.demo.domain.exception.ToolInUseException;
 import lombok.Getter;
-import lombok.Setter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Tool {
     @Getter String id;
-    private String name;
-    @Getter @Setter private ToolStatus status;
-    private ProgressivePrices prices;
-    private final List<MaintenanceRecord> maintenanceHistory;
+    @Getter String name;
+    @Getter private ToolStatus status;
+    @Getter ProgressivePrices prices;
+    @Getter final List<MaintenanceRecord> maintenanceHistory;
 
     public Tool(String id, String name, ToolStatus status, ProgressivePrices prices) {
         this.id = id;
@@ -41,4 +40,9 @@ public class Tool {
         this.maintenanceHistory.add(record);
         return record;
     }
+
+    public boolean isAvailable() {return status == ToolStatus.AVAILABLE;}
+    public void markAsAvailable() {this.status = ToolStatus.AVAILABLE;}
+    public void markAsRented() {this.status = ToolStatus.RENTED;}
+
 }
