@@ -34,9 +34,11 @@ public class RegisterRental {
     ){
         customerRepository.findById(customerId);
         Tool tool0 = toolRepository.findById(toolsIds.get(0));
-        tool0.markAsRented();
-        Tool tool1 = toolsIds.size() > 1 ? toolRepository.findById(toolsIds.get(1)) : null;
-        if (tool1 != null) tool1.markAsRented();
+
+        for (String toolId : toolsIds) {
+            toolRepository.findById(toolId).markAsRented();
+        }
+
         Rental rental = new Rental(UUID.randomUUID().toString());
         rentalRepository.save(rental);
         return rental.getId();
