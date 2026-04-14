@@ -139,7 +139,7 @@ class RegisterRentalTest {
         static Stream<Arguments> blankInputsProvider(){
             return Stream.of(
                     Arguments.of("", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null),
-                    Arguments.of("    ", List.of("tool-1", TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
+                    Arguments.of("    ", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null)
             );
         }
 
