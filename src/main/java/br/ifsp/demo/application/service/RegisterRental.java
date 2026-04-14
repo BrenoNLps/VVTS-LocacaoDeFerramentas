@@ -8,6 +8,7 @@ import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.CustomerRepository;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.domain.repository.ToolRepository;
+import br.ifsp.demo.exception.ToolUnavailableException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -41,6 +42,7 @@ public class RegisterRental {
         for (String toolId : toolsIds) {
             var tool = toolRepository.findById(toolId);
             if (tool == null) throw new EntityNotFoundException("Tool", toolId);
+            if (tool.getStatus() != ToolStatus.AVAILABLE) throw new ToolUnavailableException(toolId);
             tool.markAsRented();
         }
 
