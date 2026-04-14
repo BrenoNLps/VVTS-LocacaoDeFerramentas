@@ -109,6 +109,19 @@ class RegisterRentalTest {
     }
 
     @Nested
+    @DisplayName("Input validation errors")
+    class InputValidationErrors{
+        @Test
+        @DisplayName("Should throw NullPointerException when customerId is null")
+        void shouldThrowNullPointerExceptionWhenCustomerIdIsNull() {
+            assertThatThrownBy(() -> registerRental.execute(
+                    null, List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null
+            ))
+                    .isInstanceOf(NullPointerException.class);
+        }
+    }
+
+    @Nested
     @DisplayName("Business rule errors")
     class BusinessRuleErrors {
 
