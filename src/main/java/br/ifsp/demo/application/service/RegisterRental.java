@@ -33,7 +33,7 @@ public class RegisterRental {
     ){
         customerRepository.findById(customerId);
         var tool = toolRepository.findById(toolsIds.get(0));
-        tool.setStatus(ToolStatus.RENTED);
+        tool.markAsRented();
         Rental rental = new Rental(UUID.randomUUID().toString());
         rentalRepository.save(rental);
         return rental.getId();

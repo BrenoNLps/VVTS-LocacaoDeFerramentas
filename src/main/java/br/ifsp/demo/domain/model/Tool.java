@@ -41,4 +41,8 @@ public class Tool {
         this.maintenanceHistory.add(record);
         return record;
     }
+
+    public void markAsRented(){
+        this.status = ToolStatus.RENTED;
+    }
 }
