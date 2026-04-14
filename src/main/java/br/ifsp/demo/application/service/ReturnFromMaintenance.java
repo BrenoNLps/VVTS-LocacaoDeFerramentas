@@ -4,8 +4,10 @@ import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.MaintenanceRecord;
 import br.ifsp.demo.domain.model.Tool;
+import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.ToolRepository;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class ReturnFromMaintenance {
@@ -20,7 +22,9 @@ public class ReturnFromMaintenance {
         if(toolId.isBlank()) throw new InvalidArgumentException("ToolId");
         Tool tool = toolRepository.findById(toolId);
         if(tool==null) throw new EntityNotFoundException("Tool",toolId);
-        return null;
+        MaintenanceRecord record = tool.returnFromMaintenance(LocalDate.now());
+        toolRepository.save(tool);
+        return record;
     }
 
 }

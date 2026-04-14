@@ -31,4 +31,11 @@ public class Tool {
         this.maintenanceHistory.add(record);
         return record;
     }
+
+    public MaintenanceRecord returnFromMaintenance(LocalDate date) {
+        status= ToolStatus.AVAILABLE;
+        MaintenanceRecord record = new MaintenanceRecord();
+        this.maintenanceHistory.add(record);
+        return record;
+    }
 }
