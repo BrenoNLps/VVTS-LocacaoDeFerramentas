@@ -2,6 +2,7 @@ package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
+import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.ProgressivePrices;
 import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.model.ToolStatus;
@@ -55,5 +56,14 @@ class QueryRentalValueTest {
         List<String> toolIds = new ArrayList<>();
         assertThatThrownBy(() -> queryRentalValue.execute(toolIds, LocalDate.now(), null))
                 .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test @UnitTest @TDD //75
+    @DisplayName("Should throw InvalidArgumentException when tool id is blank")
+    void shouldThrowInvalidArgumentExceptionWhenToolIdIsBlank(){
+        List<String> toolIds = new ArrayList<>();
+        toolIds.add("");
+        assertThatThrownBy(() -> queryRentalValue.execute(toolIds, LocalDate.now(), LocalDate.now().plusDays(5)))
+                .isInstanceOf(InvalidArgumentException.class);
     }
 }
