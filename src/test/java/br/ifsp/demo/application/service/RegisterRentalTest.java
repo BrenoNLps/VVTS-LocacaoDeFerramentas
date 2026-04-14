@@ -10,6 +10,7 @@ import br.ifsp.demo.domain.repository.CustomerRepository;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.domain.repository.ToolRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,17 +45,24 @@ class RegisterRentalTest {
     @InjectMocks
     private RegisterRental registerRental;
 
+    private Customer customer;
+
     private Tool buildTool(String id, ToolStatus status){
         return new Tool(id, "Hammer", status,
                 new ProgressivePrices(BigDecimal.TEN, BigDecimal.valueOf(8), BigDecimal.valueOf(6)));
     }
+
+    @BeforeEach
+    void setUp(){
+        customer = new Customer("customer-1", "Thom Yorke");
+    }
+
 
     @Test
     @UnitTest
     @TDD
     @DisplayName("Should create rental and mark Tool as Rented when customer exists and tool is available")
     void shouldCreateRentalAndMarkToolAsRentedWhenCustomerExistsAndToolIsAvailable() {
-        var customer = new Customer("customer-1", "Thom Yorke");
         var tool = buildTool("tool-1", ToolStatus.AVAILABLE);
         when(customerRepository.findById("customer-1")).thenReturn(customer);
         when(toolRepository.findById("tool-1")).thenReturn(tool);
@@ -65,6 +73,32 @@ class RegisterRentalTest {
 
         assertThat(rentalId).isNotNull();
         assertThat(tool.getStatus()).isEqualTo(ToolStatus.RENTED);
+        verify(rentalRepository).save(any());
+    }
+
+    @UnitTest
+    @TDD
+    @Test
+    @DisplayName("should mard all tools as rented when multiple available tools are requested")
+    void shouldMardAllToolsAsRentedWhenMultipleAvailableToolsAreRequested() {
+        Tool tool1 = buildTool("tool-1", ToolStatus.AVAILABLE);
+        var tool2 = buildTool("tool-2", ToolStatus.AVAILABLE);
+        when(customerRepository.findById("customer-1")).thenReturn(customer);
+        when(toolRepository.findById("tool-1")).thenReturn(tool1);
+        when(toolRepository.findById("tool-2")).thenReturn(tool2);
+
+        String rentalId = registerRental.execute(
+                "customer-1",
+                List.of("tool-1", "tool-2"),
+                TODAY,
+                "CASH_DEPOSIT",
+                BigDecimal.TEN,
+                null
+        );
+
+        assertThat(rentalId).isNotNull();
+        assertThat(tool1.getStatus()).isEqualTo(ToolStatus.RENTED);
+        assertThat(tool2.getStatus()).isEqualTo(ToolStatus.RENTED);
         verify(rentalRepository).save(any());
     }
 }
