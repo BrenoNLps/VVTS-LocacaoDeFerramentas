@@ -21,7 +21,8 @@ public class SendToMaintenance {
         if(toolId.isBlank()) throw new InvalidArgumentException("ToolId");
         Tool tool = toolRepository.findById(toolId);
         if(tool == null) throw new EntityNotFoundException("Tool",toolId);
+        MaintenanceRecord record = tool.sendToMaintenance(LocalDate.now());
         toolRepository.save(tool);
-        return tool.sendToMaintenance(LocalDate.now());
+        return record;
     }
 }
