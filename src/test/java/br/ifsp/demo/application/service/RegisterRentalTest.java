@@ -2,6 +2,7 @@ package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
+import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.model.Customer;
 import br.ifsp.demo.domain.model.ProgressivePrices;
 import br.ifsp.demo.domain.model.Tool;
@@ -101,5 +102,21 @@ class RegisterRentalTest {
         assertThat(tool2.getStatus()).isEqualTo(ToolStatus.RENTED);
         verify(rentalRepository).save(any());
     }
+    }
+
+    @Nested
+    @DisplayName("Business rule errors")
+    class BusinessRuleErrors {
+
+        @Test
+        @UnitTest
+        @TDD
+        @DisplayName("should throw entity not found exception when customer does not exist")
+        void shouldThrowEntityNotFoundExceptionWhenCustomerDoesNotExist() {
+            when(customerRepository.findById("customer-1")).thenReturn(null);
+            assertThatThrownBy(() -> registerRental.execute(
+                    "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
+                    .isInstanceOf(EntityNotFoundException.class);
+        }
     }
 }
