@@ -10,6 +10,7 @@ public class QueryRentalValue {
     public BigDecimal execute(List<String> toolIds, LocalDate startDate, LocalDate endDate){
         Objects.requireNonNull(toolIds);
         Objects.requireNonNull(startDate);
+        Objects.requireNonNull(endDate);
         for (String toolId : toolIds) {
             Objects.requireNonNull(toolId, "toolId");
         }
