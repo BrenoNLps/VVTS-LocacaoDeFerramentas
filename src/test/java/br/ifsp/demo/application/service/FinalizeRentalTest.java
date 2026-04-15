@@ -126,6 +126,8 @@ class FinalizeRentalTest {
             }
 
             @Test
+            @UnitTest
+            @TDD
             @DisplayName("Should throw EntityNotFoundException when rental does not exist")
             void shouldThrowEntityNotFoundExceptionWhenRentalDoesNotExist() {
                 when(rentalRepository.findById("rental-1")).thenReturn(null);
@@ -135,6 +137,8 @@ class FinalizeRentalTest {
             }
 
             @Test
+            @UnitTest
+            @TDD
             @DisplayName("Should Throw InvalidDateException when end date is before start date")
             void shouldThrowInvalidDateExceptionWhenEndDateIsBeforeStartDate() {
                 Tool tool = buildTool("tool-1");
@@ -144,6 +148,32 @@ class FinalizeRentalTest {
 
                 assertThatThrownBy(() -> finalizeRental.execute("rental-1", START.minusDays(1)))
                         .isInstanceOf(InvalidDateException.class);
+            }
+
+            @Nested
+            @DisplayName("Input validation errors")
+            class InputValidationErrors {
+
+                @Test
+                @UnitTest
+                @TDD
+                @DisplayName("Should throw NullPointerException when rentalId is null")
+                void shouldThrowNullPointerExceptionWhenRentalIdIsNull() {
+                    assertThatThrownBy(() -> finalizeRental.execute(null, END))
+                            .isInstanceOf(NullPointerException.class);
+                }
+
+                static Stream<String> blankRentalIdProvider(){
+                    return Stream.of("", "  ");
+                }
+
+                @ParameterizedTest
+                @MethodSource("blankRentalIdProvider")
+                @DisplayName("Should throw InvalidArgumentException when rentalId is blank")
+                void shouldThrowInvalidArgumentExceptionWhenRentalIdIsBlank(String rentalId) {
+                    assertThatThrownBy(() -> finalizeRental.execute(rentalId, END))
+                            .isInstanceOf(InvalidDateException.class);
+                }
             }
         }
     }
