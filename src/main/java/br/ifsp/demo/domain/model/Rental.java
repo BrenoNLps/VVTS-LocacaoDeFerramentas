@@ -1,5 +1,6 @@
 package br.ifsp.demo.domain.model;
 
+import br.ifsp.demo.exception.InvalidDateException;
 import br.ifsp.demo.exception.RentalAlreadyCancelledException;
 import br.ifsp.demo.exception.RentalAlreadyFinalizedException;
 
@@ -51,6 +52,7 @@ public class Rental {
     public BigDecimal finalize(LocalDate endDate) {
         if (status == FINALIZED) throw new RentalAlreadyFinalizedException(id);
         if (status == CANCELLED) throw new RentalAlreadyCancelledException(id);
+        if (endDate.isBefore(startDate)) throw new InvalidDateException("endDate");
         long days = ChronoUnit.DAYS.between(startDate, endDate);
         BigDecimal total = BigDecimal.ZERO;
         for (Tool tool : tools) {
