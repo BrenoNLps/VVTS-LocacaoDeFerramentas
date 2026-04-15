@@ -50,8 +50,7 @@ public class Rental {
     }
 
     public BigDecimal finalize(LocalDate endDate) {
-        if (status == FINALIZED) throw new RentalAlreadyFinalizedException(id);
-        if (status == CANCELLED) throw new RentalAlreadyCancelledException(id);
+        validateActive();
         if (endDate.isBefore(startDate)) throw new InvalidDateException("endDate");
         long days = ChronoUnit.DAYS.between(startDate, endDate);
         BigDecimal total = BigDecimal.ZERO;
@@ -62,6 +61,11 @@ public class Rental {
         }
         this.status = FINALIZED;
         return total;
+    }
+
+    private void validateActive(){
+        if (status == FINALIZED) throw new RentalAlreadyFinalizedException(id);
+        if (status == CANCELLED) throw new RentalAlreadyCancelledException(id);
     }
 
     public String getId() {
@@ -81,8 +85,7 @@ public class Rental {
     }
 
     public void cancel() {
-        if (status == CANCELLED) throw new RentalAlreadyCancelledException(id);
-        if (status == FINALIZED) throw new RentalAlreadyFinalizedException(id);
+        validateActive();
         this.status = CANCELLED;
         for(Tool tool : tools){
             tool.markAsAvailable();
