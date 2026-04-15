@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static br.ifsp.demo.domain.model.ToolStatus.*;
+
 public class Tool {
     @Getter String id;
     private String name;
@@ -25,28 +27,32 @@ public class Tool {
     }
 
     public MaintenanceRecord sendToMaintenance(LocalDate date) {
-        if(status == ToolStatus.RENTED) throw new ToolInUseException(this.id);
-        if(status == ToolStatus.MAINTENANCE) throw new ToolAlreadyInMaintenanceException(this.id);
-        status= ToolStatus.MAINTENANCE;
+        if(status == RENTED) throw new ToolInUseException(this.id);
+        if(status == MAINTENANCE) throw new ToolAlreadyInMaintenanceException(this.id);
+        status= MAINTENANCE;
         MaintenanceRecord record = new MaintenanceRecord();
         this.maintenanceHistory.add(record);
         return record;
     }
 
     public MaintenanceRecord returnFromMaintenance(LocalDate date) {
-        if (status == ToolStatus.AVAILABLE) {throw new InvalidToolStateException(id, status.name());}
-        if (status == ToolStatus.RENTED) {throw new InvalidToolStateException(id, status.name());}
-        status= ToolStatus.AVAILABLE;
+        if (status == AVAILABLE) {throw new InvalidToolStateException(id, status.name());}
+        if (status == RENTED) {throw new InvalidToolStateException(id, status.name());}
+        status= AVAILABLE;
         MaintenanceRecord record = new MaintenanceRecord();
         this.maintenanceHistory.add(record);
         return record;
     }
 
     public boolean isAvailable(){
-        return status == ToolStatus.AVAILABLE;
+        return status == AVAILABLE;
     }
 
     public void markAsRented(){
-        this.status = ToolStatus.RENTED;
+        this.status = RENTED;
+    }
+
+    public void markAsAvailable() {
+        this.status = AVAILABLE;
     }
 }

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static br.ifsp.demo.domain.model.RentalStatus.*;
+import static br.ifsp.demo.domain.model.ToolStatus.AVAILABLE;
 
 public class Rental {
 
@@ -38,5 +39,12 @@ public class Rental {
 
     public void setStatus(RentalStatus status) {
         this.status = status;
+    }
+
+    public void cancel() {
+        this.status = CANCELLED;
+        for(Tool tool : tools){
+            tool.markAsAvailable();
+        }
     }
 }

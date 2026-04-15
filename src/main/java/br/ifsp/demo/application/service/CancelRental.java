@@ -19,10 +19,7 @@ public class CancelRental {
 
     public void execute(String rentalId) {
         Rental rental = rentalRepository.findById(rentalId);
-        for(Tool tool : rental.getTools()){
-            tool.setStatus(AVAILABLE);
-        }
-        rental.setStatus(CANCELLED);
+        rental.cancel();
         rentalRepository.save(rental);
     }
 }
