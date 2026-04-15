@@ -3,6 +3,9 @@ package br.ifsp.demo.domain.model;
 import br.ifsp.demo.exception.RentalAlreadyCancelledException;
 import br.ifsp.demo.exception.RentalAlreadyFinalizedException;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,24 +17,43 @@ public class Rental {
 
     private final String id;
     private final List<Tool> tools;
+    private final LocalDate startDate;
     private RentalStatus status;
 
     public Rental(String id) {
         this.id = id;
         this.tools = new ArrayList<>();
+        this.startDate = null;
         this.status = ACTIVE;
     }
 
     public Rental(String id, List<Tool> tools) {
         this.id = id;
-        this.tools = tools;
+        this.tools = new ArrayList<>(tools);
+        this.startDate = null;
         this.status = ACTIVE;
     }
 
     public Rental(String id, List<Tool> tools, RentalStatus status) {
         this.id = id;
-        this.tools = tools;
+        this.tools = new ArrayList<>(tools);
+        this.startDate = null;
         this.status = status;
+    }
+
+    public Rental(String id, List<Tool> tools, LocalDate startDate) {
+        this.id = id;
+        this.tools = new ArrayList<>(tools);
+        this.startDate = startDate;
+        this.status = ACTIVE;
+    }
+
+    public BigDecimal finalize(LocalDate endDate) {
+        long days = ChronoUnit.DAYS.between(startDate, endDate);
+        Tool tool = tools.get(0);
+        tool.markAsAvailable();
+        this.status = FINALIZED;
+        return BigDecimal.valueOf(days).multiply(tool.getPrices().rateFor(days));
     }
 
     public String getId() {
