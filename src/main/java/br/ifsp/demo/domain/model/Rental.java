@@ -50,10 +50,14 @@ public class Rental {
 
     public BigDecimal finalize(LocalDate endDate) {
         long days = ChronoUnit.DAYS.between(startDate, endDate);
-        Tool tool = tools.get(0);
-        tool.markAsAvailable();
+        BigDecimal total = BigDecimal.ZERO;
+        for (Tool tool : tools) {
+            total = total.add(BigDecimal.valueOf(days)
+                    .multiply(tool.getPrices().rateFor(days)));
+            tool.markAsAvailable();
+        }
         this.status = FINALIZED;
-        return BigDecimal.valueOf(days).multiply(tool.getPrices().rateFor(days));
+        return total;
     }
 
     public String getId() {
