@@ -4,11 +4,16 @@ import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.model.*;
 import br.ifsp.demo.domain.repository.RentalRepository;
+import br.ifsp.demo.exception.RentalAlreadyCancelledException;
+import br.ifsp.demo.exception.RentalAlreadyFinalizedException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static br.ifsp.demo.domain.model.RentalStatus.*;
 import static br.ifsp.demo.domain.model.ToolStatus.*;
@@ -88,6 +94,34 @@ class FinalizeRentalTest {
             assertThat(tool1.isAvailable()).isTrue();
             assertThat(tool2.isAvailable()).isTrue();
             assertThat(rental.getStatus()).isEqualTo(FINALIZED);
+        }
+
+        @Nested
+        @DisplayName("Business rule errors")
+        class BusinessRuleErrors{
+
+            static Stream<Arguments> nonActiveRentalProvider(){
+                return Stream.of(
+                        Arguments.of(FINALIZED, RentalAlreadyFinalizedException.class),
+                        Arguments.of(CANCELLED, RentalAlreadyCancelledException.class)
+                );
+            }
+
+            @ParameterizedTest
+            @MethodSource("nonActiveRentalProvider")
+            @UnitTest
+            @TDD
+            @DisplayName("Should throw exception when rental is not active")
+            void shouldThrowExceptionWhenRentalIsNotActive(
+                    RentalStatus status, Class<? extends Exception> expectedException) {
+                Tool tool = buildTool("tool-1");
+                Rental rental = new Rental("rental-1", List.of(tool), status);
+                when(rentalRepository.findById("rental-1"))
+                        .thenReturn(rental);
+
+                assertThatThrownBy(() -> finalizeRental.execute("rental-1", END))
+                        .isInstanceOf(expectedException);
+            }
         }
     }
 }
