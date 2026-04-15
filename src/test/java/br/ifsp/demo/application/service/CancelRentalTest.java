@@ -1,5 +1,6 @@
 package br.ifsp.demo.application.service;
 
+import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.model.*;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import org.assertj.core.api.Assertions;
@@ -37,7 +38,7 @@ class CancelRentalTest {
 
     @Nested
     @DisplayName("Happy path")
-    class HappyPath{
+    class HappyPath {
 
         @Test
         @DisplayName("Should set tool as available and rental as cancelled when rental has one tool")
@@ -80,6 +81,21 @@ class CancelRentalTest {
 
             verify(rentalRepository)
                     .save(rental);
+        }
+    }
+
+    @Nested
+    @DisplayName("Business rule errors")
+    class BusinessRuleErrors{
+
+        @Test
+        @DisplayName("Should Throw EntityNotFoundException when rental does not exist")
+        void shouldThrowEntityNotFoundExceptionWhenRentalDoesNotExist() {
+            when(rentalRepository.findById("rental-1"))
+                    .thenReturn(null);
+
+            assertThatThrownBy(() -> cancelRental.execute("rental-1"))
+                    .isInstanceOf(EntityNotFoundException.class);
         }
     }
 }
