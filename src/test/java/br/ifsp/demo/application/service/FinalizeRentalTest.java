@@ -99,62 +99,8 @@ class FinalizeRentalTest {
         }
 
         @Nested
-        @DisplayName("Business rule errors")
-        class BusinessRuleErrors{
-
-            static Stream<Arguments> nonActiveRentalProvider(){
-                return Stream.of(
-                        Arguments.of(FINALIZED, RentalAlreadyFinalizedException.class),
-                        Arguments.of(CANCELLED, RentalAlreadyCancelledException.class)
-                );
-            }
-
-            @ParameterizedTest
-            @MethodSource("nonActiveRentalProvider")
-            @UnitTest
-            @TDD
-            @DisplayName("Should throw exception when rental is not active")
-            void shouldThrowExceptionWhenRentalIsNotActive(
-                    RentalStatus status, Class<? extends Exception> expectedException) {
-                Tool tool = buildTool("tool-1");
-                Rental rental = new Rental("rental-1", List.of(tool), status);
-                when(rentalRepository.findById("rental-1"))
-                        .thenReturn(rental);
-
-                assertThatThrownBy(() -> finalizeRental.execute("rental-1", END))
-                        .isInstanceOf(expectedException);
-            }
-
-            @Test
-            @UnitTest
-            @TDD
-            @DisplayName("Should throw EntityNotFoundException when rental does not exist")
-            void shouldThrowEntityNotFoundExceptionWhenRentalDoesNotExist() {
-                when(rentalRepository.findById("rental-1")).thenReturn(null);
-
-                assertThatThrownBy(() -> finalizeRental.execute("rental-1", END))
-                        .isInstanceOf(EntityNotFoundException.class);
-            }
-
-            @Test
-            @UnitTest
-            @TDD
-            @DisplayName("Should Throw InvalidDateException when end date is before start date")
-            void shouldThrowInvalidDateExceptionWhenEndDateIsBeforeStartDate() {
-                Tool tool = buildTool("tool-1");
-                Rental rental = new Rental("rental-1", List.of(tool), START);
-                when(rentalRepository.findById("rental-1"))
-                        .thenReturn(rental);
-
-                assertThatThrownBy(() -> finalizeRental.execute("rental-1", START.minusDays(1)))
-                        .isInstanceOf(InvalidDateException.class);
-            }
-
-        }
-        @Nested
         @DisplayName("Input validation errors")
         class InputValidationErrors {
-
             @Test
             @UnitTest
             @TDD
@@ -175,6 +121,60 @@ class FinalizeRentalTest {
                 assertThatThrownBy(() -> finalizeRental.execute(rentalId, END))
                         .isInstanceOf(InvalidDateException.class);
             }
+
         }
+    }
+    @Nested
+    @DisplayName("Business rule errors")
+    class BusinessRuleErrors{
+
+        static Stream<Arguments> nonActiveRentalProvider(){
+            return Stream.of(
+                    Arguments.of(FINALIZED, RentalAlreadyFinalizedException.class),
+                    Arguments.of(CANCELLED, RentalAlreadyCancelledException.class)
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("nonActiveRentalProvider")
+        @UnitTest
+        @TDD
+        @DisplayName("Should throw exception when rental is not active")
+        void shouldThrowExceptionWhenRentalIsNotActive(
+                RentalStatus status, Class<? extends Exception> expectedException) {
+            Tool tool = buildTool("tool-1");
+            Rental rental = new Rental("rental-1", List.of(tool), status);
+            when(rentalRepository.findById("rental-1"))
+                    .thenReturn(rental);
+
+            assertThatThrownBy(() -> finalizeRental.execute("rental-1", END))
+                    .isInstanceOf(expectedException);
+        }
+
+        @Test
+        @UnitTest
+        @TDD
+        @DisplayName("Should throw EntityNotFoundException when rental does not exist")
+        void shouldThrowEntityNotFoundExceptionWhenRentalDoesNotExist() {
+            when(rentalRepository.findById("rental-1")).thenReturn(null);
+
+            assertThatThrownBy(() -> finalizeRental.execute("rental-1", END))
+                    .isInstanceOf(EntityNotFoundException.class);
+        }
+
+        @Test
+        @UnitTest
+        @TDD
+        @DisplayName("Should Throw InvalidDateException when end date is before start date")
+        void shouldThrowInvalidDateExceptionWhenEndDateIsBeforeStartDate() {
+            Tool tool = buildTool("tool-1");
+            Rental rental = new Rental("rental-1", List.of(tool), START);
+            when(rentalRepository.findById("rental-1"))
+                    .thenReturn(rental);
+
+            assertThatThrownBy(() -> finalizeRental.execute("rental-1", START.minusDays(1)))
+                    .isInstanceOf(InvalidDateException.class);
+        }
+
     }
 }
