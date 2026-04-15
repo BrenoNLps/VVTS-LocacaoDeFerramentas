@@ -57,5 +57,29 @@ class CancelRentalTest {
 
             verify(rentalRepository).save(rental);
         }
+
+        @Test
+        @DisplayName("Should set all tools as available and rental as cancelled when rental has multiple tools")
+        void shouldSetAllToolsAsAvailableAndRentalAsCancelledWhenRentalHasMultipleTools() {
+            var tool1 = buildTool("tool-1", RENTED);
+            var tool2 = buildTool("tool-2", RENTED);
+            Rental rental = new Rental("rental-1", List.of(tool1, tool2));
+            when(rentalRepository.findById("rental-1"))
+                    .thenReturn(rental);
+
+            cancelRental.execute("rental-1");
+
+            assertThat(tool1.getStatus())
+                    .isEqualTo(AVAILABLE);
+
+            assertThat(tool2.getStatus())
+                    .isEqualTo(AVAILABLE);
+
+            assertThat(rental.getStatus())
+                    .isEqualTo(CANCELLED);
+
+            verify(rentalRepository)
+                    .save(rental);
+        }
     }
 }
