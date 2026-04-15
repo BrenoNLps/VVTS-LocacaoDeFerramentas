@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static br.ifsp.demo.domain.model.ToolStatus.*;
+
 public class Tool {
     @Getter private final String id;
     @Getter private final String name;
@@ -46,10 +48,14 @@ public class Tool {
     }
 
     public boolean isAvailable(){
-        return status == ToolStatus.AVAILABLE;
+        return status == AVAILABLE;
     }
 
     public void markAsRented(){
-        this.status = ToolStatus.RENTED;
+        this.status = RENTED;
+    }
+
+    public void markAsAvailable() {
+        this.status = AVAILABLE;
     }
 }
