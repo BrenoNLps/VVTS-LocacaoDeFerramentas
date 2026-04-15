@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class RegisterRental {
@@ -46,9 +43,11 @@ public class RegisterRental {
         if (customerId.isBlank()) throw new InvalidArgumentException("customerId");
         Objects.requireNonNull(toolsIds, "toolIds");
         if (toolsIds.isEmpty()) throw new InvalidArgumentException("toolIds");
+        Set<String> seen = new HashSet<>();
         for (String toolId : toolsIds) {
             Objects.requireNonNull(toolId, "toolId");
             if (toolId.isBlank()) throw new InvalidArgumentException("toolId");
+            if (!seen.add(toolId)) throw new InvalidArgumentException("toolId");
         }
         Objects.requireNonNull(startDate, "startDate");
         if (!startDate.equals(LocalDate.now())) throw new InvalidDateException("startDate");
