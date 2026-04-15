@@ -275,5 +275,15 @@ class RegisterRentalTest {
                     .isInstanceOf(MissingGuaranteeException.class);
         }
 
+        @ParameterizedTest
+        @MethodSource("blankGuaranteeTypeProvider")
+        @UnitTest
+        @Functional
+        @DisplayName("Should throw exception when guaranteeType is blank")
+        void shouldThrowExceptionWhenGuaranteeTypeIsBlank(String guaranteeType) {
+            assertThatThrownBy(() -> registerRental.execute(
+                    "customer-1", List.of("tool-1"), TODAY, guaranteeType, BigDecimal.TEN, null)).isInstanceOf(MissingGuaranteeException.class);
+        }
+        static Stream<String> blankGuaranteeTypeProvider() {return Stream.of("", "  ");}
     }
 }
