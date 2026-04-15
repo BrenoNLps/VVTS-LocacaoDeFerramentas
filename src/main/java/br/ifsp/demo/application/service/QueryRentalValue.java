@@ -23,6 +23,7 @@ public class QueryRentalValue {
         Objects.requireNonNull(toolIds);
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
+        if (toolIds.isEmpty()) throw new InvalidArgumentException("toolIds");
         long days = ChronoUnit.DAYS.between(startDate, endDate);
         if (days <= 0) throw new InvalidPeriodException();
         BigDecimal total = BigDecimal.ZERO;
