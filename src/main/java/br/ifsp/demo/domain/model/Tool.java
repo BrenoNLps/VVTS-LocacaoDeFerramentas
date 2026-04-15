@@ -44,4 +44,12 @@ public class Tool {
     public List<MaintenanceRecord> getMaintenanceHistory() {
         return Collections.unmodifiableList(maintenanceHistory);
     }
+
+    public boolean isAvailable(){
+        return status == ToolStatus.AVAILABLE;
+    }
+
+    public void markAsRented(){
+        this.status = ToolStatus.RENTED;
+    }
 }
