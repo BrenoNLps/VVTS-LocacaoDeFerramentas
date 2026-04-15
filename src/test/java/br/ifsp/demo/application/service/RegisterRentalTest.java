@@ -1,5 +1,6 @@
 package br.ifsp.demo.application.service;
 
+import br.ifsp.demo.annotation.Functional;
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
@@ -185,6 +186,16 @@ class RegisterRentalTest {
                     .isInstanceOf(InvalidArgumentException.class);
 
         }
+
+        @Test
+        @UnitTest
+        @Functional
+        @DisplayName("Should throw InvalidArgumentException when toolIds list contains duplicates")
+        void shouldThrowInvalidArgumentExceptionWhenToolIdsContainsDuplicates() {
+            assertThatThrownBy(() -> registerRental.execute(
+                    "customer-1", Arrays.asList("tool-1", "tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null)).isInstanceOf(InvalidArgumentException.class);
+        }
+
     }
 
     @Nested
@@ -263,5 +274,6 @@ class RegisterRentalTest {
             ))
                     .isInstanceOf(MissingGuaranteeException.class);
         }
+
     }
 }
