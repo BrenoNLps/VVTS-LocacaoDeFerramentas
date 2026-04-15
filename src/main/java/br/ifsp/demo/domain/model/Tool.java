@@ -7,15 +7,16 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static br.ifsp.demo.domain.model.ToolStatus.*;
 
 public class Tool {
-    @Getter String id;
-    private String name;
-    @Getter @Setter private ToolStatus status;
-    private ProgressivePrices prices;
+    @Getter private final String id;
+    @Getter private final String name;
+    @Getter private ToolStatus status;
+    @Getter private final ProgressivePrices prices;
     private final List<MaintenanceRecord> maintenanceHistory;
 
     public Tool(String id, String name, ToolStatus status, ProgressivePrices prices) {
@@ -27,21 +28,23 @@ public class Tool {
     }
 
     public MaintenanceRecord sendToMaintenance(LocalDate date) {
-        if(status == RENTED) throw new ToolInUseException(this.id);
-        if(status == MAINTENANCE) throw new ToolAlreadyInMaintenanceException(this.id);
-        status= MAINTENANCE;
-        MaintenanceRecord record = new MaintenanceRecord();
+        if(status == ToolStatus.RENTED) throw new ToolInUseException(this.id);
+        if(status == ToolStatus.MAINTENANCE) throw new ToolAlreadyInMaintenanceException(this.id);
+        status= ToolStatus.MAINTENANCE;
+        MaintenanceRecord record = new MaintenanceRecord(date);
         this.maintenanceHistory.add(record);
         return record;
     }
 
     public MaintenanceRecord returnFromMaintenance(LocalDate date) {
-        if (status == AVAILABLE) {throw new InvalidToolStateException(id, status.name());}
-        if (status == RENTED) {throw new InvalidToolStateException(id, status.name());}
-        status= AVAILABLE;
-        MaintenanceRecord record = new MaintenanceRecord();
-        this.maintenanceHistory.add(record);
-        return record;
+        if (status == ToolStatus.AVAILABLE) {throw new InvalidToolStateException(id, status.name());}
+        if (status == ToolStatus.RENTED) {throw new InvalidToolStateException(id, status.name());}
+        status= ToolStatus.AVAILABLE;
+        return new MaintenanceRecord(date);
+    }
+
+    public List<MaintenanceRecord> getMaintenanceHistory() {
+        return Collections.unmodifiableList(maintenanceHistory);
     }
 
     public boolean isAvailable(){
