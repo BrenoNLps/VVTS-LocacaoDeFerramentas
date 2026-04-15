@@ -1,7 +1,7 @@
 package br.ifsp.demo.exception;
 
 
-import br.ifsp.demo.domain.exception.EntityNotFoundException;
+import br.ifsp.demo.domain.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -46,6 +46,56 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(value = EntityAlreadyExistsException.class)
     public ResponseEntity<?> handleEntityAlreadyExistsException(EntityAlreadyExistsException e){
+        return buildResponse(e, CONFLICT);
+    }//
+
+    @ExceptionHandler(value = InvalidArgumentException.class)
+    public ResponseEntity<?> handleInvalidArgumentException(InvalidArgumentException e) {
+        return buildResponse(e, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = InvalidDateException.class)
+    public ResponseEntity<?> handleInvalidDateException(InvalidDateException e) {
+        return buildResponse(e, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = InvalidPeriodException.class)
+    public ResponseEntity<?> handleInvalidPeriodException(InvalidPeriodException e) {
+        return buildResponse(e, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = MissingGuaranteeException.class)
+    public ResponseEntity<?> handleMissingGuaranteeException(MissingGuaranteeException e) {
+        return buildResponse(e, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = ToolUnavailableException.class)
+    public ResponseEntity<?> handleToolUnavailableException(ToolUnavailableException e) {
+        return buildResponse(e, CONFLICT);
+    }
+
+    @ExceptionHandler(value = ToolInUseException.class)
+    public ResponseEntity<?> handleToolInUseException(ToolInUseException e) {
+        return buildResponse(e, CONFLICT);
+    }
+
+    @ExceptionHandler(value = ToolAlreadyInMaintenanceException.class)
+    public ResponseEntity<?> handleToolAlreadyInMaintenanceException(ToolAlreadyInMaintenanceException e) {
+        return buildResponse(e, CONFLICT);
+    }
+
+    @ExceptionHandler(value = InvalidToolStateException.class)
+    public ResponseEntity<?> handleInvalidToolStateException(InvalidToolStateException e) {
+        return buildResponse(e, CONFLICT);
+    }
+
+    @ExceptionHandler(value = RentalAlreadyFinalizedException.class)
+    public ResponseEntity<?> handleRentalAlreadyFinalizedException(RentalAlreadyFinalizedException e) {
+        return buildResponse(e, CONFLICT);
+    }
+
+    @ExceptionHandler(value = RentalAlreadyCancelledException.class)
+    public ResponseEntity<?> handleRentalAlreadyCancelledException(RentalAlreadyCancelledException e) {
         return buildResponse(e, CONFLICT);
     }
 
