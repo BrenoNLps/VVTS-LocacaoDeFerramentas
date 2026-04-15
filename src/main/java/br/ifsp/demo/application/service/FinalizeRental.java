@@ -1,5 +1,6 @@
 package br.ifsp.demo.application.service;
 
+import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.model.Rental;
 import br.ifsp.demo.domain.repository.RentalRepository;
 
@@ -16,6 +17,7 @@ public class FinalizeRental {
 
     public BigDecimal execute(String rentalId, LocalDate endDate) {
         Rental rental = rentalRepository.findById(rentalId);
+        if (rental == null) throw new EntityNotFoundException("Rental", rentalId);
         BigDecimal total = rental.finalize(endDate);
         rentalRepository.save(rental);
         return total;
