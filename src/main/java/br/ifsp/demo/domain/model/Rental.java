@@ -1,5 +1,8 @@
 package br.ifsp.demo.domain.model;
 
+import br.ifsp.demo.exception.RentalAlreadyCancelledException;
+import br.ifsp.demo.exception.RentalAlreadyFinalizedException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +51,8 @@ public class Rental {
     }
 
     public void cancel() {
+        if (status == CANCELLED) throw new RentalAlreadyCancelledException(id);
+        if (status == FINALIZED) throw new RentalAlreadyFinalizedException(id);
         this.status = CANCELLED;
         for(Tool tool : tools){
             tool.markAsAvailable();

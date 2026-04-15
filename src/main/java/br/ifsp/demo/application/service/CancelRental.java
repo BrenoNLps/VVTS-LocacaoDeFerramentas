@@ -23,8 +23,6 @@ public class CancelRental {
     public void execute(String rentalId) {
         Rental rental = rentalRepository.findById(rentalId);
         if (rental == null) throw new EntityNotFoundException("Rental", rentalId);
-        if (rental.getStatus() == CANCELLED) throw new RentalAlreadyCancelledException(rentalId);
-        if (rental.getStatus() == FINALIZED) throw new RentalAlreadyFinalizedException(rentalId);
         rental.cancel();
         rentalRepository.save(rental);
     }
