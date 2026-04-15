@@ -25,6 +25,12 @@ public class Rental {
         this.status = ACTIVE;
     }
 
+    public Rental(String id, List<Tool> tools, RentalStatus status) {
+        this.id = id;
+        this.tools = tools;
+        this.status = status;
+    }
+
     public String getId() {
         return id;
     }

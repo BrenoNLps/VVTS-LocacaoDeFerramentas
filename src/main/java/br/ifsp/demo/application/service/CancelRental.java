@@ -1,5 +1,6 @@
 package br.ifsp.demo.application.service;
 
+import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.model.Rental;
 import br.ifsp.demo.domain.model.RentalStatus;
 import br.ifsp.demo.domain.model.Tool;
@@ -19,6 +20,7 @@ public class CancelRental {
 
     public void execute(String rentalId) {
         Rental rental = rentalRepository.findById(rentalId);
+        if (rental == null) throw new EntityNotFoundException("Rental", rentalId);
         rental.cancel();
         rentalRepository.save(rental);
     }
