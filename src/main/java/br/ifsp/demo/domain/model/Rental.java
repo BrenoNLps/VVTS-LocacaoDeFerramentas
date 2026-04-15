@@ -35,4 +35,8 @@ public class Rental {
     public List<Tool> getTools(){
         return Collections.unmodifiableList(tools);
     }
+
+    public void setStatus(RentalStatus status) {
+        this.status = status;
+    }
 }

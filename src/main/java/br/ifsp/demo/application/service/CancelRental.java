@@ -1,6 +1,13 @@
 package br.ifsp.demo.application.service;
 
+import br.ifsp.demo.domain.model.Rental;
+import br.ifsp.demo.domain.model.RentalStatus;
+import br.ifsp.demo.domain.model.Tool;
+import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.RentalRepository;
+
+import static br.ifsp.demo.domain.model.RentalStatus.*;
+import static br.ifsp.demo.domain.model.ToolStatus.*;
 
 public class CancelRental {
 
@@ -11,6 +18,11 @@ public class CancelRental {
     }
 
     public void execute(String rentalId) {
-
+        Rental rental = rentalRepository.findById(rentalId);
+        for(Tool tool : rental.getTools()){
+            tool.setStatus(AVAILABLE);
+        }
+        rental.setStatus(CANCELLED);
+        rentalRepository.save(rental);
     }
 }
