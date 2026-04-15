@@ -1,6 +1,7 @@
 package br.ifsp.demo.exception;
 
-import jakarta.persistence.EntityNotFoundException;
+
+import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,64 +14,39 @@ import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
-
-    @ExceptionHandler(value = NullPointerException.class)
-    public ResponseEntity<?> handleNullPointerException(NullPointerException e){
-        final HttpStatus badRequest = BAD_REQUEST;
+    private ResponseEntity<?> buildResponse(Exception e, HttpStatus status) {
         final ApiException apiException = ApiException.builder()
-                .status(badRequest)
+                .status(status)
                 .message(e.getMessage())
                 .developerMessage(e.getClass().getName())
                 .timestamp(ZonedDateTime.now(ZoneId.of("Z")))
                 .build();
-        return new ResponseEntity<>(apiException, badRequest);
+        return new ResponseEntity<>(apiException, status);
+    }
+
+    @ExceptionHandler(value = NullPointerException.class)
+    public ResponseEntity<?> handleNullPointerException(NullPointerException e){
+        return buildResponse(e, BAD_REQUEST);
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e){
-        final HttpStatus badRequest = BAD_REQUEST;
-        final ApiException apiException = ApiException.builder()
-                .status(badRequest)
-                .message(e.getMessage())
-                .developerMessage(e.getClass().getName())
-                .timestamp(ZonedDateTime.now(ZoneId.of("Z")))
-                .build();
-        return new ResponseEntity<>(apiException, badRequest);
+        return buildResponse(e, BAD_REQUEST);
     }
 
     @ExceptionHandler(value = IllegalStateException.class)
     public ResponseEntity<?> handleIllegalStateException(IllegalStateException e){
-        final HttpStatus forbidden = FORBIDDEN;
-        final ApiException apiException = ApiException.builder()
-                .status(forbidden)
-                .message(e.getMessage())
-                .developerMessage(e.getClass().getName())
-                .timestamp(ZonedDateTime.now(ZoneId.of("Z")))
-                .build();
-        return new ResponseEntity<>(apiException, forbidden);
+        return buildResponse(e, FORBIDDEN);
     }
 
     @ExceptionHandler(value = EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException e){
-        final HttpStatus notFound = NOT_FOUND;
-        final ApiException apiException = ApiException.builder()
-                .status(notFound)
-                .message(e.getMessage())
-                .developerMessage(e.getClass().getName())
-                .timestamp(ZonedDateTime.now(ZoneId.of("Z")))
-                .build();
-        return new ResponseEntity<>(apiException, notFound);
+        return buildResponse(e, NOT_FOUND);
     }
 
     @ExceptionHandler(value = EntityAlreadyExistsException.class)
     public ResponseEntity<?> handleEntityAlreadyExistsException(EntityAlreadyExistsException e){
-        final HttpStatus conflict = CONFLICT;
-        final ApiException apiException = ApiException.builder()
-                .status(conflict)
-                .message(e.getMessage())
-                .developerMessage(e.getClass().getName())
-                .timestamp(ZonedDateTime.now(ZoneId.of("Z")))
-                .build();
-        return new ResponseEntity<>(apiException, conflict);
+        return buildResponse(e, CONFLICT);
     }
+
 }
