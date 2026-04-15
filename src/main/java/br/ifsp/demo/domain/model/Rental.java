@@ -49,6 +49,8 @@ public class Rental {
     }
 
     public BigDecimal finalize(LocalDate endDate) {
+        if (status == FINALIZED) throw new RentalAlreadyFinalizedException(id);
+        if (status == CANCELLED) throw new RentalAlreadyCancelledException(id);
         long days = ChronoUnit.DAYS.between(startDate, endDate);
         BigDecimal total = BigDecimal.ZERO;
         for (Tool tool : tools) {
