@@ -63,5 +63,31 @@ class FinalizeRentalTest {
             assertThat(tool.isAvailable()).isTrue();
             assertThat(rental.getStatus()).isEqualTo(FINALIZED);
         }
+
+        @Test
+        @UnitTest
+        @TDD
+        @DisplayName("Should finalize rental and return consolidated total value for multiple tools")
+        void shouldFinalizeRentalAndReturnConsolidatedTotalValueForMultipleTools() {
+            Tool tool1 = buildTool("tool-1");
+            Tool tool2 = new Tool(
+                    "tool-2", "concrete mixer", RENTED,
+                    new ProgressivePrices(
+                            BigDecimal.valueOf(100),
+                            BigDecimal.valueOf(80),
+                            BigDecimal.valueOf(60))
+            );
+
+            Rental rental = new Rental("rental-1", List.of(tool1, tool2), START);
+            when(rentalRepository.findById("rental-1"))
+                    .thenReturn(rental);
+
+            BigDecimal result = finalizeRental.execute("rental-1", END);
+
+            assertThat(result).isEqualByComparingTo(new BigDecimal("90"));
+            assertThat(tool1.isAvailable()).isTrue();
+            assertThat(tool2.isAvailable()).isTrue();
+            assertThat(rental.getStatus()).isEqualTo(FINALIZED);
+        }
     }
 }
