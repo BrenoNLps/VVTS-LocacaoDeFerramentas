@@ -49,6 +49,13 @@ public class Rental {
         this.status = ACTIVE;
     }
 
+    public Rental(String id, List<Tool> tools, LocalDate startDate, RentalStatus status) {
+        this.id = id;
+        this.tools = new ArrayList<>(tools);
+        this.startDate = startDate;
+        this.status = status;
+    }
+
     public BigDecimal finalize(LocalDate endDate) {
         validateActive();
         if (endDate.isBefore(startDate)) throw new InvalidDateException("endDate");
