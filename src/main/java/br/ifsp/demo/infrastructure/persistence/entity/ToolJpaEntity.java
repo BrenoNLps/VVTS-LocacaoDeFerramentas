@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 public class ToolJpaEntity {
 
     @Id
+    private String id;
+
     private String name;
 
     @Enumerated(EnumType.STRING)
