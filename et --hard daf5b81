@@ -1,0 +1,87 @@
+[33m82897b1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/feature/us-46-send-to-maintenance[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeature/us-46-send-to-maintenance[m[33m)[m HEAD@{0}: Branch: renamed refs/heads/main to refs/heads/feature/us-53-return-from-maintenance
+[33m82897b1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/feature/us-46-send-to-maintenance[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeature/us-46-send-to-maintenance[m[33m)[m HEAD@{2}: checkout: moving from us-53-return-from-maintenance to main
+[33mdaf5b81[m[33m ([m[1;32mus-53-return-from-maintenance[m[33m)[m HEAD@{3}: checkout: moving from main to us-53-return-from-maintenance
+[33m82897b1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/feature/us-46-send-to-maintenance[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeature/us-46-send-to-maintenance[m[33m)[m HEAD@{4}: checkout: moving from us-53-return-from-maintenance to main
+[33mdaf5b81[m[33m ([m[1;32mus-53-return-from-maintenance[m[33m)[m HEAD@{5}: checkout: moving from main to us-53-return-from-maintenance
+[33m82897b1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/feature/us-46-send-to-maintenance[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeature/us-46-send-to-maintenance[m[33m)[m HEAD@{6}: checkout: moving from us-53-return-from-maintenance to main
+[33mdaf5b81[m[33m ([m[1;32mus-53-return-from-maintenance[m[33m)[m HEAD@{7}: commit: refactor: extend DomainException in all domain exceptions
+[33m27c91ae[m HEAD@{8}: commit: feat: create DomainException base class
+[33ma9dab68[m HEAD@{9}: commit: refactor: extract record variable in SendToMaintenance to match ReturnFromMaintenance pattern
+[33m14caa40[m HEAD@{10}: commit: feat: implement rented status check in Tool returnFromMaintenance - closes #56
+[33mc69b04e[m HEAD@{11}: commit: test: add failing test for invalid tool state when tool is rented
+[33m72987ed[m HEAD@{12}: commit: feat: implement available status check in Tool returnFromMaintenance - closes #55
+[33m80fd97a[m HEAD@{13}: commit: test: add failing test for invalid tool state when tool is available
+[33m95aa26a[m HEAD@{14}: reset: moving to HEAD~1
+[33m0275e99[m HEAD@{15}: commit: test: add failing test for invalid tool state when tool is available
+[33m95aa26a[m HEAD@{16}: commit: feat: create InvalidToolStateException
+[33m3c1b1b8[m HEAD@{17}: commit: feat: implement return from maintenance in Tool and ReturnFromMaintenance service - closes #54
+[33mfc154f8[m HEAD@{18}: commit: test: add failing test for return from maintenance when tool is in maintenance
+[33mdf6d1b3[m HEAD@{19}: commit: refactor: add entity parameter to EntityNotFoundException error description
+[33mf996c82[m HEAD@{20}: commit: refactor: replace null check with Objects.requireNonNull to follow project pattern
+[33mb003bb3[m HEAD@{21}: commit: feat: implement tool not found check in ReturnFromMaintenance - closes #57
+[33m0f999de[m HEAD@{22}: commit: test: add failing test for tool not found in return from maintenance
+[33m6871450[m HEAD@{23}: commit: feat: implement blank tool id validation for return from maintenance - closes #59
+[33mcb57bc0[m HEAD@{24}: commit: test: add blank tool id validation for return from maintenance
+[33m951d949[m HEAD@{25}: commit: feat: implement null tool id validation for return from maintenance - closes #58
+[33m409c97a[m HEAD@{26}: commit: test: add null tool id validation for return from maintenance
+[33m82897b1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/feature/us-46-send-to-maintenance[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeature/us-46-send-to-maintenance[m[33m)[m HEAD@{27}: checkout: moving from main to us-53-return-from-maintenance
+[33m82897b1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/feature/us-46-send-to-maintenance[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeature/us-46-send-to-maintenance[m[33m)[m HEAD@{28}: merge feature/us-46-send-to-maintenance: Fast-forward
+[33md511f08[m HEAD@{29}: checkout: moving from main to main
+[33md511f08[m HEAD@{30}: checkout: moving from feature/us-46-send-to-maintenance to main
+[33m82897b1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/feature/us-46-send-to-maintenance[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeature/us-46-send-to-maintenance[m[33m)[m HEAD@{31}: checkout: moving from main to feature/us-46-send-to-maintenance
+[33md511f08[m HEAD@{32}: checkout: moving from feature/us-46-send-to-maintenance to main
+[33m82897b1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/us-53-return-from-maintenance[m[33m, [m[1;31morigin/feature/us-46-send-to-maintenance[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeature/us-46-send-to-maintenance[m[33m)[m HEAD@{33}: commit: refactor: move UnitTest and TDD annotations to method level in send to maintenance test
+[33m2b6036d[m HEAD@{34}: commit: refactor: move domain classes to model subpackage
+[33mbe5d145[m HEAD@{35}: commit: fix: save tool to repository after sending to maintenance #47
+[33m06ee62a[m HEAD@{36}: commit: feat: add getId to Tool
+[33m2cd10a1[m HEAD@{37}: commit: refactor: replace BeforeEach setup with buildTool factory method in send to maintenance test
+[33m74a7bed[m HEAD@{38}: commit: fix: replace selenium InvalidArgumentException with domain exception in send to maintenance test #52
+[33m370cd24[m HEAD@{39}: reset: moving to HEAD~1
+[33m03b90b6[m HEAD@{40}: commit: fix: replace selenium InvalidArgumentException with domain exception in send to maintenance test #52
+[33m370cd24[m HEAD@{41}: commit: feat: add InvalidArgumentException to domain exceptions
+[33mf50d9d3[m HEAD@{42}: reset: moving to HEAD~1
+[33m92622e1[m HEAD@{43}: commit: fix: correct InvalidArgumentException import in send to maintenance test #52
+[33mf50d9d3[m HEAD@{44}: commit: test: complete status assertion for send to maintenance #47
+[33m7e17e1a[m HEAD@{45}: commit: refactor: standardize EntityNotFoundException message format
+[33m57f2a2f[m HEAD@{46}: commit: refactor: standardize ToolAlreadyInMaintenanceException message format
+[33mf6408b9[m HEAD@{47}: commit: feat: implement maintenance status check in Tool sendToMaintenance - closes #49
+[33mea89d9f[m HEAD@{48}: commit: test: add failing test for tool already in maintenance
+[33m4a3a193[m HEAD@{49}: commit: feat: create ToolAlreadyInMaintenanceException
+[33m2c1dda3[m HEAD@{50}: commit: refactor: extract toolId and tool to BeforeEach setup
+[33mb82f4ad[m HEAD@{51}: commit: feat: implement rented status check in Tool sendToMaintenance - closes #48
+[33m5c0eea0[m HEAD@{52}: commit: test: add failing test for tool in use when status is rented
+[33m49a0a3f[m HEAD@{53}: commit: feat: add setStatus method to Tool
+[33mb4fbb68[m HEAD@{54}: commit: feat: create ToolInUseException
+[33m92702ae[m HEAD@{55}: commit: fix: replace jakarta EntityNotFoundException with domain exception and add message
+[33me7de388[m HEAD@{56}: commit: feat: implement send to maintenance when tool is available - closes #47
+[33m9eca574[m HEAD@{57}: commit: test: add failing test for tool available send to maintenance
+[33m4b5f249[m HEAD@{58}: commit: refactor: move and rename SendToMaintenanceService to application.service.SendToMaintenance
+[33m17edbdb[m HEAD@{59}: commit: refactor: rename maintenanceRecords to maintenanceHistory in Tool
+[33md0b4fd8[m HEAD@{60}: reset: moving to HEAD~1
+[33m676cba0[m HEAD@{61}: commit: refactor: rename maintenanceRecords to maintenanceHistory in Tool
+[33md0b4fd8[m HEAD@{62}: checkout: moving from feature/us-21-query-rental-value to feature/us-46-send-to-maintenance
+[33ma0c43f2[m[33m ([m[1;31morigin/feature/us-21-query-rental-value[m[33m, [m[1;32mfeature/us-21-query-rental-value[m[33m)[m HEAD@{63}: checkout: moving from feature/us-46-send-to-maintenance to feature/us-21-query-rental-value
+[33md0b4fd8[m HEAD@{64}: commit: fix: replace jakarta EntityNotFoundException with domain exception in test
+[33m8ce6ef7[m HEAD@{65}: commit: feat: implement tool not found check in SendToMaintenanceService - closes #50
+[33mfb73d2f[m HEAD@{66}: commit: feat: create EntityNotFoundException
+[33me3f0a19[m HEAD@{67}: checkout: moving from feature/us-21-query-rental-value to feature/us-46-send-to-maintenance
+[33ma0c43f2[m[33m ([m[1;31morigin/feature/us-21-query-rental-value[m[33m, [m[1;32mfeature/us-21-query-rental-value[m[33m)[m HEAD@{68}: checkout: moving from feature/us-46-send-to-maintenance to feature/us-21-query-rental-value
+[33me3f0a19[m HEAD@{69}: commit: test: add failing test for tool not found
+[33mb4c7202[m HEAD@{70}: commit: feat: create ToolRepository
+[33mbb60880[m HEAD@{71}: reset: moving to HEAD~1
+[33me62d896[m HEAD@{72}: commit: feat: create ToolRepository domain interface
+[33mbb60880[m HEAD@{73}: commit: feat: create ProgressivePrices value object
+[33mee7f5ed[m HEAD@{74}: commit: feat: create ToolStatus enum
+[33m380e0cc[m HEAD@{75}: commit: feat: create Tool aggregate root
+[33m8d4b974[m HEAD@{76}: commit: feat: implement blank check for tool id in SendToMaintenanceService - closes #52
+[33m47b2713[m HEAD@{77}: commit: test: add failing test for empty tool id
+[33m716bfaf[m HEAD@{78}: commit: feat: implement null check for tool id in SendToMaintenanceService - closes #51
+[33m1820457[m HEAD@{79}: commit: test: add failing test for null tool id
+[33m1aae092[m HEAD@{80}: commit: feat: create SendToMaintenanceService application service
+[33me52696e[m HEAD@{81}: commit: feat: create MaintenanceRecord domain entity
+[33md511f08[m HEAD@{82}: checkout: moving from feature/us-21-query-rental-value to feature/us-46-send-to-maintenance
+[33ma0c43f2[m[33m ([m[1;31morigin/feature/us-21-query-rental-value[m[33m, [m[1;32mfeature/us-21-query-rental-value[m[33m)[m HEAD@{83}: checkout: moving from feature/us-46-send-to-maintenance to feature/us-21-query-rental-value
+[33md511f08[m HEAD@{84}: checkout: moving from feature/us-21-query-rental-value to feature/us-46-send-to-maintenance
+[33ma0c43f2[m[33m ([m[1;31morigin/feature/us-21-query-rental-value[m[33m, [m[1;32mfeature/us-21-query-rental-value[m[33m)[m HEAD@{85}: checkout: moving from feature/us-46-send-to-maintenance to feature/us-21-query-rental-value
+[33md511f08[m HEAD@{86}: checkout: moving from main to feature/us-46-send-to-maintenance
+[33md511f08[m HEAD@{87}: clone: from https://github.com/BrenoNLps/VVTS-LocacaoDeFerramentas.git

@@ -4,7 +4,6 @@ import br.ifsp.demo.domain.exception.InvalidToolStateException;
 import br.ifsp.demo.domain.exception.ToolAlreadyInMaintenanceException;
 import br.ifsp.demo.domain.exception.ToolInUseException;
 import lombok.Getter;
-import lombok.Setter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,15 +46,8 @@ public class Tool {
         return Collections.unmodifiableList(maintenanceHistory);
     }
 
-    public boolean isAvailable(){
-        return status == AVAILABLE;
-    }
+    public boolean isAvailable() {return status == ToolStatus.AVAILABLE;}
+    public void markAsAvailable() {this.status = ToolStatus.AVAILABLE;}
+    public void markAsRented() {this.status = ToolStatus.RENTED;}
 
-    public void markAsRented(){
-        this.status = RENTED;
-    }
-
-    public void markAsAvailable() {
-        this.status = AVAILABLE;
-    }
 }

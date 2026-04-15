@@ -14,4 +14,10 @@ public class ProgressivePrices {
         this.weeklyDailyRate = weeklyDailyRate;
         this.monthlyDailyRate = monthlyDailyRate;
     }
+
+    public BigDecimal rateFor(long days) {
+        if (days < 7)  return dailyRate;
+        if (days < 30)  return weeklyDailyRate;
+        return monthlyDailyRate;
+    }
 }
