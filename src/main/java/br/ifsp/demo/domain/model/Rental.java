@@ -52,7 +52,7 @@ public class Rental {
     public BigDecimal finalize(LocalDate endDate) {
         validateActive();
         if (endDate.isBefore(startDate)) throw new InvalidDateException("endDate");
-        long days = ChronoUnit.DAYS.between(startDate, endDate);
+        long days = Math.max(1, ChronoUnit.DAYS.between(startDate, endDate));
         BigDecimal total = BigDecimal.ZERO;
         for (Tool tool : tools) {
             total = total.add(BigDecimal.valueOf(days)
