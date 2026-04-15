@@ -150,30 +150,30 @@ class FinalizeRentalTest {
                         .isInstanceOf(InvalidDateException.class);
             }
 
-            @Nested
-            @DisplayName("Input validation errors")
-            class InputValidationErrors {
+        }
+        @Nested
+        @DisplayName("Input validation errors")
+        class InputValidationErrors {
 
-                @Test
-                @UnitTest
-                @TDD
-                @DisplayName("Should throw NullPointerException when rentalId is null")
-                void shouldThrowNullPointerExceptionWhenRentalIdIsNull() {
-                    assertThatThrownBy(() -> finalizeRental.execute(null, END))
-                            .isInstanceOf(NullPointerException.class);
-                }
+            @Test
+            @UnitTest
+            @TDD
+            @DisplayName("Should throw NullPointerException when rentalId is null")
+            void shouldThrowNullPointerExceptionWhenRentalIdIsNull() {
+                assertThatThrownBy(() -> finalizeRental.execute(null, END))
+                        .isInstanceOf(NullPointerException.class);
+            }
 
-                static Stream<String> blankRentalIdProvider(){
-                    return Stream.of("", "  ");
-                }
+            static Stream<String> blankRentalIdProvider(){
+                return Stream.of("", "  ");
+            }
 
-                @ParameterizedTest
-                @MethodSource("blankRentalIdProvider")
-                @DisplayName("Should throw InvalidArgumentException when rentalId is blank")
-                void shouldThrowInvalidArgumentExceptionWhenRentalIdIsBlank(String rentalId) {
-                    assertThatThrownBy(() -> finalizeRental.execute(rentalId, END))
-                            .isInstanceOf(InvalidDateException.class);
-                }
+            @ParameterizedTest
+            @MethodSource("blankRentalIdProvider")
+            @DisplayName("Should throw InvalidArgumentException when rentalId is blank")
+            void shouldThrowInvalidArgumentExceptionWhenRentalIdIsBlank(String rentalId) {
+                assertThatThrownBy(() -> finalizeRental.execute(rentalId, END))
+                        .isInstanceOf(InvalidDateException.class);
             }
         }
     }
