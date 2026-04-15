@@ -3,6 +3,7 @@ package br.ifsp.demo.application.service;
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
+import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.*;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.exception.RentalAlreadyCancelledException;
@@ -98,7 +99,7 @@ class CancelRentalTest {
 
     @Nested
     @DisplayName("Business rule errors")
-    class BusinessRuleErrors{
+    class BusinessRuleErrors {
 
         @Test
         @UnitTest
@@ -112,7 +113,7 @@ class CancelRentalTest {
                     .isInstanceOf(EntityNotFoundException.class);
         }
 
-        static Stream<Arguments> nonActiveRentalProvider(){
+        static Stream<Arguments> nonActiveRentalProvider() {
             return Stream.of(
                     Arguments.of(CANCELLED, RentalAlreadyCancelledException.class),
                     Arguments.of(FINALIZED, RentalAlreadyFinalizedException.class)
@@ -131,6 +132,26 @@ class CancelRentalTest {
 
             assertThatThrownBy(() -> cancelRental.execute("rental-1"))
                     .isInstanceOf(expectedException);
+        }
+    }
+
+    @Nested
+    @DisplayName("Input validation errors")
+    class InputValidationErrors{
+        static Stream<Arguments> nullInputsProvider(){
+            return Stream.of(
+                    Arguments.of((String) null)
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("nullInputsProvider")
+        @UnitTest
+        @TDD
+        @DisplayName("Should throw null pointer Exception when required field is null")
+        void shouldThrowNullPointerExceptionWhenRequiredFieldIsNull(String rentalId) {
+            assertThatThrownBy(() -> cancelRental.execute(rentalId))
+                    .isInstanceOf(InvalidArgumentException.class);
         }
     }
 }
