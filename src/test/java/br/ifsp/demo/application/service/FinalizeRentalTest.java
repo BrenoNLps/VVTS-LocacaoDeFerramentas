@@ -1,5 +1,6 @@
 package br.ifsp.demo.application.service;
 
+import br.ifsp.demo.annotation.Functional;
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
@@ -111,11 +112,25 @@ class FinalizeRentalTest {
                         .isInstanceOf(NullPointerException.class);
             }
 
-            static Stream<String> blankRentalIdProvider(){
+            static Stream<String> blankRentalIdProvider() {
                 return Stream.of("", "  ");
             }
 
+            @Test
+            @UnitTest
+            @Functional
+            @DisplayName("Should throw NullPointerException when endDate is null")
+            void shouldThrowNullPointerExceptionWhenEndDateIsNull() {
+                Tool tool = buildTool("tool-1");
+                Rental rental = new Rental("rental-1", List.of(tool), START);
+                when(rentalRepository.findById("rental-1")).thenReturn(rental);
+                assertThatThrownBy(() -> finalizeRental.execute("rental-1", null))
+                        .isInstanceOf(NullPointerException.class);
+            }
+
             @ParameterizedTest
+            @UnitTest
+            @TDD
             @MethodSource("blankRentalIdProvider")
             @DisplayName("Should throw InvalidArgumentException when rentalId is blank")
             void shouldThrowInvalidArgumentExceptionWhenRentalIdIsBlank(String rentalId) {
@@ -125,11 +140,12 @@ class FinalizeRentalTest {
 
         }
     }
+
     @Nested
     @DisplayName("Business rule errors")
-    class BusinessRuleErrors{
+    class BusinessRuleErrors {
 
-        static Stream<Arguments> nonActiveRentalProvider(){
+        static Stream<Arguments> nonActiveRentalProvider() {
             return Stream.of(
                     Arguments.of(FINALIZED, RentalAlreadyFinalizedException.class),
                     Arguments.of(CANCELLED, RentalAlreadyCancelledException.class)
@@ -177,5 +193,40 @@ class FinalizeRentalTest {
                     .isInstanceOf(InvalidDateException.class);
         }
 
+    }
+
+    @Nested
+    @DisplayName("Functional - boundary values")
+    class BoundaryValues{
+
+        static Stream<Arguments> periodTierBoundaryProvider(){
+            return Stream.of(
+                    Arguments.of(1, new BigDecimal("10")),
+                    Arguments.of(6, new BigDecimal("60")),
+
+                    Arguments.of(7, new BigDecimal("56")),
+                    Arguments.of(29, new BigDecimal("232")),
+
+                    Arguments.of(30, new BigDecimal("180")),
+                    Arguments.of(31, new BigDecimal("186"))
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("periodTierBoundaryProvider")
+        @UnitTest
+        @Functional
+        @DisplayName("Should apply correct rate at period tier boundaries")
+        void shouldApplyCorrectRateAtPeriodTierBoundaries(int days, BigDecimal expectedValue) {
+            Tool tool = buildTool("tool-1");
+            Rental rental = new Rental("rental-1", List.of(tool), START);
+            when(rentalRepository.findById("rental-1"))
+                    .thenReturn(rental);
+
+            BigDecimal result = finalizeRental.execute("rental-1", START.plusDays(days));
+
+            assertThat(result)
+                    .isEqualByComparingTo(expectedValue);
+        }
     }
 }
