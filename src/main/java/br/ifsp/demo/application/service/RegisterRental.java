@@ -5,13 +5,12 @@ import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.Customer;
 import br.ifsp.demo.domain.model.Rental;
 import br.ifsp.demo.domain.model.Tool;
-import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.CustomerRepository;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.domain.repository.ToolRepository;
-import br.ifsp.demo.exception.InvalidDateException;
-import br.ifsp.demo.exception.MissingGuaranteeException;
-import br.ifsp.demo.exception.ToolUnavailableException;
+import br.ifsp.demo.domain.exception.InvalidDateException;
+import br.ifsp.demo.domain.exception.MissingGuaranteeException;
+import br.ifsp.demo.domain.exception.ToolUnavailableException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

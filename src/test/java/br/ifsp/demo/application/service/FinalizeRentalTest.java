@@ -7,10 +7,9 @@ import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.*;
 import br.ifsp.demo.domain.repository.RentalRepository;
-import br.ifsp.demo.exception.InvalidDateException;
-import br.ifsp.demo.exception.RentalAlreadyCancelledException;
-import br.ifsp.demo.exception.RentalAlreadyFinalizedException;
-import org.assertj.core.api.Assertions;
+import br.ifsp.demo.domain.exception.InvalidDateException;
+import br.ifsp.demo.domain.exception.RentalAlreadyCancelledException;
+import br.ifsp.demo.domain.exception.RentalAlreadyFinalizedException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,6 @@ import java.util.stream.Stream;
 import static br.ifsp.demo.domain.model.RentalStatus.*;
 import static br.ifsp.demo.domain.model.ToolStatus.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

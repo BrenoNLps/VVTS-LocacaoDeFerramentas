@@ -1,8 +1,8 @@
 package br.ifsp.demo.domain.model;
 
-import br.ifsp.demo.exception.InvalidDateException;
-import br.ifsp.demo.exception.RentalAlreadyCancelledException;
-import br.ifsp.demo.exception.RentalAlreadyFinalizedException;
+import br.ifsp.demo.domain.exception.InvalidDateException;
+import br.ifsp.demo.domain.exception.RentalAlreadyCancelledException;
+import br.ifsp.demo.domain.exception.RentalAlreadyFinalizedException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static br.ifsp.demo.domain.model.RentalStatus.*;
-import static br.ifsp.demo.domain.model.ToolStatus.AVAILABLE;
 
 public class Rental {
 

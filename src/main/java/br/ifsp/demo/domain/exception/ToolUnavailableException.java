@@ -1,6 +1,4 @@
-package br.ifsp.demo.exception;
-
-import br.ifsp.demo.domain.exception.DomainException;
+package br.ifsp.demo.domain.exception;
 
 public class ToolUnavailableException extends DomainException {
     public ToolUnavailableException(String toolId) {

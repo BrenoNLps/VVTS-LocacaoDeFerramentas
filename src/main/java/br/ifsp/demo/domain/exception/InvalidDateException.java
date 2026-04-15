@@ -1,6 +1,4 @@
-package br.ifsp.demo.exception;
-
-import br.ifsp.demo.domain.exception.DomainException;
+package br.ifsp.demo.domain.exception;
 
 public class InvalidDateException extends DomainException {
     public InvalidDateException(String field) {
