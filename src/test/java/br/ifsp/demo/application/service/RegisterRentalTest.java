@@ -253,6 +253,8 @@ class RegisterRentalTest {
         }
 
         @Test
+        @UnitTest
+        @TDD
         @DisplayName("Should Throw missing GuaranteeException when guarantee is not provided")
         void shouldThrowMissingGuaranteeExceptionWhenGuaranteeIsNotProvided() {
 
