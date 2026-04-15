@@ -5,6 +5,7 @@ import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.model.*;
 import br.ifsp.demo.domain.repository.RentalRepository;
+import br.ifsp.demo.exception.InvalidDateException;
 import br.ifsp.demo.exception.RentalAlreadyCancelledException;
 import br.ifsp.demo.exception.RentalAlreadyFinalizedException;
 import org.assertj.core.api.Assertions;
@@ -131,6 +132,18 @@ class FinalizeRentalTest {
 
                 assertThatThrownBy(() -> finalizeRental.execute("rental-1", END))
                         .isInstanceOf(EntityNotFoundException.class);
+            }
+
+            @Test
+            @DisplayName("Should Throw InvalidDateException when end date is before start date")
+            void shouldThrowInvalidDateExceptionWhenEndDateIsBeforeStartDate() {
+                Tool tool = buildTool("tool-1");
+                Rental rental = new Rental("rental-1", List.of(tool), START);
+                when(rentalRepository.findById("rental-1"))
+                        .thenReturn(rental);
+
+                assertThatThrownBy(() -> finalizeRental.execute("rental-1", START.minusDays(1)))
+                        .isInstanceOf(InvalidDateException.class);
             }
         }
     }
