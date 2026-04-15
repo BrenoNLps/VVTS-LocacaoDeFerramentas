@@ -228,5 +228,21 @@ class FinalizeRentalTest {
             assertThat(result)
                     .isEqualByComparingTo(expectedValue);
         }
+
+        @Test
+        @UnitTest
+        @Functional
+        @DisplayName("Should charge minimum 1 daily rate when endDate equals startDate")
+        void shouldChargeMinimum1DailyRateWhenEndDateEqualsStartDate() {
+            Tool tool = buildTool("tool-1");
+            Rental rental = new Rental("rental-1", List.of(tool), START);
+            when(rentalRepository.findById("rental-1")).thenReturn(rental);
+
+            BigDecimal result = finalizeRental.execute("rental-1", START);
+
+            assertThat(result).isEqualByComparingTo(new BigDecimal(10));
+        }
+
+
     }
 }
