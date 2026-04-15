@@ -2,6 +2,7 @@ package br.ifsp.demo.application.service;
 
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
+import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.model.*;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.exception.RentalAlreadyCancelledException;
@@ -121,6 +122,15 @@ class FinalizeRentalTest {
 
                 assertThatThrownBy(() -> finalizeRental.execute("rental-1", END))
                         .isInstanceOf(expectedException);
+            }
+
+            @Test
+            @DisplayName("Should throw EntityNotFoundException when rental does not exist")
+            void shouldThrowEntityNotFoundExceptionWhenRentalDoesNotExist() {
+                when(rentalRepository.findById("rental-1")).thenReturn(null);
+
+                assertThatThrownBy(() -> finalizeRental.execute("rental-1", END))
+                        .isInstanceOf(EntityNotFoundException.class);
             }
         }
     }
