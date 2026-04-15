@@ -87,6 +87,10 @@ public class Rental {
         return Collections.unmodifiableList(tools);
     }
 
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
     public void setStatus(RentalStatus status) {
         this.status = status;
     }
