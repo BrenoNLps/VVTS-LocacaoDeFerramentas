@@ -3,6 +3,7 @@ package br.ifsp.demo.application.service;
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
+import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.*;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.exception.InvalidDateException;
@@ -119,7 +120,7 @@ class FinalizeRentalTest {
             @DisplayName("Should throw InvalidArgumentException when rentalId is blank")
             void shouldThrowInvalidArgumentExceptionWhenRentalIdIsBlank(String rentalId) {
                 assertThatThrownBy(() -> finalizeRental.execute(rentalId, END))
-                        .isInstanceOf(InvalidDateException.class);
+                        .isInstanceOf(InvalidArgumentException.class);
             }
 
         }
