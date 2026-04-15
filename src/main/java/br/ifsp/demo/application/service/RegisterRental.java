@@ -51,7 +51,7 @@ public class RegisterRental {
         }
         Objects.requireNonNull(startDate, "startDate");
         if (!startDate.equals(LocalDate.now())) throw new InvalidDateException("startDate");
-        if (guaranteeType == null) throw new MissingGuaranteeException();
+        if (guaranteeType == null || guaranteeType.isBlank()) throw new MissingGuaranteeException();
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
         List<Tool> tools = new ArrayList<>();
