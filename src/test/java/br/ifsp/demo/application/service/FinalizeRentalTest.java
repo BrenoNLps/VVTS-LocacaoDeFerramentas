@@ -73,9 +73,9 @@ class FinalizeRentalTest {
             Tool tool2 = new Tool(
                     "tool-2", "concrete mixer", RENTED,
                     new ProgressivePrices(
-                            BigDecimal.valueOf(100),
-                            BigDecimal.valueOf(80),
-                            BigDecimal.valueOf(60))
+                            BigDecimal.valueOf(20),
+                            BigDecimal.valueOf(16),
+                            BigDecimal.valueOf(12))
             );
 
             Rental rental = new Rental("rental-1", List.of(tool1, tool2), START);
