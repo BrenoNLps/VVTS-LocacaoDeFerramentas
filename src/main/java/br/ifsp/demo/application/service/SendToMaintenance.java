@@ -5,10 +5,12 @@ import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.repository.ToolRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Service
 public class SendToMaintenance {
     private final ToolRepository toolRepository;
 

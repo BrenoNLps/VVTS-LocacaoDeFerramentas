@@ -4,11 +4,13 @@
     import br.ifsp.demo.domain.exception.InvalidArgumentException;
     import br.ifsp.demo.domain.model.Rental;
     import br.ifsp.demo.domain.repository.RentalRepository;
+    import org.springframework.stereotype.Service;
 
     import java.math.BigDecimal;
     import java.time.LocalDate;
     import java.util.Objects;
 
+    @Service
     public class FinalizeRental {
 
         private final RentalRepository rentalRepository;

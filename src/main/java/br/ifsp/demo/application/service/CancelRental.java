@@ -9,12 +9,14 @@ import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.RentalRepository;
 import br.ifsp.demo.exception.RentalAlreadyCancelledException;
 import br.ifsp.demo.exception.RentalAlreadyFinalizedException;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 import static br.ifsp.demo.domain.model.RentalStatus.*;
 import static br.ifsp.demo.domain.model.ToolStatus.*;
 
+@Service
 public class CancelRental {
 
     private final RentalRepository rentalRepository;

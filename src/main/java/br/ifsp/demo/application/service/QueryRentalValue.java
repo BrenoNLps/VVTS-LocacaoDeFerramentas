@@ -5,6 +5,7 @@ import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.exception.InvalidPeriodException;
 import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.repository.ToolRepository;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
+@Service
 public class QueryRentalValue {
     private final ToolRepository toolRepository;
 

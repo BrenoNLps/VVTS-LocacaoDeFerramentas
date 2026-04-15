@@ -12,6 +12,7 @@ import br.ifsp.demo.domain.repository.ToolRepository;
 import br.ifsp.demo.exception.InvalidDateException;
 import br.ifsp.demo.exception.MissingGuaranteeException;
 import br.ifsp.demo.exception.ToolUnavailableException;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Service
 public class RegisterRental {
 
     private final RentalRepository rentalRepository;

@@ -6,10 +6,12 @@ import br.ifsp.demo.domain.model.MaintenanceRecord;
 import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.ToolRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Service
 public class ReturnFromMaintenance {
     private final ToolRepository toolRepository;
 
