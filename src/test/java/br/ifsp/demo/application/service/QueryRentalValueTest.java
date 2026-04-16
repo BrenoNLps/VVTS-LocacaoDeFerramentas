@@ -42,16 +42,24 @@ class QueryRentalValueTest {
 
     private final LocalDate START = LocalDate.of(2026, 1, 1);
 
-    private Tool buildTool(ToolStatus status) {
-        ProgressivePrices prices = new ProgressivePrices(BigDecimal.TEN, BigDecimal.valueOf(8), BigDecimal.valueOf(6));
-        return new Tool(UUID.randomUUID().toString(), "Hammer", status, prices);
-    }
+
+    private static final ProgressivePrices PRICES = new ProgressivePrices(BigDecimal.TEN, BigDecimal.valueOf(8), BigDecimal.valueOf(6));
 
     private Tool buildTool(String id) {
         return new Tool(id, "Hammer", ToolStatus.RENTED, PRICES);
     }
 
-    private static final ProgressivePrices PRICES = new ProgressivePrices(BigDecimal.TEN, BigDecimal.valueOf(8), BigDecimal.valueOf(6));
+    static Stream<Arguments> boundaryRentalValueProvider() {
+        return Stream.of(
+                // daily = 10: boundary < 1 day e > 6 days
+                Arguments.of(1, new BigDecimal("10")), //1*10
+                Arguments.of(6, new BigDecimal("60")), //6*10
+                //weekly = 8: boundary > 29
+                Arguments.of(29, new BigDecimal(232)), // 29*8
+                //monthly = 6: boundary in 31
+                Arguments.of(31, new BigDecimal("186")) // 31*6
+        );
+    }
 
     @Test
     @UnitTest
@@ -175,18 +183,6 @@ class QueryRentalValueTest {
         BigDecimal result = queryRentalValue.execute(List.of("tool-1", "tool-2"), LocalDate.now(), LocalDate.now().plusDays(3));
         BigDecimal expected = BigDecimal.valueOf(3).multiply(BigDecimal.valueOf(10)).add(BigDecimal.valueOf(3).multiply(BigDecimal.valueOf(20)));
         assertThat(result).isEqualByComparingTo(expected);
-    }
-
-    static Stream<Arguments> boundaryRentalValueProvider() {
-        return Stream.of(
-                // daily = 10: boundary < 1 day e > 6 days
-                Arguments.of(1, new BigDecimal("10")), //1*10
-                Arguments.of(6, new BigDecimal("60")), //6*10
-                //weekly = 8: boundary > 29
-                Arguments.of(29, new BigDecimal(232)), // 29*8
-                //monthly = 6: boundary in 31
-                Arguments.of(31, new BigDecimal("186")) // 31*6
-        );
     }
 
     @ParameterizedTest
