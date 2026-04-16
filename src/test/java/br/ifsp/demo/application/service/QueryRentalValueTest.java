@@ -42,7 +42,6 @@ class QueryRentalValueTest {
 
     private final LocalDate START = LocalDate.of(2026, 1, 1);
 
-
     private static final ProgressivePrices PRICES = new ProgressivePrices(BigDecimal.TEN, BigDecimal.valueOf(8), BigDecimal.valueOf(6));
 
     private Tool buildTool(String id) {
@@ -51,12 +50,15 @@ class QueryRentalValueTest {
 
     static Stream<Arguments> boundaryRentalValueProvider() {
         return Stream.of(
-                // daily = 10: boundary < 1 day e > 6 days
-                Arguments.of(1, new BigDecimal("10")), //1*10
-                Arguments.of(6, new BigDecimal("60")), //6*10
-                //weekly = 8: boundary > 29
-                Arguments.of(29, new BigDecimal(232)), // 29*8
-                //monthly = 6: boundary in 31
+                // daily 10 x rate (1 to 6 days)
+                Arguments.of(1, new BigDecimal("10")),  //1*10
+                Arguments.of(6, new BigDecimal("60")),  //6*10
+                //weekly 8 x rate (7 to 29 days)
+                Arguments.of(7, new BigDecimal("56")),  // 7*8
+                Arguments.of(8, new BigDecimal("64")),  // 8*8
+                Arguments.of(29, new BigDecimal("232")),// 29*8
+                //monthly 6 x rate (+30 days)
+                Arguments.of(30, new BigDecimal("180")),// 30*6
                 Arguments.of(31, new BigDecimal("186")) // 31*6
         );
     }
