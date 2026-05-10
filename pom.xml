@@ -69,7 +69,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <version>1.18.36</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -131,11 +131,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.pitest</groupId>
-            <artifactId>pitest-maven</artifactId>
-            <version>1.18.1</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
             <version>0.15</version>
@@ -162,8 +157,13 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <targetClasses></targetClasses>
-                    <targetTests></targetTests>
+                    <targetClasses>
+                        <param>br.ifsp.demo.application.service.*</param>
+                        <param>br.ifsp.demo.domain.model.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>br.ifsp.demo.application.service.*</param>
+                    </targetTests>
                 </configuration>
             </plugin>
             <plugin>
