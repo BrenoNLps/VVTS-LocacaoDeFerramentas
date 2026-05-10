@@ -10,7 +10,6 @@ import br.ifsp.demo.domain.model.ProgressivePrices;
 import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.model.ToolStatus;
 import br.ifsp.demo.domain.repository.ToolRepository;
-import org.codehaus.plexus.util.cli.Arg;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
