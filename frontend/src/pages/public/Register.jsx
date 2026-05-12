@@ -1,7 +1,7 @@
 export default function Register() {
   return (
-    <div>
-      <div>
+    <div className="page-center">
+      <div className="card">
         <h1>Cadastro</h1>
         <form>
           <input type="text" placeholder="Nome" />
