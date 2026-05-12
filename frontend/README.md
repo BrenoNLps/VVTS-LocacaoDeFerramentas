@@ -1,16 +1,36 @@
-# React + Vite
+# Frontend — VVTS Locação de Ferramentas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface web  React + Vite.
 
-Currently, two official plugins are available:
+## Pré-requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 18+
+- Back-end da aplicação rodando em `http://localhost:8080`
 
-## React Compiler
+## Configuração
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Acesse a pasta do frontend:
+   ```bash
+   cd frontend
+   ```
 
-## Expanding the ESLint configuration
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+3. Crie um arquivo `.env` na pasta `frontend` com o seguinte conteúdo:
+   ```
+   VITE_API_URL=http://localhost:8080/api/v1
+   ```
+
+   - Se o back-end estiver rodando em uma porta diferente, altere a porta.
+
+## Execute
+
+```bash
+npm run dev
+```
+
+- A aplicação estará disponível em `http://localhost:5173` (porta padrão do Vite). 
+- Se a porta já estiver em uso, o Vite usará outra.
