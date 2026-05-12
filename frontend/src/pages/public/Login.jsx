@@ -1,3 +1,14 @@
 export default function Login() {
-  return <h1>Login</h1>;
+  return (
+    <div>
+      <div>
+        <h1>Login</h1>
+        <form>
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Senha" />
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
+    </div>
+  );
 }
