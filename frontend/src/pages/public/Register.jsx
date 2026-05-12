@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { PATHS } from "../../routes/paths";
+
 export default function Register() {
   return (
     <div className="page-center">
@@ -10,6 +13,7 @@ export default function Register() {
           <input type="password" placeholder="Senha" />
           <button type="submit">Cadastrar</button>
         </form>
+        <p>Já tem conta? <Link to={PATHS.login}>Entrar</Link></p>
       </div>
     </div>
   );
