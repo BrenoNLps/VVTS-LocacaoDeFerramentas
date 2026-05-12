@@ -1,4 +1,4 @@
-# Mutantes Equivalentes
+# Cobertura de Mutantes: Mutantes Equivalentes
 
 | Classe | Linha | ID do Mutante | Tipo de Mutação | Justificativa de Equivalência |
 |--------|-------|---------------|-----------------|-------------------------------|
