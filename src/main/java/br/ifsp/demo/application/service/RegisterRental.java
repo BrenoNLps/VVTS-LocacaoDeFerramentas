@@ -3,6 +3,7 @@ package br.ifsp.demo.application.service;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.Customer;
+import br.ifsp.demo.domain.model.GuaranteeType;
 import br.ifsp.demo.domain.model.Rental;
 import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.repository.CustomerRepository;
@@ -34,7 +35,7 @@ public class RegisterRental {
             String customerId,
             List<String> toolsIds,
             LocalDate startDate,
-            String guaranteeType,
+            GuaranteeType guaranteeType,
             BigDecimal depositValue,
             String documentNumber
     ){
@@ -50,7 +51,7 @@ public class RegisterRental {
         }
         Objects.requireNonNull(startDate, "startDate");
         if (!startDate.equals(LocalDate.now())) throw new InvalidDateException("startDate");
-        if (guaranteeType == null || guaranteeType.isBlank()) throw new MissingGuaranteeException();
+        if (guaranteeType == null) throw new MissingGuaranteeException();
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
         List<Tool> tools = new ArrayList<>();
