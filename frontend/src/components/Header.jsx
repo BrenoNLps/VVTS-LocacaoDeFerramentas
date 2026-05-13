@@ -13,6 +13,7 @@ export default function Header() {
     <header className="header">
       <nav className="header-nav">
         <Link to={PATHS.home}>Home</Link>
+        <Link to={PATHS.tools}>Ferramentas</Link>
         <Link to={PATHS.rental}>Locações</Link>
         <Link to={PATHS.maintenance}>Manutenções</Link>
       </nav>
