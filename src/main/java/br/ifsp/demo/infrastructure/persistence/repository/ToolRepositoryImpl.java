@@ -7,6 +7,8 @@ import br.ifsp.demo.infrastructure.persistence.mapper.ToolMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 @AllArgsConstructor
@@ -24,5 +26,12 @@ public class ToolRepositoryImpl implements ToolRepository {
         return jpaRepository.findById(id)
                 .map(ToolMapper::toDomain)
                 .orElse(null);
+    }
+
+    @Override
+    public List<Tool> findAll() {
+        return jpaRepository.findAll().stream()
+                .map(ToolMapper::toDomain)
+                .toList();
     }
 }
