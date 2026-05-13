@@ -1,3 +1,12 @@
+import Header from "../../components/Header";
+
 export default function Maintenance() {
-  return <h1>Maintenance</h1>;
+  return (
+    <>
+      <Header />
+      <main className="page-content">
+        <h1>Manutenções</h1>
+      </main>
+    </>
+  );
 }

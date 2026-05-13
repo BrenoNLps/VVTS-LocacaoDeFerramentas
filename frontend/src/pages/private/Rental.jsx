@@ -1,3 +1,12 @@
+import Header from "../../components/Header";
+
 export default function Rental() {
-  return <h1>Rental</h1>;
+  return (
+    <>
+      <Header />
+      <main className="page-content">
+        <h1>Locações</h1>
+      </main>
+    </>
+  );
 }
