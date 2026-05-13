@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/rentals")
@@ -20,6 +21,16 @@ public class RentalController {
     private final FinalizeRental finalizeRental;
     private final CancelRental cancelRental;
     private final QueryRentalValue queryRentalValue;
+    private final ListRentals listRentals;
+
+    @Operation(summary = "List all rentals")
+    @GetMapping
+    public ResponseEntity<List<RentalResponse>> listAll() {
+        List<RentalResponse> rentals = listRentals.execute().stream()
+                .map(RentalResponse::from)
+                .toList();
+        return ResponseEntity.ok(rentals);
+    }
 
     @Operation(summary = "Register a new rental")
     @PostMapping

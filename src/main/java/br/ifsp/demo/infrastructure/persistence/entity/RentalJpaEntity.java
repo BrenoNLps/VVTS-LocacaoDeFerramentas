@@ -28,7 +28,7 @@ public class RentalJpaEntity {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "rental_tools",
-            joinColumns = @JoinColumn(name = "tool_id"),
+            joinColumns = @JoinColumn(name = "rental_id"),
             inverseJoinColumns = @JoinColumn(name = "tool_id")
     )
     private List<ToolJpaEntity> tools = new ArrayList<>();

@@ -7,6 +7,8 @@ import br.ifsp.demo.infrastructure.persistence.mapper.RentalMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @AllArgsConstructor
 public class RentalRepositoryImpl implements RentalRepository {
@@ -23,5 +25,12 @@ public class RentalRepositoryImpl implements RentalRepository {
         return jpaRepository.findById(id)
                 .map(RentalMapper::toDomain)
                 .orElse(null);
+    }
+
+    @Override
+    public List<Rental> findAll() {
+        return jpaRepository.findAll().stream()
+                .map(RentalMapper::toDomain)
+                .toList();
     }
 }
