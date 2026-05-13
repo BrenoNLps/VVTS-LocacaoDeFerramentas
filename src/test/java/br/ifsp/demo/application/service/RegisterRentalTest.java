@@ -6,6 +6,7 @@ import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.Customer;
+import br.ifsp.demo.domain.model.GuaranteeType;
 import br.ifsp.demo.domain.model.ProgressivePrices;
 import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.model.ToolStatus;
@@ -79,7 +80,7 @@ class RegisterRentalTest {
         when(toolRepository.findById("tool-1")).thenReturn(tool);
 
         String rentalId = registerRental.execute(
-                "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null
+                "customer-1", List.of("tool-1"), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null
         );
 
         assertThat(rentalId).isNotNull();
@@ -102,7 +103,7 @@ class RegisterRentalTest {
                 "customer-1",
                 List.of("tool-1", "tool-2"),
                 TODAY,
-                "CASH_DEPOSIT",
+                GuaranteeType.CASH_DEPOSIT,
                 BigDecimal.TEN,
                 null
         );
@@ -132,16 +133,16 @@ class RegisterRentalTest {
         @DisplayName("Should throw invalid date Exception  when start date is not today")
         void shouldThrowInvalidDateExceptionWhenStartDateIsNotToday(LocalDate invalidDate) {
             assertThatThrownBy(() -> registerRental.execute(
-                    "customer-1", List.of("tool-1"), invalidDate, "CASH_DEPOSIT", BigDecimal.TEN, null))
+                    "customer-1", List.of("tool-1"), invalidDate, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null))
                     .isInstanceOf(InvalidDateException.class);
         }
 
         static Stream<Arguments> nullInputsProvider(){
             return Stream.of(
-                    Arguments.of(null, List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), //#42 null customerid
-                    Arguments.of("customer-1", Arrays.asList((String) null), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), //#44 null toolId
-                    Arguments.of("customer-1", Arrays.asList(("tool-1"), null), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), // #64 null toolId in multi-tool
-                    Arguments.of("customer-1", List.of("tool-1"), null, "CASH_DEPOSIT", BigDecimal.TEN, null) //#67 null start date
+                    Arguments.of(null, List.of("tool-1"), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null), //#42 null customerid
+                    Arguments.of("customer-1", Arrays.asList((String) null), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null), //#44 null toolId
+                    Arguments.of("customer-1", Arrays.asList(("tool-1"), null), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null), // #64 null toolId in multi-tool
+                    Arguments.of("customer-1", List.of("tool-1"), null, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null) //#67 null start date
             );
         }
 
@@ -152,7 +153,7 @@ class RegisterRentalTest {
         @DisplayName("Should throw NullPointerException when required field is null")
         void shouldThrowNullPointerExceptionWhenRequiredFieldIsNull(
                 String customerId, List<String> toolIds, LocalDate startDate,
-                String guaranteeType, BigDecimal depositValue, String documentNumber
+                GuaranteeType guaranteeType, BigDecimal depositValue, String documentNumber
         ) {
             assertThatThrownBy(() -> registerRental.execute(
                     customerId, toolIds, startDate, guaranteeType, depositValue, documentNumber))
@@ -161,12 +162,12 @@ class RegisterRentalTest {
 
         static Stream<Arguments> blankInputsProvider(){
             return Stream.of(
-                    Arguments.of("", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), //#43 blank customer id
-                    Arguments.of("    ", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), // #43 whitespace customerid
-                    Arguments.of("customer-1", Arrays.asList(""), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), // #45 blank toolId
-                    Arguments.of("customer-1", Arrays.asList("  "), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null), //# 63 white space tool id
-                    Arguments.of("customer-1", List.of(), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null),
-                    Arguments.of("customer-1", Arrays.asList("tool-1", ""), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null) //#65 blank  toolId in multi-tool
+                    Arguments.of("", List.of("tool-1"), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null), //#43 blank customer id
+                    Arguments.of("    ", List.of("tool-1"), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null), // #43 whitespace customerid
+                    Arguments.of("customer-1", Arrays.asList(""), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null), // #45 blank toolId
+                    Arguments.of("customer-1", Arrays.asList("  "), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null), //# 63 white space tool id
+                    Arguments.of("customer-1", List.of(), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null),
+                    Arguments.of("customer-1", Arrays.asList("tool-1", ""), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null) //#65 blank  toolId in multi-tool
                     );
         }
 
@@ -177,7 +178,7 @@ class RegisterRentalTest {
         @DisplayName("Should throw InvalidArgumentException when required field is blank")
         void shouldThrowInvalidArgumentExceptionWhenRequiredFieldIsBlank(
                 String customerId, List<String> toolIds, LocalDate startDate,
-                String guaranteeType, BigDecimal depositValue, String documentNumber
+                GuaranteeType guaranteeType, BigDecimal depositValue, String documentNumber
         ){
             assertThatThrownBy(() -> registerRental.execute(
                     customerId, toolIds, startDate, guaranteeType, depositValue, documentNumber))
@@ -191,7 +192,7 @@ class RegisterRentalTest {
         @DisplayName("Should throw InvalidArgumentException when toolIds list contains duplicates")
         void shouldThrowInvalidArgumentExceptionWhenToolIdsContainsDuplicates() {
             assertThatThrownBy(() -> registerRental.execute(
-                    "customer-1", Arrays.asList("tool-1", "tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null)).isInstanceOf(InvalidArgumentException.class);
+                    "customer-1", Arrays.asList("tool-1", "tool-1"), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null)).isInstanceOf(InvalidArgumentException.class);
         }
 
     }
@@ -207,7 +208,7 @@ class RegisterRentalTest {
         void shouldThrowEntityNotFoundExceptionWhenCustomerDoesNotExist() {
             when(customerRepository.findById("customer-1")).thenReturn(null);
             assertThatThrownBy(() -> registerRental.execute(
-                    "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
+                    "customer-1", List.of("tool-1"), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null))
                     .isInstanceOf(EntityNotFoundException.class);
         }
 
@@ -220,7 +221,7 @@ class RegisterRentalTest {
             when(toolRepository.findById("tool-1")).thenReturn(null);
 
             assertThatThrownBy(() -> registerRental.execute(
-                    "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
+                    "customer-1", List.of("tool-1"), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null))
                     .isInstanceOf(EntityNotFoundException.class);
         }
 
@@ -235,7 +236,7 @@ class RegisterRentalTest {
             when(toolRepository.findById("tool-1")).thenReturn(tool);
 
             assertThatThrownBy(() -> registerRental.execute(
-                    "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null))
+                    "customer-1", List.of("tool-1"), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null))
                     .isInstanceOf(ToolUnavailableException.class);
         }
 
@@ -254,7 +255,7 @@ class RegisterRentalTest {
             when(toolRepository.findById("tool-2")).thenReturn(tool2);
 
             assertThatThrownBy(() -> registerRental.execute(
-                    "customer-1", List.of("tool-1", "tool-2"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null
+                    "customer-1", List.of("tool-1", "tool-2"), TODAY, GuaranteeType.CASH_DEPOSIT, BigDecimal.TEN, null
             ))
                     .isInstanceOf(ToolUnavailableException.class);
 
@@ -273,15 +274,5 @@ class RegisterRentalTest {
                     .isInstanceOf(MissingGuaranteeException.class);
         }
 
-        @ParameterizedTest
-        @MethodSource("blankGuaranteeTypeProvider")
-        @UnitTest
-        @Functional
-        @DisplayName("Should throw exception when guaranteeType is blank")
-        void shouldThrowExceptionWhenGuaranteeTypeIsBlank(String guaranteeType) {
-            assertThatThrownBy(() -> registerRental.execute(
-                    "customer-1", List.of("tool-1"), TODAY, guaranteeType, BigDecimal.TEN, null)).isInstanceOf(MissingGuaranteeException.class);
-        }
-        static Stream<String> blankGuaranteeTypeProvider() {return Stream.of("", "  ");}
     }
 }
