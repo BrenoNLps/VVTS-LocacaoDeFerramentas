@@ -34,7 +34,7 @@ export default function Home() {
                 <td>{tool.name}</td>
                 <td className="table-actions">
                   <button onClick={() => navigate(PATHS.rental)}>Locar</button>
-                  <button onClick={() => navigate(PATHS.maintenance)}>Manutenção</button>
+                  <button onClick={() => navigate(`${PATHS.maintenance}?toolId=${tool.id}`)}>Manutenção</button>
                 </td>
               </tr>
             ))}

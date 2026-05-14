@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "../../components/Header";
 import { api } from "../../services/api";
 
 export default function Maintenance() {
   const [tools, setTools] = useState([]);
   const [error, setError] = useState("");
+  const [searchParams] = useSearchParams();
+  const preSelectedId = searchParams.get("toolId");
 
   useEffect(() => {
     loadTools();
@@ -57,7 +60,7 @@ export default function Maintenance() {
           </thead>
           <tbody>
             {available.map(tool => (
-              <tr key={tool.id}>
+              <tr key={tool.id} className={tool.id === preSelectedId ? "row-selected" : ""}>
                 <td>{tool.name}</td>
                 <td>
                   <button className="btn-success" onClick={() => sendToMaintenance(tool.id)}>
