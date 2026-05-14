@@ -111,6 +111,10 @@ button:hover {
   margin-top: var(--spacing-md);
 }
 
+.data-table--fixed {
+  table-layout: fixed;
+}
+
 .data-table th,
 .data-table td {
   text-align: left;
@@ -130,4 +134,28 @@ button:hover {
 
 .table-actions button {
   width: auto;
+}
+
+.row-selected {
+  background-color: #b3c6fc;
+}
+
+.data-table button {
+  width: auto;
+}
+
+.btn-warning {
+  background-color: var(--color-warning);
+}
+
+.btn-warning:hover {
+  background-color: var(--color-warning-hover);
+}
+
+.btn-success {
+  background-color: var(--color-success);
+}
+
+.btn-success:hover {
+  background-color: var(--color-success-hover);
 }
