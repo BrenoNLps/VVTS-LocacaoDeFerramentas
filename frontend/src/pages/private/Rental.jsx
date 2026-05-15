@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "../../components/Header";
 import Tabs from "../../components/Tabs";
 import ToolTable from "../../components/ToolTable";
@@ -21,20 +21,41 @@ export default function Rental() {
   const [tab, setTab] = useState("new");
   const [tools, setTools] = useState([]);
   const [selectedToolIds, setSelectedToolIds] = useState([]);
-  const [customerName, setCustomerName] = useState("");
+  const [customers, setCustomers] = useState([]);
+  const [customerSearch, setCustomerSearch] = useState("");
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [guarantee, setGuarantee] = useState("");
   const [activeRentals, setActiveRentals] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const customerRef = useRef(null);
 
   useEffect(() => {
     loadTools();
+    loadCustomers();
     loadActiveRentals();
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (customerRef.current && !customerRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   function loadTools() {
     api.get("/tools")
       .then(data => setTools(data.filter(t => t.status === "AVAILABLE")))
+      .catch(() => {});
+  }
+
+  function loadCustomers() {
+    api.get("/customers")
+      .then(data => setCustomers(data ?? []))
       .catch(() => {});
   }
 
@@ -50,23 +71,30 @@ export default function Rental() {
     );
   }
 
+  function selectCustomer(customer) {
+    setSelectedCustomer(customer);
+    setCustomerSearch(customer.name);
+    setShowDropdown(false);
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
     setSuccess("");
     if (selectedToolIds.length === 0) { setError("Selecione ao menos uma ferramenta."); return; }
-    if (!customerName.trim()) { setError("Informe o nome do cliente."); return; }
+    if (!selectedCustomer) { setError("Selecione um cliente."); return; }
     if (!guarantee) { setError("Selecione o tipo de garantia."); return; }
     try {
       await api.post("/rentals", {
-        customerName: customerName.trim(),
+        customerId: selectedCustomer.id,
         toolIds: selectedToolIds,
         startDate: today,
         guaranteeType: guarantee,
       });
       setSuccess("Locação registrada com sucesso.");
       setSelectedToolIds([]);
-      setCustomerName("");
+      setSelectedCustomer(null);
+      setCustomerSearch("");
       setGuarantee("");
       loadTools();
       loadActiveRentals();
@@ -86,6 +114,10 @@ export default function Rental() {
       setError("Erro ao cancelar locação.");
     }
   }
+
+  const filteredCustomers = customerSearch.trim()
+    ? customers.filter(c => c.name.toLowerCase().includes(customerSearch.toLowerCase()))
+    : customers;
 
   const tabs = TABS.map(t =>
     t.key === "active" ? { ...t, badge: activeRentals.length } : t
@@ -108,14 +140,33 @@ export default function Rental() {
             <form onSubmit={handleSubmit}>
               <ToolTable tools={tools} selectedIds={selectedToolIds} onToggle={toggleTool} />
 
-              <div className="mt-md">
+              <div className="customer-field mt-md" ref={customerRef}>
                 <label className="field-label">Cliente</label>
                 <input
                   type="text"
-                  placeholder="Nome do cliente..."
-                  value={customerName}
-                  onChange={e => setCustomerName(e.target.value)}
+                  placeholder="Buscar pelo nome..."
+                  value={customerSearch}
+                  autoComplete="off"
+                  onChange={e => {
+                    setCustomerSearch(e.target.value);
+                    setSelectedCustomer(null);
+                    setShowDropdown(true);
+                    setSuccess("");
+                  }}
+                  onFocus={() => setShowDropdown(true)}
                 />
+                {showDropdown && customerSearch.trim() && !selectedCustomer && (
+                  <ul className="customer-dropdown">
+                    {filteredCustomers.length > 0
+                      ? filteredCustomers.map(c => (
+                          <li key={c.id} className="customer-dropdown__item" onClick={() => selectCustomer(c)}>
+                            {c.name}
+                          </li>
+                        ))
+                      : <li className="customer-dropdown__item">Nenhum cliente encontrado.</li>
+                    }
+                  </ul>
+                )}
               </div>
 
               <div className="field mt-md">
