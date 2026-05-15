@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -32,6 +33,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CancelRentalTest {
+
+    private static final LocalDate START = LocalDate.of(2026, 1, 1);
+    private static final Customer CUSTOMER = new Customer("customer-1", "John Doe");
 
     @Mock
     private RentalRepository rentalRepository;
@@ -54,7 +58,7 @@ class CancelRentalTest {
         @DisplayName("Should set tool as available and rental as cancelled when rental has one tool")
         void shouldSetToolAsAvailableAndRentalAsCancelledWhenRentalHasOneTool() {
             var tool = buildTool("tool-1", RENTED);
-            Rental rental = new Rental("rental-1", List.of(tool));
+            Rental rental = Rental.create("rental-1", List.of(tool), START, CUSTOMER);
             when(rentalRepository.findById("rental-1"))
                     .thenReturn(rental);
 
@@ -76,7 +80,7 @@ class CancelRentalTest {
         void shouldSetAllToolsAsAvailableAndRentalAsCancelledWhenRentalHasMultipleTools() {
             var tool1 = buildTool("tool-1", RENTED);
             var tool2 = buildTool("tool-2", RENTED);
-            Rental rental = new Rental("rental-1", List.of(tool1, tool2));
+            Rental rental = Rental.create("rental-1", List.of(tool1, tool2), null, null);
             when(rentalRepository.findById("rental-1"))
                     .thenReturn(rental);
 
@@ -125,7 +129,7 @@ class CancelRentalTest {
         @TDD
         @DisplayName("Should Throw Exception when rental is not active")
         void shouldThrowExceptionWhenRentalIsNotActive(RentalStatus status, Class<? extends Exception> expectedException) {
-            Rental rental = new Rental("rental-1", List.of(), status);
+            Rental rental = Rental.reconstitute("rental-1", List.of(), START, status, CUSTOMER, null);
             when(rentalRepository.findById("rental-1"))
                     .thenReturn(rental);
 

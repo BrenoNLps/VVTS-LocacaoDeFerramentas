@@ -25,10 +25,16 @@ public class RentalJpaEntity {
 
     private LocalDate startDate;
 
+    private LocalDate endDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private CustomerJpaEntity customer;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "rental_tools",
-            joinColumns = @JoinColumn(name = "tool_id"),
+            joinColumns = @JoinColumn(name = "rental_id"),
             inverseJoinColumns = @JoinColumn(name = "tool_id")
     )
     private List<ToolJpaEntity> tools = new ArrayList<>();

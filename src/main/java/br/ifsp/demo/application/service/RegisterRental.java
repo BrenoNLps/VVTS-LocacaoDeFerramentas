@@ -3,6 +3,7 @@ package br.ifsp.demo.application.service;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.Customer;
+import br.ifsp.demo.domain.model.GuaranteeType;
 import br.ifsp.demo.domain.model.Rental;
 import br.ifsp.demo.domain.model.Tool;
 import br.ifsp.demo.domain.repository.CustomerRepository;
@@ -13,7 +14,6 @@ import br.ifsp.demo.domain.exception.MissingGuaranteeException;
 import br.ifsp.demo.domain.exception.ToolUnavailableException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -34,9 +34,7 @@ public class RegisterRental {
             String customerId,
             List<String> toolsIds,
             LocalDate startDate,
-            String guaranteeType,
-            BigDecimal depositValue,
-            String documentNumber
+            GuaranteeType guaranteeType
     ){
         Objects.requireNonNull(customerId, "customerId");
         if (customerId.isBlank()) throw new InvalidArgumentException("customerId");
@@ -50,12 +48,10 @@ public class RegisterRental {
         }
         Objects.requireNonNull(startDate, "startDate");
         if (!startDate.equals(LocalDate.now())) throw new InvalidDateException("startDate");
-        if (guaranteeType == null || guaranteeType.isBlank()) throw new MissingGuaranteeException();
+        if (guaranteeType == null) throw new MissingGuaranteeException();
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
         List<Tool> tools = new ArrayList<>();
-        Tool tool0 = toolRepository.findById(toolsIds.get(0));
-
         for (String toolId : toolsIds) {
             var tool = toolRepository.findById(toolId);
             if (tool == null) throw new EntityNotFoundException("Tool", toolId);
@@ -66,7 +62,7 @@ public class RegisterRental {
             tool.markAsRented();
         }
 
-        Rental rental = new Rental(UUID.randomUUID().toString(), tools, startDate);
+        Rental rental = Rental.create(UUID.randomUUID().toString(), tools, startDate, customer);
         rentalRepository.save(rental);
         return rental.getId();
     }
