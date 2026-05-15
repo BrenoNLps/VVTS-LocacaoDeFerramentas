@@ -284,10 +284,27 @@ input[type="checkbox"] {
   gap: var(--spacing-sm);
   margin-top: var(--spacing-md);
   align-items: flex-end;
+  flex-wrap: wrap;
 }
 
 .query-controls .field {
   flex: 1;
+  min-width: 160px;
+}
+
+@media (max-width: 640px) {
+  .query-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .query-controls .field {
+    min-width: unset;
+  }
+
+  .query-controls .btn-auto {
+    width: 100%;
+  }
 }
 
 .query-result {
