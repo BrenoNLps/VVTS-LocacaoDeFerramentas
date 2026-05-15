@@ -39,9 +39,7 @@ public class RentalController {
                 request.customerId(),
                 request.toolIds(),
                 request.startDate(),
-                request.guaranteeType(),
-                request.depositValue(),
-                request.documentNumber()
+                request.guaranteeType()
         );
         return ResponseEntity.created(URI.create("/api/v1/rentals/" + rentalId)).body(rentalId);
     }

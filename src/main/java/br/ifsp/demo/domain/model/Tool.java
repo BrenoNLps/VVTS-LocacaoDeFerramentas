@@ -36,10 +36,19 @@ public class Tool {
     }
 
     public MaintenanceRecord returnFromMaintenance(LocalDate date) {
-        if (status == ToolStatus.AVAILABLE) {throw new InvalidToolStateException(id, status.name());}
-        if (status == ToolStatus.RENTED) {throw new InvalidToolStateException(id, status.name());}
-        status= ToolStatus.AVAILABLE;
-        return new MaintenanceRecord(date);
+        if (status == ToolStatus.AVAILABLE) throw new InvalidToolStateException(id, status.name());
+        if (status == ToolStatus.RENTED) throw new InvalidToolStateException(id, status.name());
+        MaintenanceRecord record = maintenanceHistory.stream()
+                .filter(MaintenanceRecord::isOpen)
+                .findFirst()
+                .orElseThrow(() -> new InvalidToolStateException(id, status.name()));
+        status = ToolStatus.AVAILABLE;
+        record.close(date);
+        return record;
+    }
+
+    public void addMaintenanceRecord(MaintenanceRecord record) {
+        this.maintenanceHistory.add(record);
     }
 
     public List<MaintenanceRecord> getMaintenanceHistory() {
