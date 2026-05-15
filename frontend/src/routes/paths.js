@@ -6,4 +6,5 @@ export const PATHS = {
   rental: "/rental",
   rentalHistory: "/rental/history",
   maintenance: "/maintenance",
+  customers: "/customers",
 };

@@ -31,6 +31,7 @@ export default function Header() {
           <Link to={PATHS.rental} onClick={closeMenu}>Locações</Link>
           <Link to={PATHS.maintenance} onClick={closeMenu}>Manutenções</Link>
           <Link to={PATHS.rentalHistory} onClick={closeMenu}>Histórico</Link>
+          <Link to={PATHS.customers} onClick={closeMenu}>Clientes</Link>
         </nav>
 
         <button className="header-logout" onClick={handleLogout}>Sair</button>
