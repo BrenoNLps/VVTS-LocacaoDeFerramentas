@@ -52,8 +52,6 @@ public class RegisterRental {
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
         List<Tool> tools = new ArrayList<>();
-        Tool tool0 = toolRepository.findById(toolsIds.get(0));
-
         for (String toolId : toolsIds) {
             var tool = toolRepository.findById(toolId);
             if (tool == null) throw new EntityNotFoundException("Tool", toolId);
