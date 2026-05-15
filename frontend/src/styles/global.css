@@ -159,3 +159,125 @@ button:hover {
 .btn-success:hover {
   background-color: var(--color-success-hover);
 }
+
+.btn-auto {
+  width: auto;
+}
+
+select {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: var(--font-size-base);
+  background-color: var(--color-surface);
+  outline: none;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: var(--color-primary);
+}
+
+input[type="checkbox"] {
+  width: auto;
+}
+
+.mt-md {
+  margin-top: var(--spacing-md);
+}
+
+.mt-xl {
+  margin-top: var(--spacing-xl);
+}
+
+.section-form {
+  max-width: 700px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: var(--font-size-sm);
+}
+
+.field-label--bold {
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm);
+}
+
+.query-controls {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  align-items: flex-end;
+}
+
+.query-controls .field {
+  flex: 1;
+}
+
+.query-result {
+  margin-top: var(--spacing-sm);
+  font-weight: 500;
+}
+
+.error-text {
+  color: var(--color-error);
+  margin-top: var(--spacing-sm);
+}
+
+.error-text--sm {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+}
+
+.section-description {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.tool-table-container {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.tool-table-container .data-table {
+  margin-top: 0;
+}
+
+.tool-table-container thead th {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-surface);
+}
+
+.col-checkbox {
+  width: 40px;
+}
+
+.tool-row {
+  cursor: pointer;
+}
+
+.tool-row--selected {
+  background-color: #e8effd;
+}
+
+.rental-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rental-actions-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.input-date-sm {
+  width: 140px;
+}
