@@ -25,6 +25,12 @@ public class RentalJpaEntity {
 
     private LocalDate startDate;
 
+    private LocalDate endDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private CustomerJpaEntity customer;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "rental_tools",
