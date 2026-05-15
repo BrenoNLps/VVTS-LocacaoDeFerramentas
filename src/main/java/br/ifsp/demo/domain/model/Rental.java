@@ -18,21 +18,25 @@ public class Rental {
     private final String id;
     private final List<Tool> tools;
     private final LocalDate startDate;
+    private final Customer customer;
+    private LocalDate endDate;
     private RentalStatus status;
 
-    private Rental(String id, List<Tool> tools, LocalDate startDate, RentalStatus status) {
+    private Rental(String id, List<Tool> tools, LocalDate startDate, RentalStatus status, Customer customer, LocalDate endDate) {
         this.id = id;
         this.tools = new ArrayList<>(tools);
         this.startDate = startDate;
         this.status = status;
+        this.customer = customer;
+        this.endDate = endDate;
     }
 
-    public static Rental create(String id, List<Tool> tools, LocalDate startDate) {
-        return new Rental(id, tools, startDate, ACTIVE);
+    public static Rental create(String id, List<Tool> tools, LocalDate startDate, Customer customer) {
+        return new Rental(id, tools, startDate, ACTIVE, customer, null);
     }
 
-    public static Rental reconstitute(String id, List<Tool> tools, LocalDate startDate, RentalStatus status) {
-        return new Rental(id, tools, startDate, status);
+    public static Rental reconstitute(String id, List<Tool> tools, LocalDate startDate, RentalStatus status, Customer customer, LocalDate endDate) {
+        return new Rental(id, tools, startDate, status, customer, endDate);
     }
 
     public BigDecimal finalize(LocalDate endDate) {
@@ -46,6 +50,7 @@ public class Rental {
             tool.markAsAvailable();
         }
         this.status = FINALIZED;
+        this.endDate = endDate;
         return total;
     }
 
@@ -58,6 +63,8 @@ public class Rental {
     public RentalStatus getStatus() { return status; }
     public List<Tool> getTools() { return Collections.unmodifiableList(tools); }
     public LocalDate getStartDate() { return startDate; }
+    public Customer getCustomer() { return customer; }
+    public LocalDate getEndDate() { return endDate; }
 
     public void setStatus(RentalStatus status) { this.status = status; }
 

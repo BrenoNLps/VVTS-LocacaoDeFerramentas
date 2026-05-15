@@ -62,7 +62,7 @@ public class RegisterRental {
             tool.markAsRented();
         }
 
-        Rental rental = new Rental(UUID.randomUUID().toString(), tools, startDate);
+        Rental rental = Rental.create(UUID.randomUUID().toString(), tools, startDate, customer);
         rentalRepository.save(rental);
         return rental.getId();
     }
