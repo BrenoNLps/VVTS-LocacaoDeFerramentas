@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
+import Tabs from "../../components/Tabs";
 import ToolTable from "../../components/ToolTable";
 import { api } from "../../services/api";
 
@@ -11,7 +12,13 @@ const GUARANTEE_OPTIONS = [
   { value: "CASH_DEPOSIT", label: "Dinheiro" },
 ];
 
+const TABS = [
+  { key: "new", label: "Nova locação" },
+  { key: "active", label: "Locações ativas" },
+];
+
 export default function Rental() {
+  const [tab, setTab] = useState("new");
   const [tools, setTools] = useState([]);
   const [selectedToolIds, setSelectedToolIds] = useState([]);
   const [customerName, setCustomerName] = useState("");
@@ -80,81 +87,95 @@ export default function Rental() {
     }
   }
 
+  const tabs = TABS.map(t =>
+    t.key === "active" ? { ...t, badge: activeRentals.length } : t
+  );
+
   return (
     <>
       <Header />
       <main className="page-content">
         <h1>Locações</h1>
 
-        <section className="section-form mt-xl">
-          <h2>Nova locação</h2>
-          <form onSubmit={handleSubmit}>
-            <ToolTable tools={tools} selectedIds={selectedToolIds} onToggle={toggleTool} />
+        <Tabs
+          tabs={tabs}
+          active={tab}
+          onChange={key => { setTab(key); setError(""); setSuccess(""); }}
+        />
 
-            <div className="mt-md">
-              <label className="field-label">Cliente</label>
-              <input
-                type="text"
-                placeholder="Nome do cliente..."
-                value={customerName}
-                onChange={e => setCustomerName(e.target.value)}
-              />
-            </div>
+        {tab === "new" && (
+          <section className="section-form mt-xl">
+            <form onSubmit={handleSubmit}>
+              <ToolTable tools={tools} selectedIds={selectedToolIds} onToggle={toggleTool} />
 
-            <div className="field mt-md">
-              <label className="field-label">Garantia</label>
-              <div className="radio-group">
-                {GUARANTEE_OPTIONS.map(opt => (
-                  <label key={opt.value} className="radio-label">
-                    <input
-                      type="radio"
-                      name="guarantee"
-                      value={opt.value}
-                      checked={guarantee === opt.value}
-                      onChange={e => setGuarantee(e.target.value)}
-                    />
-                    {opt.label}
-                  </label>
-                ))}
+              <div className="mt-md">
+                <label className="field-label">Cliente</label>
+                <input
+                  type="text"
+                  placeholder="Nome do cliente..."
+                  value={customerName}
+                  onChange={e => setCustomerName(e.target.value)}
+                />
               </div>
-            </div>
 
+              <div className="field mt-md">
+                <label className="field-label">Garantia</label>
+                <div className="radio-group">
+                  {GUARANTEE_OPTIONS.map(opt => (
+                    <label key={opt.value} className="radio-label">
+                      <input
+                        type="radio"
+                        name="guarantee"
+                        value={opt.value}
+                        checked={guarantee === opt.value}
+                        onChange={e => setGuarantee(e.target.value)}
+                      />
+                      {opt.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {error && <p className="error-text">{error}</p>}
+              {success && <p className="success-text">{success}</p>}
+              <button type="submit" className="btn-auto">Confirmar locação</button>
+            </form>
+          </section>
+        )}
+
+        {tab === "active" && (
+          <section className="mt-xl">
             {error && <p className="error-text">{error}</p>}
             {success && <p className="success-text">{success}</p>}
-            <button type="submit" className="btn-auto">Confirmar locação</button>
-          </form>
-        </section>
-
-        <section className="mt-xl">
-          <h2>Locações ativas</h2>
-          <div className="table-wrapper">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Ferramentas</th>
-                  <th>Início</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {activeRentals.map(rental => (
-                  <tr key={rental.id}>
-                    <td>{rental.tools.map(t => t.name).join(", ")}</td>
-                    <td>{rental.startDate}</td>
-                    <td>
-                      <button className="btn-danger" onClick={() => cancelRental(rental.id)}>
-                        Cancelar
-                      </button>
-                    </td>
+            <div className="table-wrapper">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Ferramentas</th>
+                    <th>Início</th>
+                    <th></th>
                   </tr>
-                ))}
-                {activeRentals.length === 0 && (
-                  <tr><td colSpan={3}>Nenhuma locação ativa.</td></tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
+                </thead>
+                <tbody>
+                  {activeRentals.map(rental => (
+                    <tr key={rental.id}>
+                      <td>{rental.tools.map(t => t.name).join(", ")}</td>
+                      <td>{rental.startDate}</td>
+                      <td>
+                        <button className="btn-danger" onClick={() => cancelRental(rental.id)}>
+                          Cancelar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {activeRentals.length === 0 && (
+                    <tr><td colSpan={3}>Nenhuma locação ativa.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
       </main>
     </>
   );
