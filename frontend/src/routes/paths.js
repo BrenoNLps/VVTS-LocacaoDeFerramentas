@@ -4,5 +4,6 @@ export const PATHS = {
   home: "/home",
   tools: "/tools",
   rental: "/rental",
+  rentalHistory: "/rental/history",
   maintenance: "/maintenance",
 };

@@ -16,6 +16,7 @@ export default function Header() {
         <Link to={PATHS.tools}>Ferramentas</Link>
         <Link to={PATHS.rental}>Locações</Link>
         <Link to={PATHS.maintenance}>Manutenções</Link>
+        <Link to={PATHS.rentalHistory}>Histórico</Link>
       </nav>
       <button className="header-logout" onClick={handleLogout}>Sair</button>
     </header>
