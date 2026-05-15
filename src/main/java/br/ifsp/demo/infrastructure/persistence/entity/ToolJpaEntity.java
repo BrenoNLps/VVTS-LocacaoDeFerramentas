@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tools")
@@ -26,4 +28,7 @@ public class ToolJpaEntity {
     private BigDecimal dailyRate;
     private BigDecimal weeklyDailyRate;
     private BigDecimal monthlyDailyRate;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "toolId")
+    private List<MaintenanceRecordJpaEntity> maintenanceHistory = new ArrayList<>();
 }

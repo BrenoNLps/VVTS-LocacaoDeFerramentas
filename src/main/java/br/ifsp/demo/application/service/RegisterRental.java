@@ -14,7 +14,6 @@ import br.ifsp.demo.domain.exception.MissingGuaranteeException;
 import br.ifsp.demo.domain.exception.ToolUnavailableException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -35,9 +34,7 @@ public class RegisterRental {
             String customerId,
             List<String> toolsIds,
             LocalDate startDate,
-            GuaranteeType guaranteeType,
-            BigDecimal depositValue,
-            String documentNumber
+            GuaranteeType guaranteeType
     ){
         Objects.requireNonNull(customerId, "customerId");
         if (customerId.isBlank()) throw new InvalidArgumentException("customerId");
@@ -55,8 +52,6 @@ public class RegisterRental {
         Customer customer = customerRepository.findById(customerId);
         if (customer == null) throw new EntityNotFoundException("Customer", customerId);
         List<Tool> tools = new ArrayList<>();
-        Tool tool0 = toolRepository.findById(toolsIds.get(0));
-
         for (String toolId : toolsIds) {
             var tool = toolRepository.findById(toolId);
             if (tool == null) throw new EntityNotFoundException("Tool", toolId);

@@ -58,12 +58,14 @@ class ReturnFromMaintenanceTest {
     @Test @UnitTest @TDD //54
     @DisplayName("Should close maintenance record and change status to available when tool is in maintenance")
     void shouldCloseMaintenanceRecordAndChangeStatusToAvailableWhenToolIsInMaintenance() {
-        Tool tool = buildTool(ToolStatus.MAINTENANCE);
+        Tool tool = buildTool(ToolStatus.AVAILABLE);
+        tool.sendToMaintenance(java.time.LocalDate.now());
         when(toolRepository.findById(tool.getId())).thenReturn(tool);
         MaintenanceRecord record = returnFromMaintenance.execute(tool.getId());
 
         assertThat(tool.getStatus()).isEqualTo(ToolStatus.AVAILABLE);
-        assertThat(record).isNotNull();
+        assertThat(record.isClosed()).isTrue();
+        assertThat(record.getReturnDate()).isNotNull();
         verify(toolRepository).save(tool);
     }
 
