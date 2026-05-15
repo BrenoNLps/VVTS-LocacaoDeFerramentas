@@ -47,6 +47,10 @@ public class Tool {
         return record;
     }
 
+    public void addMaintenanceRecord(MaintenanceRecord record) {
+        this.maintenanceHistory.add(record);
+    }
+
     public List<MaintenanceRecord> getMaintenanceHistory() {
         return Collections.unmodifiableList(maintenanceHistory);
     }
