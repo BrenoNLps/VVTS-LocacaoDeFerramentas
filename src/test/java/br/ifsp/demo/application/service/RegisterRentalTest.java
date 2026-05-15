@@ -96,7 +96,7 @@ class RegisterRentalTest {
         when(toolRepository.findById("tool-1")).thenReturn(tool);
 
         String rentalId = registerRental.execute(
-                "customer-1", List.of("tool-1"), TODAY, "CASH_DEPOSIT", BigDecimal.TEN, null
+                "customer-1", List.of("tool-1"), TODAY, GuaranteeType.CASH_DEPOSIT
         );
 
         assertThat(rentalId).isNotBlank();

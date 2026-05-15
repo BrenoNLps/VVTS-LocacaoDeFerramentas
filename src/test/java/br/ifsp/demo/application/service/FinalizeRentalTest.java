@@ -101,7 +101,7 @@ class FinalizeRentalTest {
         @DisplayName("Should call rentalRepository save after finalizing rental")
         void shouldCallRentalRepositorySaveAfterFinalizingRental() {
             Tool tool = buildTool("tool-1");
-            Rental rental = new Rental("rental-1", List.of(tool), START);
+            Rental rental = Rental.create("rental-1", List.of(tool), START, CUSTOMER);
             when(rentalRepository.findById("rental-1")).thenReturn(rental);
 
             finalizeRental.execute("rental-1", END);
