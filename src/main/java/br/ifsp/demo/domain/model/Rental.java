@@ -20,39 +20,19 @@ public class Rental {
     private final LocalDate startDate;
     private RentalStatus status;
 
-    public Rental(String id) {
-        this.id = id;
-        this.tools = new ArrayList<>();
-        this.startDate = null;
-        this.status = ACTIVE;
-    }
-
-    public Rental(String id, List<Tool> tools) {
-        this.id = id;
-        this.tools = new ArrayList<>(tools);
-        this.startDate = null;
-        this.status = ACTIVE;
-    }
-
-    public Rental(String id, List<Tool> tools, RentalStatus status) {
-        this.id = id;
-        this.tools = new ArrayList<>(tools);
-        this.startDate = null;
-        this.status = status;
-    }
-
-    public Rental(String id, List<Tool> tools, LocalDate startDate) {
-        this.id = id;
-        this.tools = new ArrayList<>(tools);
-        this.startDate = startDate;
-        this.status = ACTIVE;
-    }
-
-    public Rental(String id, List<Tool> tools, LocalDate startDate, RentalStatus status) {
+    private Rental(String id, List<Tool> tools, LocalDate startDate, RentalStatus status) {
         this.id = id;
         this.tools = new ArrayList<>(tools);
         this.startDate = startDate;
         this.status = status;
+    }
+
+    public static Rental create(String id, List<Tool> tools, LocalDate startDate) {
+        return new Rental(id, tools, startDate, ACTIVE);
+    }
+
+    public static Rental reconstitute(String id, List<Tool> tools, LocalDate startDate, RentalStatus status) {
+        return new Rental(id, tools, startDate, status);
     }
 
     public BigDecimal finalize(LocalDate endDate) {
@@ -69,35 +49,22 @@ public class Rental {
         return total;
     }
 
-    private void validateActive(){
+    private void validateActive() {
         if (status == FINALIZED) throw new RentalAlreadyFinalizedException(id);
         if (status == CANCELLED) throw new RentalAlreadyCancelledException(id);
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
+    public RentalStatus getStatus() { return status; }
+    public List<Tool> getTools() { return Collections.unmodifiableList(tools); }
+    public LocalDate getStartDate() { return startDate; }
 
-    public RentalStatus getStatus(){
-        return status;
-    }
-
-    public List<Tool> getTools(){
-        return Collections.unmodifiableList(tools);
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStatus(RentalStatus status) {
-        this.status = status;
-    }
+    public void setStatus(RentalStatus status) { this.status = status; }
 
     public void cancel() {
         validateActive();
         this.status = CANCELLED;
-        for(Tool tool : tools){
+        for (Tool tool : tools) {
             tool.markAsAvailable();
         }
     }
