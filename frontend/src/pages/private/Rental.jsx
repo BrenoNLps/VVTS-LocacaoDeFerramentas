@@ -16,16 +16,24 @@ export default function Rental() {
   const [selectedToolIds, setSelectedToolIds] = useState([]);
   const [customerName, setCustomerName] = useState("");
   const [guarantee, setGuarantee] = useState("");
+  const [activeRentals, setActiveRentals] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
     loadTools();
+    loadActiveRentals();
   }, []);
 
   function loadTools() {
     api.get("/tools")
       .then(data => setTools(data.filter(t => t.status === "AVAILABLE")))
+      .catch(() => {});
+  }
+
+  function loadActiveRentals() {
+    api.get("/rentals")
+      .then(data => setActiveRentals(data.filter(r => r.status === "ACTIVE")))
       .catch(() => {});
   }
 
@@ -54,8 +62,21 @@ export default function Rental() {
       setCustomerName("");
       setGuarantee("");
       loadTools();
+      loadActiveRentals();
     } catch {
       setError("Erro ao registrar locação.");
+    }
+  }
+
+  async function cancelRental(rentalId) {
+    setError("");
+    setSuccess("");
+    try {
+      await api.put(`/rentals/${rentalId}/cancel`);
+      loadActiveRentals();
+      loadTools();
+    } catch {
+      setError("Erro ao cancelar locação.");
     }
   }
 
@@ -104,6 +125,36 @@ export default function Rental() {
           </form>
         </section>
 
+        <section className="mt-xl">
+          <h2>Locações ativas</h2>
+          <div className="table-wrapper">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Ferramentas</th>
+                  <th>Início</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {activeRentals.map(rental => (
+                  <tr key={rental.id}>
+                    <td>{rental.tools.map(t => t.name).join(", ")}</td>
+                    <td>{rental.startDate}</td>
+                    <td>
+                      <button className="btn-danger" onClick={() => cancelRental(rental.id)}>
+                        Cancelar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {activeRentals.length === 0 && (
+                  <tr><td colSpan={3}>Nenhuma locação ativa.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </main>
     </>
   );
