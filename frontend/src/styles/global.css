@@ -192,7 +192,13 @@ input[type="checkbox"] {
 }
 
 .section-form {
-  max-width: 700px;
+  width: 100%;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .field-label {
@@ -239,9 +245,11 @@ input[type="checkbox"] {
 
 .tool-table-container {
   max-height: 220px;
+  overflow-x: auto;
   overflow-y: auto;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
+  -webkit-overflow-scrolling: touch;
 }
 
 .tool-table-container .data-table {

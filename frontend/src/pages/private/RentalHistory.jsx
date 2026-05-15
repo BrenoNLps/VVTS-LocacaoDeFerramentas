@@ -19,6 +19,7 @@ export default function RentalHistory() {
       <Header />
       <main className="page-content">
         <h1>Histórico de locações</h1>
+        <div className="table-wrapper">
         <table className="data-table">
           <thead>
             <tr>
@@ -42,6 +43,7 @@ export default function RentalHistory() {
             )}
           </tbody>
         </table>
+        </div>
       </main>
     </>
   );

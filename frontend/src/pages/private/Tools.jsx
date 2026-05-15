@@ -51,6 +51,7 @@ export default function Tools() {
           {error && <p>{error}</p>}
           <button type="submit">Cadastrar</button>
         </form>
+        <div className="table-wrapper">
         <table className="data-table">
           <thead>
             <tr>
@@ -73,6 +74,7 @@ export default function Tools() {
             ))}
           </tbody>
         </table>
+        </div>
       </main>
     </>
   );
