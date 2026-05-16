@@ -34,6 +34,3 @@ build/
 
 ### SQLite ###
 database.db
-
-### Frontend ###
-frontend/

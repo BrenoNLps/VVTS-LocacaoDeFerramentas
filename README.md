@@ -1,10 +1,45 @@
 # Sistema de Locação de Ferramentas
-Trabalho Prático – Verificação, Validação e Teste de Software  
+Trabalho Prático – Verificação, Validação e Teste de Software
 IFSP São Carlos – Prof. Dr. Lucas Oliveira
 
 ## Descrição
-Módulo de aluguel de um sistema de locação de ferramentas.  
+Módulo de aluguel de um sistema de locação de ferramentas.
 O sistema aplica preços progressivos: quanto maior o período de locação, menor o custo por dia, com faixas de preço para diária, semanal e mensal.
+
+## Como executar
+
+### Back-end
+
+**Pré-requisitos:** Java 21+, Maven
+
+1. Abra o projeto na raiz no IntelliJ IDEA (ou outra IDE)
+2. Execute a classe principal `DemoAuthAppApplication`
+3. A API estará disponível em `http://localhost:8080`
+
+### Front-end
+
+**Pré-requisitos:** Node.js 18+, back-end rodando em `http://localhost:8080`
+
+1. Acesse a pasta do frontend:
+   ```bash
+   cd frontend
+   ```
+
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+
+3. Crie um arquivo `.env` na pasta `frontend` com o seguinte conteúdo:
+   ```
+   VITE_API_URL=http://localhost:8080/api/v1
+   ```
+
+4. Execute:
+   ```bash
+   npm run dev
+   ```
+A aplicação estará disponível em `http://localhost:5173` (porta padrão do Vite).
 
 ## Procedimento de locação de ferramenta
 
@@ -28,7 +63,7 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 |------------|-----------|
 | Java | Linguagem principal do projeto |
 | Spring Boot | API REST Back-end |
-| A definir | Front-end |
+| React + Vite | Front-end |
 
 ## Práticas
 
@@ -41,33 +76,6 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 | Testes Estruturais e de Mutação | Cobertura e qualidade dos testes |
 | Testes de Integração e de Sistema | Validação end-to-end com foco em UI |
 
-## Estrutura DDD
-
-**Agregado (Aggregate Root)**
-- `Locacao`
-
-**Entidade (Entity)**
-- `ItemLocacao` : representa cada ferramenta dentro de uma locação
-- `RegistroFechamento` : registra o desfecho de uma locação
-
-**Objetos de Valor (Value Objects)**
-- `PrecosProgressivos` : encapsula os valores de diária padrão, semanal e mensal
-- `Garantia` : enumeração de garantias aceitas para realizar uma locação
-
-**Repositório (Repository)**
-- `LocacaoRepository`
-
-**Serviços de Aplicação (Application Services)**
-- `RegistrarLocacao`
-- `FinalizarLocacao`
-- `CancelarLocacao`
-- `ConsultarValorLocacao`
-- `EnviarManutenção`
-- `RetornarManutenção`
-
-**Enumerações de domminio**
-- `StatusDaFerramenta`: `DISPONIVEL`, `ALUGADA`, `MANUTENCAO`
-- `StatusDaLocacao`: `ATIVA`, `CANCELADA`, `FINALIZADA`
 
 ## Equipe
 
@@ -75,7 +83,3 @@ Quando a ferramenta retorna da manutenção, o atendente testa novamente o equip
 |--------|--------|
 | Breno Nascimento Lopes | [@brenonlps](https://github.com/brenonlps) |
 | Lucas Jundi Hikazudani | [@hikazudani](https://github.com/hikazudani) |
-| Maria Clara Passareli Alves | [@passareliscoding](https://github.com/passareliscoding) |
-
-# demo-auth-app
-Pre-configured secure Spring Boot application template using JWT.
