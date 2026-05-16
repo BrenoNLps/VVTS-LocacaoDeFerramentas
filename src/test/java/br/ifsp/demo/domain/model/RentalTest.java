@@ -61,4 +61,14 @@ class RentalTest {
         rental.finalize(endDate);
         assertThat(rental.getEndDate()).isEqualTo(endDate);
     }
+
+    @Test
+    @UnitTest
+    @Mutation
+    @DisplayName("Should reflect status after setStatus is called")
+    void shouldReflectStatusAfterSetStatusIsCalled() {
+        Rental rental = Rental.create("rental-1", List.of(buildTool("tool-1")), START, CUSTOMER);
+        rental.setStatus(RentalStatus.CANCELLED);
+        assertThat(rental.getStatus()).isEqualTo(RentalStatus.CANCELLED);
+    }
 }
