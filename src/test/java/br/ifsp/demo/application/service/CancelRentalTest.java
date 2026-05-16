@@ -1,5 +1,6 @@
 package br.ifsp.demo.application.service;
 
+import br.ifsp.demo.annotation.Structural;
 import br.ifsp.demo.annotation.TDD;
 import br.ifsp.demo.annotation.UnitTest;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
@@ -153,6 +154,15 @@ class CancelRentalTest {
         @DisplayName("Should throw null pointer Exception when required field is null")
         void shouldThrowNullPointerExceptionWhenRequiredFieldIsNull(String rentalId) {
             assertThatThrownBy(() -> cancelRental.execute(rentalId))
+                    .isInstanceOf(InvalidArgumentException.class);
+        }
+
+        @Test
+        @UnitTest
+        @Structural
+        @DisplayName("Should throw InvalidArgumentException when rentalId is blank")
+        void shouldThrowInvalidArgumentExceptionWhenRentalIdIsBlank() {
+            assertThatThrownBy(() -> cancelRental.execute("   "))
                     .isInstanceOf(InvalidArgumentException.class);
         }
     }

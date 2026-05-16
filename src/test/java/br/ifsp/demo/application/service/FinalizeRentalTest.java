@@ -1,8 +1,6 @@
 package br.ifsp.demo.application.service;
 
-import br.ifsp.demo.annotation.Functional;
-import br.ifsp.demo.annotation.TDD;
-import br.ifsp.demo.annotation.UnitTest;
+import br.ifsp.demo.annotation.*;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.*;
@@ -29,7 +27,7 @@ import java.util.stream.Stream;
 import static br.ifsp.demo.domain.model.RentalStatus.*;
 import static br.ifsp.demo.domain.model.ToolStatus.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Finalize Rental")
@@ -95,6 +93,20 @@ class FinalizeRentalTest {
             assertThat(tool1.isAvailable()).isTrue();
             assertThat(tool2.isAvailable()).isTrue();
             assertThat(rental.getStatus()).isEqualTo(FINALIZED);
+        }
+
+        @Test
+        @UnitTest
+        @Mutation
+        @DisplayName("Should call rentalRepository save after finalizing rental")
+        void shouldCallRentalRepositorySaveAfterFinalizingRental() {
+            Tool tool = buildTool("tool-1");
+            Rental rental = Rental.create("rental-1", List.of(tool), START, CUSTOMER);
+            when(rentalRepository.findById("rental-1")).thenReturn(rental);
+
+            finalizeRental.execute("rental-1", END);
+
+            verify(rentalRepository).save(rental);
         }
 
         @Nested
