@@ -5,7 +5,8 @@ import ToolTable from "../../components/ToolTable";
 import { api } from "../../services/api";
 import { PATHS } from "../../routes/paths";
 
-const today = new Date().toISOString().split("T")[0];
+const _now = new Date();
+const today = `${_now.getFullYear()}-${String(_now.getMonth() + 1).padStart(2, "0")}-${String(_now.getDate()).padStart(2, "0")}`;
 
 export default function Home() {
   const [tools, setTools] = useState([]);
