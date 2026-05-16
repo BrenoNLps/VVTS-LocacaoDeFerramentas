@@ -4,7 +4,8 @@ import Tabs from "../../components/Tabs";
 import ToolTable from "../../components/ToolTable";
 import { api } from "../../services/api";
 
-const today = new Date().toISOString().split("T")[0];
+const now = new Date();
+const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
 const GUARANTEE_OPTIONS = [
   { value: "PROMISSORY_NOTE", label: "Promissória" },
@@ -103,15 +104,16 @@ export default function Rental() {
     }
   }
 
-  async function cancelRental(rentalId) {
+  async function finalizeRental(rentalId) {
     setError("");
     setSuccess("");
     try {
-      await api.put(`/rentals/${rentalId}/cancel`);
+      const total = await api.put(`/rentals/${rentalId}/finalize`, { endDate: today });
       loadActiveRentals();
       loadTools();
+      setSuccess(`Locação finalizada. Valor total: R$ ${Number(total).toFixed(2).replace(".", ",")}`);
     } catch {
-      setError("Erro ao cancelar locação.");
+      setError("Erro ao finalizar locação.");
     }
   }
 
@@ -213,8 +215,8 @@ export default function Rental() {
                       <td>{rental.tools.map(t => t.name).join(", ")}</td>
                       <td>{rental.startDate}</td>
                       <td>
-                        <button className="btn-danger" onClick={() => cancelRental(rental.id)}>
-                          Cancelar
+                        <button className="btn-primary" onClick={() => finalizeRental(rental.id)}>
+                          Finalizar
                         </button>
                       </td>
                     </tr>
