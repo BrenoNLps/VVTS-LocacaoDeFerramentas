@@ -50,4 +50,15 @@ class RentalTest {
         Rental rental = Rental.create("rental-1", List.of(buildTool("tool-1")), START, CUSTOMER);
         assertThat(rental.getCustomer()).isEqualTo(CUSTOMER);
     }
+
+    @Test
+    @UnitTest
+    @Mutation
+    @DisplayName("Should return end date after finalization")
+    void shouldReturnEndDateAfterFinalization() {
+        LocalDate endDate = START.plusDays(3);
+        Rental rental = Rental.create("rental-1", List.of(buildTool("tool-1")), START, CUSTOMER);
+        rental.finalize(endDate);
+        assertThat(rental.getEndDate()).isEqualTo(endDate);
+    }
 }
