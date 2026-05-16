@@ -41,6 +41,11 @@ docker-compose up --build
 
 Para parar: `Ctrl+C` ou `docker-compose down`
 
+Para subir novamente (sem rebuild):
+```bash
+docker compose up
+```
+
 > O banco de dados é criado automaticamente na primeira execução e persiste entre reinicializações.
 
 ## Tecnologias
