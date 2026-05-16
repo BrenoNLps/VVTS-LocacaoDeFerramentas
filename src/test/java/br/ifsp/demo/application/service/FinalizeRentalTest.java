@@ -1,8 +1,6 @@
 package br.ifsp.demo.application.service;
 
-import br.ifsp.demo.annotation.Functional;
-import br.ifsp.demo.annotation.TDD;
-import br.ifsp.demo.annotation.UnitTest;
+import br.ifsp.demo.annotation.*;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.*;
@@ -29,7 +27,7 @@ import java.util.stream.Stream;
 import static br.ifsp.demo.domain.model.RentalStatus.*;
 import static br.ifsp.demo.domain.model.ToolStatus.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Finalize Rental")
@@ -37,6 +35,7 @@ class FinalizeRentalTest {
 
     private static final LocalDate START = LocalDate.of(2026, 1, 1);
     private static final LocalDate END = START.plusDays(3);
+    private static final Customer CUSTOMER = new Customer("customer-1", "John Doe");
     private static final ProgressivePrices PRICES = new ProgressivePrices(
             BigDecimal.TEN, BigDecimal.valueOf(8), BigDecimal.valueOf(6)
     );
@@ -61,9 +60,8 @@ class FinalizeRentalTest {
         @DisplayName("Should finalize rental and return total value for single tool")
         void shouldFinalizeRentalAndReturnTotalValueForSingleTool() {
             Tool tool = buildTool("tool-1");
-            Rental rental = new Rental("rental-1", List.of(tool), START);
-            when(rentalRepository.findById("rental-1"))
-                    .thenReturn(rental);
+            Rental rental = Rental.create("rental-1", List.of(tool), START, CUSTOMER);
+            when(rentalRepository.findById("rental-1")).thenReturn(rental);
 
             BigDecimal result = finalizeRental.execute("rental-1", END);
 
@@ -86,9 +84,8 @@ class FinalizeRentalTest {
                             BigDecimal.valueOf(12))
             );
 
-            Rental rental = new Rental("rental-1", List.of(tool1, tool2), START);
-            when(rentalRepository.findById("rental-1"))
-                    .thenReturn(rental);
+            Rental rental = Rental.create("rental-1", List.of(tool1, tool2), START, CUSTOMER);
+            when(rentalRepository.findById("rental-1")).thenReturn(rental);
 
             BigDecimal result = finalizeRental.execute("rental-1", END);
 
@@ -96,6 +93,20 @@ class FinalizeRentalTest {
             assertThat(tool1.isAvailable()).isTrue();
             assertThat(tool2.isAvailable()).isTrue();
             assertThat(rental.getStatus()).isEqualTo(FINALIZED);
+        }
+
+        @Test
+        @UnitTest
+        @Mutation
+        @DisplayName("Should call rentalRepository save after finalizing rental")
+        void shouldCallRentalRepositorySaveAfterFinalizingRental() {
+            Tool tool = buildTool("tool-1");
+            Rental rental = Rental.create("rental-1", List.of(tool), START, CUSTOMER);
+            when(rentalRepository.findById("rental-1")).thenReturn(rental);
+
+            finalizeRental.execute("rental-1", END);
+
+            verify(rentalRepository).save(rental);
         }
 
         @Nested
@@ -120,7 +131,7 @@ class FinalizeRentalTest {
             @DisplayName("Should throw NullPointerException when endDate is null")
             void shouldThrowNullPointerExceptionWhenEndDateIsNull() {
                 Tool tool = buildTool("tool-1");
-                Rental rental = new Rental("rental-1", List.of(tool), START);
+                Rental rental = Rental.create("rental-1", List.of(tool), START, CUSTOMER);
                 when(rentalRepository.findById("rental-1")).thenReturn(rental);
                 assertThatThrownBy(() -> finalizeRental.execute("rental-1", null))
                         .isInstanceOf(NullPointerException.class);
@@ -135,7 +146,6 @@ class FinalizeRentalTest {
                 assertThatThrownBy(() -> finalizeRental.execute(rentalId, END))
                         .isInstanceOf(InvalidArgumentException.class);
             }
-
         }
     }
 
@@ -158,9 +168,8 @@ class FinalizeRentalTest {
         void shouldThrowExceptionWhenRentalIsNotActive(
                 RentalStatus status, Class<? extends Exception> expectedException) {
             Tool tool = buildTool("tool-1");
-            Rental rental = new Rental("rental-1", List.of(tool), status);
-            when(rentalRepository.findById("rental-1"))
-                    .thenReturn(rental);
+            Rental rental = Rental.reconstitute("rental-1", List.of(tool), START, status, CUSTOMER, null);
+            when(rentalRepository.findById("rental-1")).thenReturn(rental);
 
             assertThatThrownBy(() -> finalizeRental.execute("rental-1", END))
                     .isInstanceOf(expectedException);
@@ -180,31 +189,27 @@ class FinalizeRentalTest {
         @Test
         @UnitTest
         @TDD
-        @DisplayName("Should Throw InvalidDateException when end date is before start date")
+        @DisplayName("Should throw InvalidDateException when end date is before start date")
         void shouldThrowInvalidDateExceptionWhenEndDateIsBeforeStartDate() {
             Tool tool = buildTool("tool-1");
-            Rental rental = new Rental("rental-1", List.of(tool), START);
-            when(rentalRepository.findById("rental-1"))
-                    .thenReturn(rental);
+            Rental rental = Rental.create("rental-1", List.of(tool), START, CUSTOMER);
+            when(rentalRepository.findById("rental-1")).thenReturn(rental);
 
             assertThatThrownBy(() -> finalizeRental.execute("rental-1", START.minusDays(1)))
                     .isInstanceOf(InvalidDateException.class);
         }
-
     }
 
     @Nested
     @DisplayName("Functional - boundary values")
-    class BoundaryValues{
+    class BoundaryValues {
 
-        static Stream<Arguments> periodTierBoundaryProvider(){
+        static Stream<Arguments> periodTierBoundaryProvider() {
             return Stream.of(
                     Arguments.of(1, new BigDecimal("10")),
                     Arguments.of(6, new BigDecimal("60")),
-
                     Arguments.of(7, new BigDecimal("56")),
                     Arguments.of(29, new BigDecimal("232")),
-
                     Arguments.of(30, new BigDecimal("180")),
                     Arguments.of(31, new BigDecimal("186"))
             );
@@ -217,14 +222,12 @@ class FinalizeRentalTest {
         @DisplayName("Should apply correct rate at period tier boundaries")
         void shouldApplyCorrectRateAtPeriodTierBoundaries(int days, BigDecimal expectedValue) {
             Tool tool = buildTool("tool-1");
-            Rental rental = new Rental("rental-1", List.of(tool), START);
-            when(rentalRepository.findById("rental-1"))
-                    .thenReturn(rental);
+            Rental rental = Rental.create("rental-1", List.of(tool), START, CUSTOMER);
+            when(rentalRepository.findById("rental-1")).thenReturn(rental);
 
             BigDecimal result = finalizeRental.execute("rental-1", START.plusDays(days));
 
-            assertThat(result)
-                    .isEqualByComparingTo(expectedValue);
+            assertThat(result).isEqualByComparingTo(expectedValue);
         }
 
         @Test
@@ -233,14 +236,12 @@ class FinalizeRentalTest {
         @DisplayName("Should charge minimum 1 daily rate when endDate equals startDate")
         void shouldChargeMinimum1DailyRateWhenEndDateEqualsStartDate() {
             Tool tool = buildTool("tool-1");
-            Rental rental = new Rental("rental-1", List.of(tool), START);
+            Rental rental = Rental.create("rental-1", List.of(tool), START, CUSTOMER);
             when(rentalRepository.findById("rental-1")).thenReturn(rental);
 
             BigDecimal result = finalizeRental.execute("rental-1", START);
 
             assertThat(result).isEqualByComparingTo(new BigDecimal(10));
         }
-
-
     }
 }

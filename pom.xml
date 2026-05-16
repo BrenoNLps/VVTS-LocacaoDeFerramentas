@@ -28,6 +28,7 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <argLine></argLine>
     </properties>
 
     <dependencies>
@@ -163,6 +164,7 @@
                     </targetClasses>
                     <targetTests>
                         <param>br.ifsp.demo.application.service.*</param>
+                        <param>br.ifsp.demo.domain.model.*</param>
                     </targetTests>
                 </configuration>
             </plugin>

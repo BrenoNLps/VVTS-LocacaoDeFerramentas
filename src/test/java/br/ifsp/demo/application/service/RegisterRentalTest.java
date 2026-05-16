@@ -1,8 +1,6 @@
 package br.ifsp.demo.application.service;
 
-import br.ifsp.demo.annotation.Functional;
-import br.ifsp.demo.annotation.TDD;
-import br.ifsp.demo.annotation.UnitTest;
+import br.ifsp.demo.annotation.*;
 import br.ifsp.demo.domain.exception.EntityNotFoundException;
 import br.ifsp.demo.domain.exception.InvalidArgumentException;
 import br.ifsp.demo.domain.model.Customer;
@@ -86,6 +84,22 @@ class RegisterRentalTest {
         assertThat(rentalId).isNotNull();
         assertThat(tool.getStatus()).isEqualTo(ToolStatus.RENTED);
         verify(rentalRepository).save(any());
+    }
+
+    @Test
+    @UnitTest
+    @Mutation
+    @DisplayName("Should return non-blank rental id after registration")
+    void shouldReturnNonBlankRentalIdAfterRegistration() {
+        var tool = buildTool("tool-1", ToolStatus.AVAILABLE);
+        when(customerRepository.findById("customer-1")).thenReturn(customer);
+        when(toolRepository.findById("tool-1")).thenReturn(tool);
+
+        String rentalId = registerRental.execute(
+                "customer-1", List.of("tool-1"), TODAY, GuaranteeType.CASH_DEPOSIT
+        );
+
+        assertThat(rentalId).isNotBlank();
     }
 
     @UnitTest
