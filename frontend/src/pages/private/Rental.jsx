@@ -117,6 +117,18 @@ export default function Rental() {
     }
   }
 
+  async function cancelRental(rentalId) {
+    setError("");
+    setSuccess("");
+    try {
+      await api.put(`/rentals/${rentalId}/cancel`);
+      loadActiveRentals();
+      loadTools();
+    } catch {
+      setError("Erro ao cancelar locação.");
+    }
+  }
+
   const filteredCustomers = customerSearch.trim()
     ? customers.filter(c => c.name.toLowerCase().includes(customerSearch.toLowerCase()))
     : customers;
@@ -214,9 +226,12 @@ export default function Rental() {
                     <tr key={rental.id}>
                       <td>{rental.tools.map(t => t.name).join(", ")}</td>
                       <td>{rental.startDate}</td>
-                      <td>
+                      <td style={{ display: "flex", gap: "0.5rem" }}>
                         <button className="btn-primary" onClick={() => finalizeRental(rental.id)}>
                           Finalizar
+                        </button>
+                        <button className="btn-danger" onClick={() => cancelRental(rental.id)}>
+                          Cancelar
                         </button>
                       </td>
                     </tr>
