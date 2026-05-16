@@ -41,4 +41,13 @@ class RentalTest {
         Rental rental = Rental.create("rental-1", List.of(buildTool("tool-1")), START, CUSTOMER);
         assertThat(rental.getStartDate()).isEqualTo(START);
     }
+
+    @Test
+    @UnitTest
+    @Mutation
+    @DisplayName("Should return customer provided at creation")
+    void shouldReturnCustomerProvidedAtCreation() {
+        Rental rental = Rental.create("rental-1", List.of(buildTool("tool-1")), START, CUSTOMER);
+        assertThat(rental.getCustomer()).isEqualTo(CUSTOMER);
+    }
 }
