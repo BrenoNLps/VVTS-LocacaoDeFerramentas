@@ -24,5 +24,12 @@ class MaintenanceRecordTest {
         assertThat(record.isOpen()).isFalse();
     }
 
-
+    @Test
+    @UnitTest
+    @Mutation
+    @DisplayName("Should return false for isClosed when record is open")
+    void shouldReturnFalseForIsClosedWhenRecordIsOpen() {
+        MaintenanceRecord record = new MaintenanceRecord(SENT);
+        assertThat(record.isClosed()).isFalse();
+    }
 }
