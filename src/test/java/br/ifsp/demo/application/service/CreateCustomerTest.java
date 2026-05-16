@@ -39,4 +39,13 @@ class CreateCustomerTest {
         verify(customerRepository).save(any());
     }
 
+    @Test
+    @UnitTest
+    @Structural
+    @DisplayName("Should throw InvalidArgumentException when name is blank")
+    void shouldThrowInvalidArgumentExceptionWhenNameIsBlank() {
+        assertThatThrownBy(() -> createCustomer.execute("  "))
+                .isInstanceOf(InvalidArgumentException.class);
+    }
+
 }
