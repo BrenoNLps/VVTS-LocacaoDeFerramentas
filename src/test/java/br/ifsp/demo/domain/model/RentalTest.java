@@ -32,4 +32,13 @@ class RentalTest {
         Rental rental = Rental.create("rental-1", List.of(tool), START, CUSTOMER);
         assertThat(rental.getTools()).containsExactly(tool);
     }
+
+    @Test
+    @UnitTest
+    @Mutation
+    @DisplayName("Should return start date provided at creation")
+    void shouldReturnStartDateProvidedAtCreation() {
+        Rental rental = Rental.create("rental-1", List.of(buildTool("tool-1")), START, CUSTOMER);
+        assertThat(rental.getStartDate()).isEqualTo(START);
+    }
 }
