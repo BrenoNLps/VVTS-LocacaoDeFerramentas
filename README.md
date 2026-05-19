@@ -18,10 +18,9 @@ O sistema aplica preços progressivos: quanto maior o período de locação, men
 
 ## Como executar
 
-### Pré-requisitos
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado
+### Com Docker
 
-### Passos
+**Pré-requisitos:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 1. Clone o repositório:
 ```bash
@@ -47,6 +46,40 @@ docker compose up
 ```
 
 > O banco de dados é criado automaticamente na primeira execução e persiste entre reinicializações.
+
+---
+
+### Sem Docker
+
+**Pré-requisitos:** Java 21+, Maven, Node.js 18+
+
+**Back-end:**
+1. Abra o projeto no IntelliJ 
+2. Execute a classe principal `DemoAuthAppApplication`
+3. A API estará disponível em `http://localhost:8080`
+
+**Front-end:**
+1. Entre na pasta do frontend:
+```bash
+cd frontend
+```
+2. Instale as dependências:
+```bash
+npm install
+```
+3. Crie o arquivo `.env` a partir do exemplo:
+```bash
+cp .env.example .env
+```
+Ou crie manualmente o arquivo `.env` com o conteúdo:
+```
+VITE_API_URL=http://localhost:8080/api/v1
+```
+4. Rode:
+```bash
+npm run dev
+```
+A aplicação estará disponível em `http://localhost:5173`.
 
 ## Tecnologias
 
