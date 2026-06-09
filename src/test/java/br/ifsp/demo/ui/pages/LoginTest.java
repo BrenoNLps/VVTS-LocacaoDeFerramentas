@@ -47,4 +47,19 @@ public class LoginTest extends BaseUiTest {
         assertThat(driver.getCurrentUrl()).contains("/home");
         assertThat(driver.findElements(By.xpath("//h1[text()='Login']"))).isEmpty();
     }
+
+    @Test
+    @DisplayName("Invalid login should show error message")
+    public void shouldShowErrorWhenLoginFails() {
+        driver.get("http://localhost:5173/");
+
+        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("wrong@gmail.com");
+        driver.findElement(By.xpath("//input[@placeholder='Senha']")).sendKeys("wrongpassword");
+        driver.findElement(By.xpath("//button[text()='Entrar']")).click();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.findElement(By.xpath("//p[text()='Email ou senha inválidos.']")).isDisplayed());
+
+        assertThat(driver.findElement(By.xpath("//p[text()='Email ou senha inválidos.']")).isDisplayed()).isTrue();
+        assertThat(driver.getCurrentUrl()).isEqualTo("http://localhost:5173/");
+    }
 }
