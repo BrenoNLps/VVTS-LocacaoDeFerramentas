@@ -10,6 +10,10 @@ public class UiTestDataFactory {
         return faker.name().fullName();
     }
 
+    public static String createLastName() {
+        return faker.name().lastName();
+    }
+
     public static String createEmail() {
         return faker.internet().emailAddress();
     }
