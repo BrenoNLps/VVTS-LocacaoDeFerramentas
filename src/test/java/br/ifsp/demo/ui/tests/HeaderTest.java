@@ -66,4 +66,14 @@ public class HeaderTest extends BaseUiTest {
 
         wait.until(d -> headerPage.isMenuHidden());
     }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Header navigation should route to the home page")
+    public void shouldNavigateToHomeWhenHomeLinkIsClicked() {
+        headerPage.clickHome();
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().contains("/home"));
+        assertThat(driver.getCurrentUrl()).contains("/home");
+        assertThat(driver.findElement(By.xpath("//h1[text()='Ferramentas disponíveis']")).isDisplayed()).isTrue();
+    }
 }

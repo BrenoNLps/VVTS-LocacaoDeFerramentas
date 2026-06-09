@@ -24,4 +24,8 @@ public class HeaderPage extends BasePage {
     public boolean isMenuHidden() {
         return !isMenuOpen();
     }
+
+    public void clickHome() {
+        driver.findElement(By.linkText("Home")).click();
+    }
 }
