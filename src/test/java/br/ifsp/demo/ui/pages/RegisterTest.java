@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -44,5 +45,26 @@ public class RegisterTest extends BaseUiTest {
 
         assertThat(driver.getCurrentUrl()).isEqualTo("http://localhost:5173/");
         assertThat(driver.findElements(By.xpath("//h1[text()='Cadastro']"))).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Invalid registration should show an error message")
+    public void shouldShowErrorWhenRegistrationFails() {
+        driver.get("http://localhost:5173/register");
+
+        ((JavascriptExecutor) driver).executeScript(
+            "window.fetch = function() { return Promise.resolve({ ok: false, status: 400 }); };"
+        );
+
+        driver.findElement(By.xpath("//input[@placeholder='Nome']")).sendKeys(UiTestDataFactory.createName());
+        driver.findElement(By.xpath("//input[@placeholder='Sobrenome']")).sendKeys(UiTestDataFactory.createLastName());
+        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys(UiTestDataFactory.createEmail());
+        driver.findElement(By.xpath("//input[@placeholder='Senha']")).sendKeys(UiTestDataFactory.createPassword());
+        driver.findElement(By.xpath("//button[text()='Cadastrar']")).click();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.findElement(By.xpath("//p[text()='Erro ao cadastrar. Verifique os dados e tente novamente.']")).isDisplayed());
+
+        assertThat(driver.findElement(By.xpath("//p[text()='Erro ao cadastrar. Verifique os dados e tente novamente.']")).isDisplayed()).isTrue();
+        assertThat(driver.getCurrentUrl()).isEqualTo("http://localhost:5173/register");
     }
 }
