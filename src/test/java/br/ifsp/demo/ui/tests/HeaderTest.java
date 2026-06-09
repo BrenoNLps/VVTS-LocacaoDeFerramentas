@@ -1,8 +1,8 @@
-package br.ifsp.demo.ui.components;
+package br.ifsp.demo.ui.tests;
 
 import br.ifsp.demo.ui.base.BaseUiTest;
 import br.ifsp.demo.ui.helpers.UiTestDataFactory;
-import br.ifsp.demo.ui.helpers.HeaderPage;
+import br.ifsp.demo.ui.pages.HeaderPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -17,7 +17,6 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Tag("UiTest")
 public class HeaderTest extends BaseUiTest {
     private HeaderPage headerPage;
 
@@ -35,6 +34,7 @@ public class HeaderTest extends BaseUiTest {
     }
 
     @Test
+    @Tag("UiTest")
     @DisplayName("Header should render navigation links and logout button")
     public void shouldRenderHeaderNavigationAndLogoutButton() {
         assertThat(driver.findElement(By.linkText("Home")).isDisplayed()).isTrue();
@@ -56,7 +56,7 @@ public class HeaderTest extends BaseUiTest {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        assertThat(headerPage.isMenuOpen()).isFalse();
+        assertThat(headerPage.isMenuHidden()).isTrue();
 
         headerPage.clickHamburger();
 
@@ -64,6 +64,6 @@ public class HeaderTest extends BaseUiTest {
 
         headerPage.clickHamburger();
 
-        wait.until(d -> !headerPage.isMenuOpen());
+        wait.until(d -> headerPage.isMenuHidden());
     }
 }

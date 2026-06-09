@@ -1,7 +1,9 @@
-package br.ifsp.demo.ui.pages;
+package br.ifsp.demo.ui.tests;
 
 import br.ifsp.demo.ui.base.BaseUiTest;
 import br.ifsp.demo.ui.helpers.UiTestDataFactory;
+import br.ifsp.demo.ui.pages.RegisterPage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,12 @@ import java.time.Duration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegisterTest extends BaseUiTest {
+    private RegisterPage registerPage;
+
+    @BeforeEach
+    public void setup() {
+        registerPage = new RegisterPage(driver);
+    }
 
     @Test
     @Tag("UiTest")
@@ -36,11 +44,8 @@ public class RegisterTest extends BaseUiTest {
     public void shouldRegisterAndRedirectToLoginWhenDataIsValid() {
         driver.get("http://localhost:5173/register");
 
-        driver.findElement(By.xpath("//input[@placeholder='Nome']")).sendKeys(UiTestDataFactory.createName());
-        driver.findElement(By.xpath("//input[@placeholder='Sobrenome']")).sendKeys(UiTestDataFactory.createLastName());
-        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys(UiTestDataFactory.createEmail());
-        driver.findElement(By.xpath("//input[@placeholder='Senha']")).sendKeys(UiTestDataFactory.createPassword());
-        driver.findElement(By.xpath("//button[text()='Cadastrar']")).click();
+        registerPage.fillForm(UiTestDataFactory.createName(), UiTestDataFactory.createLastName(), UiTestDataFactory.createEmail(), UiTestDataFactory.createPassword());
+        registerPage.clickRegister();
 
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().equals("http://localhost:5173/"));
 
@@ -50,7 +55,7 @@ public class RegisterTest extends BaseUiTest {
 
     @Test
     @Tag("UiTest")
-    @DisplayName("Invalid registration should show error message")
+    @DisplayName("Invalid registration should show an error message")
     public void shouldShowErrorWhenRegistrationFails() {
         driver.get("http://localhost:5173/register");
 
@@ -58,15 +63,12 @@ public class RegisterTest extends BaseUiTest {
             "window.fetch = function() { return Promise.resolve({ ok: false, status: 400 }); };"
         );
 
-        driver.findElement(By.xpath("//input[@placeholder='Nome']")).sendKeys(UiTestDataFactory.createName());
-        driver.findElement(By.xpath("//input[@placeholder='Sobrenome']")).sendKeys(UiTestDataFactory.createLastName());
-        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys(UiTestDataFactory.createEmail());
-        driver.findElement(By.xpath("//input[@placeholder='Senha']")).sendKeys(UiTestDataFactory.createPassword());
-        driver.findElement(By.xpath("//button[text()='Cadastrar']")).click();
+        registerPage.fillForm(UiTestDataFactory.createName(), UiTestDataFactory.createLastName(), UiTestDataFactory.createEmail(), UiTestDataFactory.createPassword());
+        registerPage.clickRegister();
 
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.findElement(By.xpath("//p[text()='Erro ao cadastrar. Verifique os dados e tente novamente.']")).isDisplayed());
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> registerPage.isErrorMessageVisible());
 
-        assertThat(driver.findElement(By.xpath("//p[text()='Erro ao cadastrar. Verifique os dados e tente novamente.']")).isDisplayed()).isTrue();
+        assertThat(registerPage.isErrorMessageVisible()).isTrue();
         assertThat(driver.getCurrentUrl()).isEqualTo("http://localhost:5173/register");
     }
 }

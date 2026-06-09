@@ -1,6 +1,6 @@
-package br.ifsp.demo.ui.helpers;
+package br.ifsp.demo.ui.pages;
 
-import br.ifsp.demo.ui.pages.base.BasePage;
+import br.ifsp.demo.ui.base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -19,5 +19,9 @@ public class HeaderPage extends BasePage {
 
     public boolean isMenuOpen() {
         return driver.findElement(menuNav).getAttribute("class").contains("header-nav--open");
+    }
+
+    public boolean isMenuHidden() {
+        return !isMenuOpen();
     }
 }

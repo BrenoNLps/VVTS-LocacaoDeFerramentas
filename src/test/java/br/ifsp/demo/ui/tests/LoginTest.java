@@ -1,12 +1,13 @@
-package br.ifsp.demo.ui.pages;
+package br.ifsp.demo.ui.tests;
 
 import br.ifsp.demo.ui.base.BaseUiTest;
+import br.ifsp.demo.ui.helpers.UiTestDataFactory;
+import br.ifsp.demo.ui.pages.LoginPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -14,10 +15,12 @@ import java.time.Duration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginTest extends BaseUiTest {
+    private LoginPage loginPage;
 
     @BeforeEach
     public void setup() {
         registerUser("Admin", "User", "admin@gmail.com", "1234");
+        loginPage = new LoginPage(driver);
     }
 
     @Test
@@ -39,9 +42,9 @@ public class LoginTest extends BaseUiTest {
     public void shouldLoginAndRedirectToHomeWhenCredentialsAreValid() {
         driver.get("http://localhost:5173/");
 
-        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("admin@gmail.com");
-        driver.findElement(By.xpath("//input[@placeholder='Senha']")).sendKeys("1234");
-        driver.findElement(By.xpath("//button[text()='Entrar']")).click();
+        loginPage.fillEmail("admin@gmail.com");
+        loginPage.fillPassword("1234");
+        loginPage.clickLogin();
 
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().contains("/home"));
 
@@ -55,13 +58,13 @@ public class LoginTest extends BaseUiTest {
     public void shouldShowErrorWhenLoginFails() {
         driver.get("http://localhost:5173/");
 
-        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("wrong@gmail.com");
-        driver.findElement(By.xpath("//input[@placeholder='Senha']")).sendKeys("wrongpassword");
-        driver.findElement(By.xpath("//button[text()='Entrar']")).click();
+        loginPage.fillEmail(UiTestDataFactory.createEmail());
+        loginPage.fillPassword(UiTestDataFactory.createPassword());
+        loginPage.clickLogin();
 
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.findElement(By.xpath("//p[text()='Email ou senha inválidos.']")).isDisplayed());
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> loginPage.isErrorMessageVisible());
 
-        assertThat(driver.findElement(By.xpath("//p[text()='Email ou senha inválidos.']")).isDisplayed()).isTrue();
+        assertThat(loginPage.isErrorMessageVisible()).isTrue();
         assertThat(driver.getCurrentUrl()).isEqualTo("http://localhost:5173/");
     }
 }

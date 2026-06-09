@@ -1,4 +1,4 @@
-package br.ifsp.demo.ui.components;
+package br.ifsp.demo.ui.tests;
 
 import br.ifsp.demo.ui.base.BaseUiTest;
 import org.junit.jupiter.api.DisplayName;
