@@ -9,10 +9,10 @@ import org.openqa.selenium.JavascriptExecutor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Tag("UiTest")
 public class PublicRouteTest extends BaseUiTest {
 
     @Test
+    @Tag("UiTest")
     @DisplayName("Authenticated users are redirected away from public routes")
     public void authenticatedUsersAreRedirectedAwayFromPublicRoute() {
         driver.get("http://localhost:5173/");

@@ -13,10 +13,10 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Tag("UiTest")
 public class RegisterTest extends BaseUiTest {
 
     @Test
+    @Tag("UiTest")
     @DisplayName("Register page should render the registration form")
     public void shouldRenderRegisterForm() {
         driver.get("http://localhost:5173/register");
@@ -31,6 +31,7 @@ public class RegisterTest extends BaseUiTest {
     }
 
     @Test
+    @Tag("UiTest")
     @DisplayName("Valid registration should redirect the user to login")
     public void shouldRegisterAndRedirectToLoginWhenDataIsValid() {
         driver.get("http://localhost:5173/register");
@@ -48,7 +49,8 @@ public class RegisterTest extends BaseUiTest {
     }
 
     @Test
-    @DisplayName("Invalid registration should show an error message")
+    @Tag("UiTest")
+    @DisplayName("Invalid registration should show error message")
     public void shouldShowErrorWhenRegistrationFails() {
         driver.get("http://localhost:5173/register");
 

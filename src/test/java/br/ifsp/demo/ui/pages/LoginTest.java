@@ -13,7 +13,6 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Tag("UiTest")
 public class LoginTest extends BaseUiTest {
 
     @BeforeEach
@@ -22,6 +21,7 @@ public class LoginTest extends BaseUiTest {
     }
 
     @Test
+    @Tag("UiTest")
     @DisplayName("Login page should render the authentication form")
     public void shouldRenderLoginForm() {
         driver.get("http://localhost:5173/");
@@ -34,6 +34,7 @@ public class LoginTest extends BaseUiTest {
     }
 
     @Test
+    @Tag("UiTest")
     @DisplayName("Valid login should redirect the user to home")
     public void shouldLoginAndRedirectToHomeWhenCredentialsAreValid() {
         driver.get("http://localhost:5173/");
@@ -49,6 +50,7 @@ public class LoginTest extends BaseUiTest {
     }
 
     @Test
+    @Tag("UiTest")
     @DisplayName("Invalid login should show error message")
     public void shouldShowErrorWhenLoginFails() {
         driver.get("http://localhost:5173/");

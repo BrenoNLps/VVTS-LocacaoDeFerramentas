@@ -12,10 +12,10 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Tag("UiTest")
 public class PrivateRouteTest extends BaseUiTest {
 
     @Test
+    @Tag("UiTest")
     @DisplayName("Unauthenticated users are blocked from private routes")
     public void unauthenticatedUsersAreBlockedFromPrivateRoute() {
         driver.get("http://localhost:5173/");
