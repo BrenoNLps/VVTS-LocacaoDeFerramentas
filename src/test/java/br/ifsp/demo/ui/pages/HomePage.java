@@ -29,6 +29,10 @@ public class HomePage extends BasePage {
         return driver.findElement(errorMessage).getText();
     }
 
+    public String getSimulationResultText() {
+        return driver.findElement(simulationResult).getText();
+    }
+
     public boolean isSimulationValueVisible() {
         return !driver.findElements(simulationResult).isEmpty();
     }

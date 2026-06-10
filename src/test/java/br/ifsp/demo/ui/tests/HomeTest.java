@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -23,9 +24,9 @@ public class HomeTest extends BaseUiTest {
         String password = UiTestDataFactory.createPassword();
         registerUser("Admin", "User", email, password);
         login(email, password);
-        
+
         createTool("Furadeira", 10.0, 50.0, 150.0);
-        
+
         homePage = new HomePage(driver);
     }
 
@@ -44,10 +45,10 @@ public class HomeTest extends BaseUiTest {
     @DisplayName("Selecting a tool should toggle its selected state")
     public void shouldToggleToolSelectionInTheTable() {
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> homePage.isToolTableVisible());
-        
+
         homePage.clickFirstToolRow();
         assertThat(homePage.isFirstToolRowSelected()).isTrue();
-        
+
         homePage.clickFirstToolRow();
         assertThat(homePage.isFirstToolRowSelected()).isFalse();
     }
@@ -58,7 +59,7 @@ public class HomeTest extends BaseUiTest {
     public void shouldShowValidationWhenSimulatingWithoutSelectingAnyTool() {
         homePage.setEndDate("2026-12-31");
         homePage.clickSimulate();
-        
+
         assertThat(homePage.getErrorMessage()).isEqualTo("Selecione ao menos uma ferramenta.");
         assertThat(homePage.isSimulationValueVisible()).isFalse();
     }
@@ -69,8 +70,32 @@ public class HomeTest extends BaseUiTest {
     public void shouldShowValidationWhenSimulatingWithoutReturnDate() {
         homePage.clickFirstToolRow();
         homePage.clickSimulate();
-        
+
         assertThat(homePage.getErrorMessage()).isEqualTo("Informe a data de devolução.");
         assertThat(homePage.isSimulationValueVisible()).isFalse();
+    }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Successful simulation should show the estimated rental value")
+    public void shouldDisplayEstimatedValueAfterSuccessfulSimulation() {
+        homePage.clickFirstToolRow();
+        homePage.setEndDate("2026-12-31");
+
+        ((JavascriptExecutor) driver).executeScript(
+            "window.fetch = function() { " +
+            "  return Promise.resolve(new Response('100.0', { " +
+            "    status: 200, " +
+            "    headers: { 'Content-Type': 'application/json' } " +
+            "  })); " +
+            "};"
+        );
+
+        homePage.clickSimulate();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> homePage.isSimulationValueVisible());
+
+        assertThat(homePage.getSimulationResultText()).contains("Valor estimado: R$");
+        assertThat(homePage.getSimulationResultText()).contains("100.00");
     }
 }
