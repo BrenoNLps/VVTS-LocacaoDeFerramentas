@@ -3,6 +3,7 @@ package br.ifsp.demo.ui.pages;
 import br.ifsp.demo.ui.base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -20,6 +21,7 @@ public class RentalPage extends BasePage {
     }
 
     public boolean isHeadingVisible() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(heading));
         return driver.findElement(heading).isDisplayed();
     }
 
@@ -111,5 +113,17 @@ public class RentalPage extends BasePage {
 
     public boolean isEmptyStateMessageVisible() {
         return !driver.findElements(By.xpath("//td[text()='Nenhuma locação ativa.']")).isEmpty();
+    }
+
+    public void clickFinalizeButton() {
+        driver.findElement(By.xpath("//button[text()='Finalizar']")).click();
+    }
+
+    public void clickCancelButton() {
+        driver.findElement(By.xpath("//button[text()='Cancelar']")).click();
+    }
+
+    public int getActiveRentalCount() {
+        return driver.findElements(By.xpath("//button[text()='Finalizar']")).size();
     }
 }
