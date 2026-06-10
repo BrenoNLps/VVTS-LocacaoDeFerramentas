@@ -68,4 +68,12 @@ public class ToolsPage extends BasePage {
     public boolean isToolInTable(String name) {
         return !driver.findElements(By.xpath("//td[text()='" + name + "']")).isEmpty();
     }
+
+    public String getErrorMessage() {
+        return driver.findElement(By.xpath("//form//p")).getText();
+    }
+
+    public boolean isErrorMessageVisible() {
+        return !driver.findElements(By.xpath("//form//p")).isEmpty();
+    }
 }

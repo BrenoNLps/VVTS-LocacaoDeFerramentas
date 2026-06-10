@@ -79,4 +79,37 @@ public class ToolsTest extends BaseUiTest {
 
         assertThat(toolsPage.isToolInTable(toolName)).isTrue();
     }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Invalid tool creation should show an error message")
+    public void shouldShowErrorWhenToolCreationFails() {
+        String email = UiTestDataFactory.createEmail();
+        String password = UiTestDataFactory.createPassword();
+        registerUser("Admin", "User", email, password);
+        login(email, password);
+
+        driver.get("http://localhost:5173/tools");
+        ToolsPage toolsPage = new ToolsPage(driver);
+
+        String toolName = "Error Tool " + System.currentTimeMillis();
+        toolsPage.fillForm(toolName, "15.0", "70.0", "200.0");
+
+        ((JavascriptExecutor) driver).executeScript(
+            "const originalFetch = window.fetch; " +
+            "window.fetch = function(url, options) { " +
+            "  if (url.includes('/tools') && options && options.method === 'POST') { " +
+            "    return Promise.reject(new Error('Failed to create tool')); " +
+            "  } " +
+            "  return originalFetch(url, options); " +
+            "};"
+        );
+
+        toolsPage.clickRegister();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> toolsPage.isErrorMessageVisible());
+
+        assertThat(toolsPage.getErrorMessage()).isEqualTo("Erro ao cadastrar ferramenta.");
+        assertThat(toolsPage.isToolInTable(toolName)).isFalse();
+    }
 }
