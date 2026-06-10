@@ -98,6 +98,16 @@ class MaintenanceControllerTest extends BaseIntegrationTest {
                     .when().post("/api/v1/maintenance/send/" + toolId)
                     .then().statusCode(409);
         }
+
+        @Test
+        @DisplayName("should return 401 without token")
+        void shouldReturn401WithoutToken() {
+            String toolId = createTool();
+
+            givenNoAuth()
+                    .when().post("/api/v1/maintenance/send/" + toolId)
+                    .then().statusCode(401);
+        }
     }
 
     @Nested
@@ -121,6 +131,17 @@ class MaintenanceControllerTest extends BaseIntegrationTest {
             givenAuth()
                     .when().put("/api/v1/maintenance/return/non-existent-id")
                     .then().statusCode(404);
+        }
+
+        @Test
+        @DisplayName("should return 401 without token")
+        void shouldReturn401WithoutToken() {
+            String toolId = createTool();
+            givenAuth().post("/api/v1/maintenance/send/" + toolId);
+
+            givenNoAuth()
+                    .when().put("/api/v1/maintenance/return/" + toolId)
+                    .then().statusCode(401);
         }
     }
 }
