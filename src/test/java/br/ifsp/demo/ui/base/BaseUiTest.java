@@ -1,5 +1,6 @@
 package br.ifsp.demo.ui.base;
 
+import br.ifsp.demo.ui.pages.LoginPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
@@ -34,5 +35,15 @@ public abstract class BaseUiTest {
         driver.findElement(By.xpath("//button[text()='Cadastrar']")).click();
         
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().contains("/"));
+    }
+
+    protected void login(String email, String password) {
+        driver.get("http://localhost:5173/");
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.fillEmail(email);
+        loginPage.fillPassword(password);
+        loginPage.clickLogin();
+        
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().contains("/home"));
     }
 }
