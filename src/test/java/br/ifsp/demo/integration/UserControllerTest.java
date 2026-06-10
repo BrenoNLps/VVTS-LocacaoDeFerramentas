@@ -45,6 +45,54 @@ class UserControllerTest extends BaseIntegrationTest {
                     .when().post("/api/v1/register")
                     .then().statusCode(409);
         }
+
+        @Test
+        @DisplayName("should return 400 when name is null")
+        void shouldReturn400WhenNameIsNull() {
+            String body = String.format(
+                    "{\"name\":null,\"lastname\":\"%s\",\"email\":\"%s\",\"password\":\"Test@1234\"}",
+                    EntityBuilder.randomLastName(), EntityBuilder.randomEmail());
+
+            given().contentType("application/json").body(body)
+                    .when().post("/api/v1/register")
+                    .then().statusCode(400);
+        }
+
+        @Test
+        @DisplayName("should return 400 when email is null")
+        void shouldReturn400WhenEmailIsNull() {
+            String body = String.format(
+                    "{\"name\":\"%s\",\"lastname\":\"%s\",\"email\":null,\"password\":\"Test@1234\"}",
+                    EntityBuilder.randomFirstName(), EntityBuilder.randomLastName());
+
+            given().contentType("application/json").body(body)
+                    .when().post("/api/v1/register")
+                    .then().statusCode(400);
+        }
+
+        @Test
+        @DisplayName("should return 400 when password is null")
+        void shouldReturn400WhenPasswordIsNull() {
+            String body = String.format(
+                    "{\"name\":\"%s\",\"lastname\":\"%s\",\"email\":\"%s\",\"password\":null}",
+                    EntityBuilder.randomFirstName(), EntityBuilder.randomLastName(), EntityBuilder.randomEmail());
+
+            given().contentType("application/json").body(body)
+                    .when().post("/api/v1/register")
+                    .then().statusCode(400);
+        }
+
+        @Test
+        @DisplayName("should return 400 when email format is invalid")
+        void shouldReturn400WhenEmailFormatIsInvalid() {
+            String body = String.format(
+                    "{\"name\":\"%s\",\"lastname\":\"%s\",\"email\":\"not-an-email\",\"password\":\"Test@1234\"}",
+                    EntityBuilder.randomFirstName(), EntityBuilder.randomLastName());
+
+            given().contentType("application/json").body(body)
+                    .when().post("/api/v1/register")
+                    .then().statusCode(400);
+        }
     }
 
     @Nested
