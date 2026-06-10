@@ -57,4 +57,18 @@ public abstract class BaseUiTest {
         );
         driver.navigate().refresh();
     }
+
+    protected void mockCustomerList(String id, String name, String email) {
+        ((JavascriptExecutor) driver).executeScript(
+            "const originalFetch = window.fetch; " +
+            "window.fetch = function(url, options) { " +
+            "  if (url.includes('/customers') && (!options || options.method === 'GET')) { " +
+            "    return Promise.resolve(new Response(JSON.stringify([{ " +
+            "      id: arguments[0], name: arguments[1], email: arguments[2] " +
+            "    }]), { status: 200, headers: { 'Content-Type': 'application/json' } })); " +
+            "  } " +
+            "  return originalFetch(url, options); " +
+            "};", id, name, email
+        );
+    }
 }

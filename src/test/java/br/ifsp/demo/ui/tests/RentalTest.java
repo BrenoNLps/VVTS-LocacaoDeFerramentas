@@ -2,10 +2,15 @@ package br.ifsp.demo.ui.tests;
 
 import br.ifsp.demo.ui.base.BaseUiTest;
 import br.ifsp.demo.ui.helpers.UiTestDataFactory;
+import br.ifsp.demo.ui.pages.HeaderPage;
 import br.ifsp.demo.ui.pages.RentalPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,5 +36,56 @@ public class RentalTest extends BaseUiTest {
         assertThat(rentalPage.isClientLabelVisible()).isTrue();
         assertThat(rentalPage.isGuaranteeLabelVisible()).isTrue();
         assertThat(rentalPage.isConfirmButtonVisible()).isTrue();
+    }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Valid rental creation should show a success message")
+    public void shouldCreateARentalWhenAValidCustomerToolAndGuaranteeAreSelected() {
+        String email = UiTestDataFactory.createEmail();
+        String password = UiTestDataFactory.createPassword();
+        registerUser("Admin", "User", email, password);
+        login(email, password);
+
+        createTool("Serra Circular", 20.0, 90.0, 250.0);
+        
+        ((JavascriptExecutor) driver).executeScript(
+            "window.fetch = function(url, options) { " +
+            "  if (url.includes('/customers')) { " +
+            "    return Promise.resolve(new Response(JSON.stringify([{ " +
+            "      id: 'cust-1', name: 'Jose Silva', email: 'jose@test.com' " +
+            "    }]), { status: 200, headers: { 'Content-Type': 'application/json' } })); " +
+            "  } " +
+            "  if (url.includes('/tools')) { " +
+            "    return Promise.resolve(new Response(JSON.stringify([{ " +
+            "      id: 'tool-1', name: 'Serra Circular', status: 'AVAILABLE', dailyRate: 20.0, weeklyDailyRate: 90.0, monthlyDailyRate: 250.0 " +
+            "    }]), { status: 200, headers: { 'Content-Type': 'application/json' } })); " +
+            "  } " +
+            "  if (url.includes('/rentals') && options && options.method === 'POST') { " +
+            "    return Promise.resolve(new Response(null, { status: 201 })); " +
+            "  } " +
+            "  return Promise.resolve(new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } })); " +
+            "};"
+        );
+
+        HeaderPage headerPage = new HeaderPage(driver);
+        headerPage.clickRental();
+
+        RentalPage rentalPage = new RentalPage(driver);
+
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> rentalPage.isToolTableVisible());
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> !driver.findElements(org.openqa.selenium.By.className("tool-row")).isEmpty());
+        
+        rentalPage.clickFirstToolRow();
+        rentalPage.searchCustomer("Jose");
+        rentalPage.selectCustomerFromDropdown("Jose Silva");
+        rentalPage.selectGuarantee("Dinheiro");
+
+        rentalPage.clickConfirm();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> rentalPage.isSuccessMessageVisible());
+
+        assertThat(rentalPage.getSuccessMessage()).isEqualTo("Locação registrada com sucesso.");
+        assertThat(rentalPage.areToolsSelected()).isFalse();
     }
 }
