@@ -51,4 +51,15 @@ public class HomeTest extends BaseUiTest {
         homePage.clickFirstToolRow();
         assertThat(homePage.isFirstToolRowSelected()).isFalse();
     }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Simulation should require at least one selected tool")
+    public void shouldShowValidationWhenSimulatingWithoutSelectingAnyTool() {
+        homePage.setEndDate("2026-12-31");
+        homePage.clickSimulate();
+        
+        assertThat(homePage.getErrorMessage()).isEqualTo("Selecione ao menos uma ferramenta.");
+        assertThat(homePage.isSimulationValueVisible()).isFalse();
+    }
 }

@@ -10,9 +10,27 @@ public class HomePage extends BasePage {
     private final By endDateInput = By.xpath("//input[@type='date']");
     private final By simulateButton = By.xpath("//button[text()='Simular valor']");
     private final By goToRentalsButton = By.xpath("//button[text()='Ir para locações']");
+    private final By errorMessage = By.className("error-text");
+    private final By simulationResult = By.className("query-result");
 
     public HomePage(WebDriver driver) {
         super(driver);
+    }
+
+    public void setEndDate(String date) {
+        driver.findElement(endDateInput).sendKeys(date);
+    }
+
+    public void clickSimulate() {
+        driver.findElement(simulateButton).click();
+    }
+
+    public String getErrorMessage() {
+        return driver.findElement(errorMessage).getText();
+    }
+
+    public boolean isSimulationValueVisible() {
+        return !driver.findElements(simulationResult).isEmpty();
     }
 
     public boolean isHeadingVisible() {
