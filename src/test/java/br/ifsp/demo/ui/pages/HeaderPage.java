@@ -30,6 +30,10 @@ public class HeaderPage extends BasePage {
         driver.findElement(By.linkText("Home")).click();
     }
 
+    public void clickTools() {
+        driver.findElement(By.linkText("Ferramentas")).click();
+    }
+
     public void clickLogout() {
         driver.findElement(logoutButton).click();
     }

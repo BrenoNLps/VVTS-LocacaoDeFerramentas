@@ -2,6 +2,7 @@ package br.ifsp.demo.ui.tests;
 
 import br.ifsp.demo.ui.base.BaseUiTest;
 import br.ifsp.demo.ui.helpers.UiTestDataFactory;
+import br.ifsp.demo.ui.pages.HeaderPage;
 import br.ifsp.demo.ui.pages.ToolsPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -111,5 +112,32 @@ public class ToolsTest extends BaseUiTest {
 
         assertThat(toolsPage.getErrorMessage()).isEqualTo("Erro ao cadastrar ferramenta.");
         assertThat(toolsPage.isToolInTable(toolName)).isFalse();
+    }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Tools list loading failure should show an error message")
+    public void shouldShowErrorWhenToolsCannotBeLoaded() {
+        String email = UiTestDataFactory.createEmail();
+        String password = UiTestDataFactory.createPassword();
+        registerUser("Admin", "User", email, password);
+        login(email, password);
+
+        ((JavascriptExecutor) driver).executeScript(
+            "window.fetch = function(url, options) { " +
+            "  if (url.includes('/tools') && (!options || options.method === 'GET')) { " +
+            "    return Promise.reject(new Error('Failed to load tools')); " +
+            "  } " +
+            "  return window.fetch(url, options); " +
+            "};"
+        );
+
+        HeaderPage headerPage = new HeaderPage(driver);
+        headerPage.clickTools();
+
+        ToolsPage toolsPage = new ToolsPage(driver);
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> toolsPage.isErrorMessageVisible());
+
+        assertThat(toolsPage.getErrorMessage()).isEqualTo("Erro ao carregar ferramentas.");
     }
 }
