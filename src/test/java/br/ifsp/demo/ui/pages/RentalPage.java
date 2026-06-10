@@ -73,6 +73,14 @@ public class RentalPage extends BasePage {
         return !driver.findElements(By.className("success-text")).isEmpty();
     }
 
+    public String getErrorMessage() {
+        return driver.findElement(By.className("error-text")).getText();
+    }
+
+    public boolean isErrorMessageVisible() {
+        return !driver.findElements(By.className("error-text")).isEmpty();
+    }
+
     public boolean areToolsSelected() {
         return !driver.findElements(By.className("tool-row--selected")).isEmpty();
     }

@@ -70,4 +70,24 @@ public class RentalTest extends BaseUiTest {
         assertThat(rentalPage.getSuccessMessage()).isEqualTo("Locação registrada com sucesso.");
         assertThat(rentalPage.areToolsSelected()).isFalse();
     }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Rental submission should require the minimum selections")
+    public void shouldShowErrorWhenRentalIsSubmittedWithoutSelections() {
+        String email = UiTestDataFactory.createEmail();
+        String password = UiTestDataFactory.createPassword();
+        registerUser("Admin", "User", email, password);
+        login(email, password);
+
+        HeaderPage headerPage = new HeaderPage(driver);
+        headerPage.clickRental();
+
+        RentalPage rentalPage = new RentalPage(driver);
+        rentalPage.clickConfirm();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> rentalPage.isErrorMessageVisible());
+
+        assertThat(rentalPage.getErrorMessage()).isEqualTo("Selecione ao menos uma ferramenta.");
+    }
 }
