@@ -136,6 +136,22 @@ class RentalControllerTest extends BaseIntegrationTest {
         }
 
         @Test
+        @DisplayName("should return 409 when tool is in maintenance")
+        void shouldReturn409WhenToolIsInMaintenance() {
+            String customerId = createCustomer();
+            String toolId = createTool();
+            givenAuth().post("/api/v1/maintenance/send/" + toolId);
+
+            String body = String.format(
+                    "{\"customerId\":\"%s\",\"toolIds\":[\"%s\"],\"startDate\":\"%s\",\"guaranteeType\":\"CASH_DEPOSIT\"}",
+                    customerId, toolId, LocalDate.now());
+
+            givenAuth().body(body)
+                    .when().post("/api/v1/rentals")
+                    .then().statusCode(409);
+        }
+
+        @Test
         @DisplayName("should return 400 when guarantee type is null")
         void shouldReturn400WhenGuaranteeTypeIsNull() {
             String customerId = createCustomer();
@@ -176,6 +192,36 @@ class RentalControllerTest extends BaseIntegrationTest {
                     .when().put("/api/v1/rentals/non-existent/finalize")
                     .then().statusCode(404);
         }
+
+        @Test
+        @DisplayName("should return 409 when rental is already finalized")
+        void shouldReturn409WhenRentalAlreadyFinalized() {
+            String customerId = createCustomer();
+            String toolId = createTool();
+            String rentalId = registerRental(customerId, toolId);
+
+            givenAuth()
+                    .body(String.format("{\"endDate\":\"%s\"}", LocalDate.now().plusDays(2)))
+                    .put("/api/v1/rentals/" + rentalId + "/finalize");
+
+            givenAuth()
+                    .body(String.format("{\"endDate\":\"%s\"}", LocalDate.now().plusDays(3)))
+                    .when().put("/api/v1/rentals/" + rentalId + "/finalize")
+                    .then().statusCode(409);
+        }
+
+        @Test
+        @DisplayName("should return 401 without token")
+        void shouldReturn401WithoutToken() {
+            String customerId = createCustomer();
+            String toolId = createTool();
+            String rentalId = registerRental(customerId, toolId);
+
+            givenNoAuth()
+                    .body(String.format("{\"endDate\":\"%s\"}", LocalDate.now().plusDays(1)))
+                    .when().put("/api/v1/rentals/" + rentalId + "/finalize")
+                    .then().statusCode(401);
+        }
     }
 
     @Nested
@@ -200,6 +246,18 @@ class RentalControllerTest extends BaseIntegrationTest {
             givenAuth()
                     .when().put("/api/v1/rentals/non-existent/cancel")
                     .then().statusCode(404);
+        }
+
+        @Test
+        @DisplayName("should return 401 without token")
+        void shouldReturn401WithoutToken() {
+            String customerId = createCustomer();
+            String toolId = createTool();
+            String rentalId = registerRental(customerId, toolId);
+
+            givenNoAuth()
+                    .when().put("/api/v1/rentals/" + rentalId + "/cancel")
+                    .then().statusCode(401);
         }
 
         @Test
@@ -233,6 +291,31 @@ class RentalControllerTest extends BaseIntegrationTest {
                     .when().post("/api/v1/rentals/query-value")
                     .then().statusCode(200)
                     .body(notNullValue());
+        }
+
+        @Test
+        @DisplayName("should return 404 when tool does not exist")
+        void shouldReturn404WhenToolDoesNotExist() {
+            String body = String.format(
+                    "{\"toolIds\":[\"non-existent\"],\"startDate\":\"%s\",\"endDate\":\"%s\"}",
+                    LocalDate.now(), LocalDate.now().plusDays(3));
+
+            givenAuth().body(body)
+                    .when().post("/api/v1/rentals/query-value")
+                    .then().statusCode(404);
+        }
+
+        @Test
+        @DisplayName("should return 400 when end date is before start date")
+        void shouldReturn400WhenEndDateIsBeforeStartDate() {
+            String toolId = createTool();
+            String body = String.format(
+                    "{\"toolIds\":[\"%s\"],\"startDate\":\"%s\",\"endDate\":\"%s\"}",
+                    toolId, LocalDate.now().plusDays(5), LocalDate.now());
+
+            givenAuth().body(body)
+                    .when().post("/api/v1/rentals/query-value")
+                    .then().statusCode(400);
         }
     }
 }
