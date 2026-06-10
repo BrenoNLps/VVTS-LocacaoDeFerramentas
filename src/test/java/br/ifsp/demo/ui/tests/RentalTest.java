@@ -90,4 +90,31 @@ public class RentalTest extends BaseUiTest {
 
         assertThat(rentalPage.getErrorMessage()).isEqualTo("Selecione ao menos uma ferramenta.");
     }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Active rentals tab should show the active rentals content")
+    public void shouldShowActiveRentalsTabContentWhenTheTabIsSelected() {
+        String email = UiTestDataFactory.createEmail();
+        String password = UiTestDataFactory.createPassword();
+        registerUser("Admin", "User", email, password);
+        login(email, password);
+
+        HeaderPage headerPage = new HeaderPage(driver);
+        headerPage.clickRental();
+
+        RentalPage rentalPage = new RentalPage(driver);
+        rentalPage.clickActiveRentalsTab();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> rentalPage.isRentalTableVisible());
+        assertThat(rentalPage.isRentalTableVisible()).isTrue();
+
+        if (rentalPage.isFinalizeButtonVisible()) {
+            assertThat(rentalPage.isFinalizeButtonVisible()).isTrue();
+            assertThat(rentalPage.isCancelButtonVisible()).isTrue();
+        } else {
+            assertThat(rentalPage.isEmptyStateMessageVisible()).isTrue();
+            assertThat(rentalPage.getEmptyStateMessage()).isEqualTo("Nenhuma locação ativa.");
+        }
+    }
 }

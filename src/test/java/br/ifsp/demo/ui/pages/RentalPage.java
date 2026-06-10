@@ -88,4 +88,28 @@ public class RentalPage extends BasePage {
     public boolean isToolTableVisible() {
         return !driver.findElements(By.cssSelector("tbody tr")).isEmpty();
     }
+
+    public void clickActiveRentalsTab() {
+        driver.findElement(activeRentalsTab).click();
+    }
+
+    public boolean isRentalTableVisible() {
+        return !driver.findElements(By.className("data-table")).isEmpty();
+    }
+
+    public boolean isFinalizeButtonVisible() {
+        return !driver.findElements(By.xpath("//button[text()='Finalizar']")).isEmpty();
+    }
+
+    public boolean isCancelButtonVisible() {
+        return !driver.findElements(By.xpath("//button[text()='Cancelar']")).isEmpty();
+    }
+
+    public String getEmptyStateMessage() {
+        return driver.findElement(By.xpath("//td[text()='Nenhuma locação ativa.']")).getText();
+    }
+
+    public boolean isEmptyStateMessageVisible() {
+        return !driver.findElements(By.xpath("//td[text()='Nenhuma locação ativa.']")).isEmpty();
+    }
 }
