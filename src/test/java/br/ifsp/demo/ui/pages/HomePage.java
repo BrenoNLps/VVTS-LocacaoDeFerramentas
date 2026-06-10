@@ -30,4 +30,16 @@ public class HomePage extends BasePage {
     public boolean isGoToRentalsButtonVisible() {
         return driver.findElement(goToRentalsButton).isDisplayed();
     }
+
+    public void clickFirstToolRow() {
+        driver.findElement(By.className("tool-row")).click();
+    }
+
+    public boolean isFirstToolRowSelected() {
+        return driver.findElement(By.className("tool-row")).getAttribute("class").contains("tool-row--selected");
+    }
+
+    public boolean isToolTableVisible() {
+        return !driver.findElements(By.cssSelector("tbody tr")).isEmpty();
+    }
 }

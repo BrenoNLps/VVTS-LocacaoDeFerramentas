@@ -1,9 +1,10 @@
 package br.ifsp.demo.ui.base;
 
 import br.ifsp.demo.ui.pages.LoginPage;
+import br.ifsp.demo.ui.pages.RegisterPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -28,13 +29,11 @@ public abstract class BaseUiTest {
 
     protected void registerUser(String name, String lastname, String email, String password) {
         driver.get("http://localhost:5173/register");
-        driver.findElement(By.xpath("//input[@name='name']")).sendKeys(name);
-        driver.findElement(By.xpath("//input[@name='lastname']")).sendKeys(lastname);
-        driver.findElement(By.xpath("//input[@name='email']")).sendKeys(email);
-        driver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
-        driver.findElement(By.xpath("//button[text()='Cadastrar']")).click();
+        RegisterPage registerPage = new RegisterPage(driver);
+        registerPage.fillForm(name, lastname, email, password);
+        registerPage.clickRegister();
         
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().contains("/"));
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().equals("http://localhost:5173/"));
     }
 
     protected void login(String email, String password) {
@@ -45,5 +44,17 @@ public abstract class BaseUiTest {
         loginPage.clickLogin();
         
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().contains("/home"));
+    }
+
+    protected void createTool(String name, double daily, double weekly, double monthly) {
+        String toolJson = String.format("{\"name\": \"%s\", \"dailyRate\": %.2f, \"weeklyDailyRate\": %.2f, \"monthlyDailyRate\": %.2f}", name, daily, weekly, monthly);
+        ((JavascriptExecutor) driver).executeScript(
+            "fetch('http://localhost:5173/api/v1/tools', { " +
+            "  method: 'POST', " +
+            "  headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') }, " +
+            "  body: '" + toolJson + "' " +
+            "});"
+        );
+        driver.navigate().refresh();
     }
 }
