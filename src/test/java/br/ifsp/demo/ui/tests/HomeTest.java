@@ -62,4 +62,15 @@ public class HomeTest extends BaseUiTest {
         assertThat(homePage.getErrorMessage()).isEqualTo("Selecione ao menos uma ferramenta.");
         assertThat(homePage.isSimulationValueVisible()).isFalse();
     }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Simulation should require a return date")
+    public void shouldShowValidationWhenSimulatingWithoutReturnDate() {
+        homePage.clickFirstToolRow();
+        homePage.clickSimulate();
+        
+        assertThat(homePage.getErrorMessage()).isEqualTo("Informe a data de devolução.");
+        assertThat(homePage.isSimulationValueVisible()).isFalse();
+    }
 }
