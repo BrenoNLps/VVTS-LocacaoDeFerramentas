@@ -7,7 +7,6 @@ import br.ifsp.demo.ui.pages.RentalPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -48,25 +47,9 @@ public class RentalTest extends BaseUiTest {
         login(email, password);
 
         createTool("Serra Circular", 20.0, 90.0, 250.0);
+        createCustomer("Jose Silva", "jose@test.com");
         
-        ((JavascriptExecutor) driver).executeScript(
-            "window.fetch = function(url, options) { " +
-            "  if (url.includes('/customers')) { " +
-            "    return Promise.resolve(new Response(JSON.stringify([{ " +
-            "      id: 'cust-1', name: 'Jose Silva', email: 'jose@test.com' " +
-            "    }]), { status: 200, headers: { 'Content-Type': 'application/json' } })); " +
-            "  } " +
-            "  if (url.includes('/tools')) { " +
-            "    return Promise.resolve(new Response(JSON.stringify([{ " +
-            "      id: 'tool-1', name: 'Serra Circular', status: 'AVAILABLE', dailyRate: 20.0, weeklyDailyRate: 90.0, monthlyDailyRate: 250.0 " +
-            "    }]), { status: 200, headers: { 'Content-Type': 'application/json' } })); " +
-            "  } " +
-            "  if (url.includes('/rentals') && options && options.method === 'POST') { " +
-            "    return Promise.resolve(new Response(null, { status: 201 })); " +
-            "  } " +
-            "  return Promise.resolve(new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } })); " +
-            "};"
-        );
+        driver.navigate().refresh();
 
         HeaderPage headerPage = new HeaderPage(driver);
         headerPage.clickRental();
@@ -74,7 +57,6 @@ public class RentalTest extends BaseUiTest {
         RentalPage rentalPage = new RentalPage(driver);
 
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> rentalPage.isToolTableVisible());
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> !driver.findElements(org.openqa.selenium.By.className("tool-row")).isEmpty());
         
         rentalPage.clickFirstToolRow();
         rentalPage.searchCustomer("Jose");

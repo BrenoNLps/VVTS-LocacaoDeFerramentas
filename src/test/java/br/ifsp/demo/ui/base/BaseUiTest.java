@@ -55,20 +55,16 @@ public abstract class BaseUiTest {
             "  body: '" + toolJson + "' " +
             "});"
         );
-        driver.navigate().refresh();
     }
 
-    protected void mockCustomerList(String id, String name, String email) {
+    protected void createCustomer(String name, String email) {
+        String customerJson = String.format("{\"name\": \"%s\", \"email\": \"%s\"}", name, email);
         ((JavascriptExecutor) driver).executeScript(
-            "const originalFetch = window.fetch; " +
-            "window.fetch = function(url, options) { " +
-            "  if (url.includes('/customers') && (!options || options.method === 'GET')) { " +
-            "    return Promise.resolve(new Response(JSON.stringify([{ " +
-            "      id: arguments[0], name: arguments[1], email: arguments[2] " +
-            "    }]), { status: 200, headers: { 'Content-Type': 'application/json' } })); " +
-            "  } " +
-            "  return originalFetch(url, options); " +
-            "};", id, name, email
+            "fetch('http://localhost:5173/api/v1/customers', { " +
+            "  method: 'POST', " +
+            "  headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') }, " +
+            "  body: '" + customerJson + "' " +
+            "});"
         );
     }
 }

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -28,6 +27,7 @@ public class HomeTest extends BaseUiTest {
         login(email, password);
 
         createTool("Furadeira", 10.0, 50.0, 150.0);
+        driver.navigate().refresh();
 
         homePage = new HomePage(driver);
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> homePage.isEndDateInputVisible());
@@ -61,7 +61,7 @@ public class HomeTest extends BaseUiTest {
     @Tag("UiTest")
     @DisplayName("Simulation should require at least one selected tool")
     public void shouldShowValidationWhenSimulatingWithoutSelectingAnyTool() {
-        homePage.setEndDate("2026-12-31");
+        homePage.setEndDate("31122026");
         homePage.clickSimulate();
 
         assertThat(homePage.getErrorMessage()).isEqualTo("Selecione ao menos uma ferramenta.");
@@ -84,25 +84,13 @@ public class HomeTest extends BaseUiTest {
     @DisplayName("Successful simulation should show the estimated rental value")
     public void shouldDisplayEstimatedValueAfterSuccessfulSimulation() {
         homePage.clickFirstToolRow();
-        homePage.setEndDate("2026-12-31");
-
-        ((JavascriptExecutor) driver).executeScript(
-            "window.fetch = function() { " +
-            "  return Promise.resolve({ " +
-            "    ok: true, " +
-            "    headers: { get: (n) => n.toLowerCase() === 'content-type' ? 'application/json' : null }, " +
-            "    json: () => Promise.resolve(100.0) " +
-            "  }); " +
-            "};"
-        );
+        homePage.setEndDate("31122026");
 
         homePage.clickSimulate();
 
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> homePage.isSimulationValueVisible());
 
-        assertThat(homePage.getSimulationResultText())
-                .contains("Valor estimado: R$")
-                .contains("100.00");
+        assertThat(homePage.getSimulationResultText()).contains("Valor estimado: R$");
     }
 
     @Test

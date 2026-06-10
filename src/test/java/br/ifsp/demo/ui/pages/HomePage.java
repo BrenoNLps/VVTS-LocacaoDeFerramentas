@@ -2,9 +2,7 @@ package br.ifsp.demo.ui.pages;
 
 import br.ifsp.demo.ui.base.BasePage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 public class HomePage extends BasePage {
     private final By heading = By.xpath("//h1[text()='Ferramentas disponíveis']");
@@ -20,13 +18,7 @@ public class HomePage extends BasePage {
     }
 
     public void setEndDate(String date) {
-        WebElement element = driver.findElement(endDateInput);
-        ((JavascriptExecutor) driver).executeScript(
-            "var setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;" +
-            "setter.call(arguments[0], arguments[1]);" +
-            "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));",
-            element, date
-        );
+        driver.findElement(endDateInput).sendKeys(date);
     }
 
     public void clickSimulate() {
