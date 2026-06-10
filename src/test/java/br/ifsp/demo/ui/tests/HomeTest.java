@@ -3,6 +3,7 @@ package br.ifsp.demo.ui.tests;
 import br.ifsp.demo.ui.base.BaseUiTest;
 import br.ifsp.demo.ui.helpers.UiTestDataFactory;
 import br.ifsp.demo.ui.pages.HomePage;
+import br.ifsp.demo.ui.pages.MaintenancePage;
 import br.ifsp.demo.ui.pages.RentalPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -115,5 +116,20 @@ public class HomeTest extends BaseUiTest {
         assertThat(driver.getCurrentUrl()).endsWith("/rental");
         RentalPage rentalPage = new RentalPage(driver);
         assertThat(rentalPage.isHeadingVisible()).isTrue();
+    }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Maintenance action should navigate to the maintenance page with the selected tool")
+    public void shouldNavigateToMaintenancePageWhenMaintenanceActionIsClicked() {
+        homePage.clickMaintenanceOfFirstTool();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().contains("/maintenance"));
+
+        assertThat(driver.getCurrentUrl()).contains("/maintenance");
+        assertThat(driver.getCurrentUrl()).contains("toolId=");
+        
+        MaintenancePage maintenancePage = new MaintenancePage(driver);
+        assertThat(maintenancePage.isHeadingVisible()).isTrue();
     }
 }

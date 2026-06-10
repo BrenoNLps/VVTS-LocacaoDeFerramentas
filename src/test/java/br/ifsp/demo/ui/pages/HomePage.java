@@ -65,6 +65,10 @@ public class HomePage extends BasePage {
         driver.findElement(goToRentalsButton).click();
     }
 
+    public void clickMaintenanceOfFirstTool() {
+        driver.findElement(By.xpath("//tr[contains(@class, 'tool-row')][1]//button[text()='Manutenção']")).click();
+    }
+
     public void clickFirstToolRow() {
         driver.findElement(By.className("tool-row")).click();
     }
