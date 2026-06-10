@@ -88,4 +88,18 @@ public class HeaderTest extends BaseUiTest {
         assertThat(driver.getCurrentUrl()).isEqualTo("http://localhost:5173/");
         assertThat(driver.findElement(By.xpath("//h1[text()='Login']")).isDisplayed()).isTrue();
     }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Header should collapse navigation on small screens")
+    public void shouldCollapseNavigationOnSmallViewport() {
+        driver.manage().window().setSize(new Dimension(320, 812));
+        new Actions(driver).sendKeys(Keys.ESCAPE).perform();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        assertThat(headerPage.isMenuHidden()).isTrue();
+        headerPage.clickHamburger();
+        wait.until(d -> headerPage.isMenuOpen());
+        headerPage.clickHamburger();
+        wait.until(d -> headerPage.isMenuHidden());
+    }
 }
