@@ -53,4 +53,19 @@ public class ToolsPage extends BasePage {
                driver.findElement(weeklyHeader).isDisplayed() &&
                driver.findElement(monthlyHeader).isDisplayed();
     }
+
+    public void fillForm(String name, String daily, String weekly, String monthly) {
+        driver.findElement(nameInput).sendKeys(name);
+        driver.findElement(dailyRateInput).sendKeys(daily);
+        driver.findElement(weeklyRateInput).sendKeys(weekly);
+        driver.findElement(monthlyRateInput).sendKeys(monthly);
+    }
+
+    public void clickRegister() {
+        driver.findElement(registerButton).click();
+    }
+
+    public boolean isToolInTable(String name) {
+        return !driver.findElements(By.xpath("//td[text()='" + name + "']")).isEmpty();
+    }
 }
