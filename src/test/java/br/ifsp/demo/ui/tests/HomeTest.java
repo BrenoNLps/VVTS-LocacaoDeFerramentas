@@ -3,6 +3,7 @@ package br.ifsp.demo.ui.tests;
 import br.ifsp.demo.ui.base.BaseUiTest;
 import br.ifsp.demo.ui.helpers.UiTestDataFactory;
 import br.ifsp.demo.ui.pages.HomePage;
+import br.ifsp.demo.ui.pages.RentalPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -28,6 +29,8 @@ public class HomeTest extends BaseUiTest {
         createTool("Furadeira", 10.0, 50.0, 150.0);
 
         homePage = new HomePage(driver);
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> homePage.isEndDateInputVisible());
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> homePage.isToolTableVisible());
     }
 
     @Test
@@ -84,10 +87,11 @@ public class HomeTest extends BaseUiTest {
 
         ((JavascriptExecutor) driver).executeScript(
             "window.fetch = function() { " +
-            "  return Promise.resolve(new Response('100.0', { " +
-            "    status: 200, " +
-            "    headers: { 'Content-Type': 'application/json' } " +
-            "  })); " +
+            "  return Promise.resolve({ " +
+            "    ok: true, " +
+            "    headers: { get: (n) => n.toLowerCase() === 'content-type' ? 'application/json' : null }, " +
+            "    json: () => Promise.resolve(100.0) " +
+            "  }); " +
             "};"
         );
 
@@ -95,7 +99,21 @@ public class HomeTest extends BaseUiTest {
 
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> homePage.isSimulationValueVisible());
 
-        assertThat(homePage.getSimulationResultText()).contains("Valor estimado: R$");
-        assertThat(homePage.getSimulationResultText()).contains("100.00");
+        assertThat(homePage.getSimulationResultText())
+                .contains("Valor estimado: R$")
+                .contains("100.00");
+    }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Home should navigate to the rentals page")
+    public void shouldNavigateToRentalPageWhenGoToRentalsButtonIsClicked() {
+        homePage.clickGoToRentals();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().endsWith("/rental"));
+
+        assertThat(driver.getCurrentUrl()).endsWith("/rental");
+        RentalPage rentalPage = new RentalPage(driver);
+        assertThat(rentalPage.isHeadingVisible()).isTrue();
     }
 }
