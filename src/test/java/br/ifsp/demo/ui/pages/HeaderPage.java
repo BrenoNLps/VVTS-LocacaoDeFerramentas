@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 public class HeaderPage extends BasePage {
     private final By hamburgerButton = By.className("header-hamburger");
     private final By menuNav = By.className("header-nav");
+    private final By logoutButton = By.className("header-logout");
 
     public HeaderPage(WebDriver driver) {
         super(driver);
@@ -27,5 +28,9 @@ public class HeaderPage extends BasePage {
 
     public void clickHome() {
         driver.findElement(By.linkText("Home")).click();
+    }
+
+    public void clickLogout() {
+        driver.findElement(logoutButton).click();
     }
 }

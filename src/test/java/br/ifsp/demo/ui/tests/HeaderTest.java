@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -75,5 +76,16 @@ public class HeaderTest extends BaseUiTest {
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().contains("/home"));
         assertThat(driver.getCurrentUrl()).contains("/home");
         assertThat(driver.findElement(By.xpath("//h1[text()='Ferramentas disponíveis']")).isDisplayed()).isTrue();
+    }
+
+    @Test
+    @Tag("UiTest")
+    @DisplayName("Logout should clear the session and redirect to login")
+    public void shouldLogoutAndRedirectToLogin() {
+        headerPage.clickLogout();
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().equals("http://localhost:5173/"));
+        assertThat((String) ((JavascriptExecutor) driver).executeScript("return window.localStorage.getItem('token');")).isNull();
+        assertThat(driver.getCurrentUrl()).isEqualTo("http://localhost:5173/");
+        assertThat(driver.findElement(By.xpath("//h1[text()='Login']")).isDisplayed()).isTrue();
     }
 }
