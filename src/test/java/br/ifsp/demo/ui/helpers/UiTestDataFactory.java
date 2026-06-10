@@ -19,6 +19,6 @@ public class UiTestDataFactory {
     }
 
     public static String createPassword() {
-        return faker.internet().password();
+        return "Test@1234";
     }
 }

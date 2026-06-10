@@ -16,10 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginTest extends BaseUiTest {
     private LoginPage loginPage;
+    private String testEmail;
+    private static final String TEST_PASSWORD = "Test@1234";
 
     @BeforeEach
     public void setup() {
-        registerUser("Admin", "User", "admin@gmail.com", "1234");
+        testEmail = UiTestDataFactory.createEmail();
+        registerUser("Admin", "User", testEmail, TEST_PASSWORD);
         loginPage = new LoginPage(driver);
     }
 
@@ -42,8 +45,8 @@ public class LoginTest extends BaseUiTest {
     public void shouldLoginAndRedirectToHomeWhenCredentialsAreValid() {
         driver.get("http://localhost:5173/");
 
-        loginPage.fillEmail("admin@gmail.com");
-        loginPage.fillPassword("1234");
+        loginPage.fillEmail(testEmail);
+        loginPage.fillPassword(TEST_PASSWORD);
         loginPage.clickLogin();
 
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().contains("/home"));
