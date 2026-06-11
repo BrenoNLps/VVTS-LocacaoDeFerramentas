@@ -38,6 +38,8 @@ public class HeaderPage extends BasePage {
         driver.findElement(By.linkText("Locações")).click();
     }
 
+    public void clickHistory() { driver.findElement(By.linkText("Histórico")).click();}
+
     public void clickLogout() {
         driver.findElement(logoutButton).click();
     }
