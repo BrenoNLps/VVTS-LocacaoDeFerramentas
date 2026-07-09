@@ -110,7 +110,7 @@ A aplicação estará disponível em `http://localhost:5173`.
 | Breno Nascimento Lopes | [@brenonlps](https://github.com/brenonlps) |
 
 
-## Ex Colaboradores
+## Colaboradores
 
 | Membro | GitHub |
 |--------|--------|
