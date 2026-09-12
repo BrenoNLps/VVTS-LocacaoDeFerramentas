@@ -103,12 +103,6 @@ A aplicação estará disponível em `http://localhost:5173`.
 | Testes Estruturais e de Mutação | Cobertura e qualidade dos testes |
 | Testes de Integração e de Sistema | Validação end-to-end com foco em UI |
 
-## Equipe
-
-| Membro | GitHub |
-|--------|--------|
-| Breno Nascimento Lopes | [@brenonlps](https://github.com/brenonlps) |
-
 
 ## Colaboradores
 
